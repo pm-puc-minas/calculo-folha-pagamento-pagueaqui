@@ -5,6 +5,9 @@ import com.example.hrpayroll.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserService {
         @Autowired
@@ -17,5 +20,18 @@ public class UserService {
         public UserModel create(UserModel userModel) {
                 return userRepository.save(userModel);
         }
+
+        // Listar todos
+        public List<UserModel> list() {
+                return userRepository.findAll();
+        }
+        // Listar id
+        public Optional<UserModel> findOne (Long id) {
+            Optional<UserModel> one;
+            one = userRepository.findOne(id);
+            return one;
+
+        }
+
 
 }
