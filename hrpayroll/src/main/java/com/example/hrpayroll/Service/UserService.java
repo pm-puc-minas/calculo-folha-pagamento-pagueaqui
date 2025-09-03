@@ -1,5 +1,6 @@
 package com.example.hrpayroll.Service;
 
+import com.example.hrpayroll.Model.UserModel;
 import com.example.hrpayroll.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,10 @@ public class UserService {
 
         public UserService(UserRepository userRepository) {
                 this.userRepository = userRepository;
+        }
+
+        public UserModel create(UserModel userModel) {
+                return userRepository.save(userModel);
         }
 
 }
