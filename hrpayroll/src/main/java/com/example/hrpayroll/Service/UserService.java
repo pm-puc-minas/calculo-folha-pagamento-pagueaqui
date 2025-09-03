@@ -21,17 +21,12 @@ public class UserService {
                 return userRepository.save(userModel);
         }
 
-        // Listar todos
         public List<UserModel> list() {
                 return userRepository.findAll();
         }
-        // Listar id
-        public Optional<UserModel> findOne (Long id) {
-            Optional<UserModel> one;
-            one = userRepository.findOne(id);
-            return one;
 
+        public Optional<UserModel> findOneById(String id) {
+                return userRepository.findById(id);
         }
-
 
 }
