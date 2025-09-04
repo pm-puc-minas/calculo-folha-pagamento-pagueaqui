@@ -25,7 +25,7 @@ public class UserService {
                 return userRepository.findAll();
         }
 
-        public Optional<UserModel> findOneById(String id) {
+        public Optional<UserModel> findOneById(Long id) {
                 return userRepository.findById(id);
         }
 
