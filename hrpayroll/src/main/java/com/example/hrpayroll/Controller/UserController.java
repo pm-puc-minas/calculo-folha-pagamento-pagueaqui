@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.hrpayroll.Model.UserModel;
 import com.example.hrpayroll.Service.UserService;
-
+@RestController
 public class UserController {
     @Autowired
     private final UserService userService;
@@ -32,5 +33,10 @@ public class UserController {
     @GetMapping("/users")
     public Iterable<UserModel> listUsers() {
         return userService.list();
+    }
+
+    @GetMapping("/users/health")
+    public String healthCheck() {
+        return "OK";
     }
 }
