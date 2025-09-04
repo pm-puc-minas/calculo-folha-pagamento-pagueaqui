@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 import com.example.hrpayroll.Model.UserModel;
 import com.example.hrpayroll.Service.UserService;
 @RestController
@@ -20,13 +22,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/user/create")
-    public UserModel createUser(@RequestBody UserModel userModel) {
+    @PostMapping("/users/create")
+    public UserModel createUser(@Valid @RequestBody UserModel userModel) {
         return userService.create(userModel);
     }
 
-    @GetMapping("/user/{id}")
-    public Optional<UserModel> getUser(@PathVariable String id) {
+    @GetMapping("/users/{id}")
+    public Optional<UserModel> getUser(@Valid @PathVariable Long id) {
         return userService.findOneById(id);
     }
 
