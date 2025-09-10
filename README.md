@@ -6,12 +6,12 @@ A folha de pagamento é um documento essencial que detalha todos os valores pago
 
 Funcionalidades principais:
 Autenticação com login e senha (apenas usuários autorizados acessam o sistema)
-Cálculo de jornada de trabalho
-Cálculo de adicionais
-Cálculo de benefícios
-Cálculo de descontos
-Cálculo de salário líquido
-Relatório completo da folha de pagamento
+Cálculo de jornada de trabalho,
+Cálculo de adicionais,
+Cálculo de benefícios,
+Cálculo de descontos,
+Cálculo de salário líquido,
+Relatório completo da folha de pagamento,
 Armazenamento seguro dos dados por até 5 anos
 
 Requisitos não funcionais:
