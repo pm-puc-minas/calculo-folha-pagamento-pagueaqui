@@ -1,7 +1,7 @@
-package com.example.hrpayroll.Repository;
+package com.example.hrpayroll.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.hrpayroll.Model.UserModel;
+import com.example.hrpayroll.model.UserModel;
 
 public interface UserRepository extends JpaRepository<UserModel, Long>{}

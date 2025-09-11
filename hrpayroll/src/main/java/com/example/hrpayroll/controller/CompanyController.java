@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
-import com.example.hrpayroll.DTO.CompanyPatchDTO;
-import com.example.hrpayroll.Model.CompanyModel;
-import com.example.hrpayroll.Service.CompanyService;
+import com.example.hrpayroll.dto.CompanyPatchDTO;
+import com.example.hrpayroll.model.CompanyModel;
+import com.example.hrpayroll.service.CompanyService;
 
 @RestController
 public class CompanyController {

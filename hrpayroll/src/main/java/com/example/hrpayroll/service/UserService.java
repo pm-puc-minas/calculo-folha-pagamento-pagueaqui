@@ -1,7 +1,8 @@
-package com.example.hrpayroll.Service;
+package com.example.hrpayroll.service;
 
-import com.example.hrpayroll.Model.UserModel;
-import com.example.hrpayroll.Repository.UserRepository;
+import com.example.hrpayroll.model.UserModel;
+import com.example.hrpayroll.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

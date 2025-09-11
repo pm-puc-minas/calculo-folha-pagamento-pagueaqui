@@ -1,4 +1,4 @@
-package com.example.hrpayroll.DTO;
+package com.example.hrpayroll.dto;
     
 public record CompanyPatchDTO(
     String cnpj,

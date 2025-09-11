@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
-import com.example.hrpayroll.Model.UserModel;
-import com.example.hrpayroll.Service.UserService;
+import com.example.hrpayroll.model.UserModel;
+import com.example.hrpayroll.service.UserService;
 @RestController
 public class UserController {
     @Autowired

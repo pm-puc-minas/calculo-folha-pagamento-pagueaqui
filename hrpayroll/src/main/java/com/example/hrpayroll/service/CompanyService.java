@@ -1,8 +1,8 @@
-package com.example.hrpayroll.Service;
+package com.example.hrpayroll.service;
 
-import com.example.hrpayroll.DTO.CompanyPatchDTO;
-import com.example.hrpayroll.Model.CompanyModel;
-import com.example.hrpayroll.Repository.CompanyRepository;
+import com.example.hrpayroll.dto.CompanyPatchDTO;
+import com.example.hrpayroll.model.CompanyModel;
+import com.example.hrpayroll.repository.CompanyRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
