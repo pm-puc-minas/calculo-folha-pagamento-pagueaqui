@@ -1,4 +1,4 @@
-package com.example.hrpayroll.Controller;
+package com.example.hrpayroll.controller;
 
 import java.util.Optional;
 

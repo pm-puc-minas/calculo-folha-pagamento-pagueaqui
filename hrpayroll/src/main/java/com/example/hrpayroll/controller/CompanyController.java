@@ -1,4 +1,4 @@
-package com.example.hrpayroll.Controller;
+package com.example.hrpayroll.controller;
 
 import java.util.Optional;
 
@@ -14,10 +14,7 @@ import jakarta.validation.Valid;
 
 import com.example.hrpayroll.DTO.CompanyPatchDTO;
 import com.example.hrpayroll.Model.CompanyModel;
-import com.example.hrpayroll.Model.UserModel;
 import com.example.hrpayroll.Service.CompanyService;
-import com.example.hrpayroll.Service.UserService;
-import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 public class CompanyController {
