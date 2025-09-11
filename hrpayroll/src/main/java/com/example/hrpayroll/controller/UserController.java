@@ -36,9 +36,4 @@ public class UserController {
     public Iterable<UserModel> listUsers() {
         return userService.list();
     }
-
-    @GetMapping("/users/health")
-    public String healthCheck() {
-        return "OK";
-    }
 }
