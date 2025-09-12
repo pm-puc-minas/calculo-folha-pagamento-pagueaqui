@@ -48,5 +48,14 @@ class UserValidationTest {
         assertTrue(violations.stream()
                 .anyMatch(v -> v.getPropertyPath().toString().equals("email")));
     }
-}
+    @Test
+    void whenValidUser_thenNoViolations() {
+        UserModel user = new UserModel();
+        user.setNome("João da Silva");
+        user.setEmail("joao@example.com");
 
+        Set<ConstraintViolation<UserModel>> violations = validator.validate(user);
+
+        assertTrue(violations.isEmpty());
+    }
+}
