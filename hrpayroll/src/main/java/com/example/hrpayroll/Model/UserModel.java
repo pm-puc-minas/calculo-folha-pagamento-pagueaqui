@@ -18,10 +18,10 @@ public class UserModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank (message = "Nome é obrigatório")
     private String nome;
 
-    @Email
+    @Email (message = "Email é obrigatório")
     private String email;
 
     @NotBlank()
