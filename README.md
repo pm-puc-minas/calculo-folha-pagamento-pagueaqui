@@ -22,3 +22,10 @@ Tecnologias utilizadas:
 Frontend: React
 Backend: Java com Spring Boot e dependências
 Banco de Dados: Sistema robusto para armazenamento seguro de informações
+
+# Entrega Sprint 1
+
+- **figma**: https://www.figma.com/design/vlSw482Gcr3kPkM5rQNaC6/PagueAqui?node-id=1-4&p=f&t=mjGwYE3Rx7nn2pj3-0
+- **cartoes crc**: ./docs/cartoes-crc.pdf
+- **plano de testes**: ./docs/plano-de-testes.pdf
+- **uml**: ./docs/uml.drawio (https://drive.google.com/file/d/1ZkdH4p--TR9MdA6cPMf-qQCYig-e-cFP/view?usp=sharing)
