@@ -12,7 +12,8 @@
 	<groupId>com.example</groupId>
 	<artifactId>hrpayroll</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>hrpayroll</name>
+    <packaging>pom</packaging>
+    <name>hrpayroll</name>
 	<description>Demo project for Spring Boot</description>
 	<url />
 	<licenses>
@@ -21,7 +22,10 @@
 	<developers>
 		<developer />
 	</developers>
-	<scm>
+    <modules>
+        <module>app.Sistemaf</module>
+    </modules>
+    <scm>
 		<connection />
 		<developerConnection />
 		<tag />
