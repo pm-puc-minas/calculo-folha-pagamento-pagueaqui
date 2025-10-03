@@ -29,3 +29,6 @@ Banco de Dados: Sistema robusto para armazenamento seguro de informações
 - **cartoes crc**: ./docs/cartoes-crc.pdf
 - **plano de testes**: ./docs/plano-de-testes.pdf
 - **uml**: ./docs/uml.drawio (https://drive.google.com/file/d/1ZkdH4p--TR9MdA6cPMf-qQCYig-e-cFP/view?usp=sharing)
+
+- # Uml
+<img width="1020" height="969" alt="image" src="https://github.com/user-attachments/assets/00838fbe-e471-4c08-810a-bd6ca375bc6e" />
