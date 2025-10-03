@@ -1,3 +1,4 @@
+# Title
 Projeto Folha de Pagamento – PagueAqui
 O PagueAqui é um sistema de gestão de folha de pagamento desenvolvido para auxiliar empresas no cálculo de salários, benefícios, encargos e descontos, garantindo transparência com os colaboradores e conformidade com as obrigações trabalhistas e fiscais.
 
