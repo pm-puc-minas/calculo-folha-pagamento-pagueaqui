@@ -21,7 +21,7 @@ public class FolhaPagamentoController {
             this.service = service;
         }
 
-        @GetMapping
+        @GetMapping()
         public List<FolhaPagamentoModel> listarTodas() {
             return service.findAll();
         }
@@ -29,7 +29,7 @@ public class FolhaPagamentoController {
         public Optional<FolhaPagamentoModel> buscarPorId (@PathVariable Long id){
             return service.findById(id);
         }
-        @PostMapping
+        @PostMapping("/create")
         public ResponseEntity<FolhaPagamentoModel> criar (@RequestBody FolhaPagamentoModel folha) {
             FolhaPagamentoModel salva = service.save(folha);
             return ResponseEntity.status(HttpStatus.CREATED).body(salva);

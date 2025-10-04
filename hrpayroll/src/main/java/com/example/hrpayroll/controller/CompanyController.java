@@ -32,7 +32,7 @@ public class CompanyController {
 
     @GetMapping("/companies/{id}")
     public Optional<CompanyModel> getCompany(@Valid @PathVariable Long id) {
-        return companyService.findOneById(id);
+        return companyService.findById(id);
     }
 
     @GetMapping("/companies")
