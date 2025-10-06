@@ -1,35 +1,63 @@
-# Title
-Projeto Folha de Pagamento – PagueAqui
-O PagueAqui é um sistema de gestão de folha de pagamento desenvolvido para auxiliar empresas no cálculo de salários, benefícios, encargos e descontos, garantindo transparência com os colaboradores e conformidade com as obrigações trabalhistas e fiscais.
+# 💰 PagueAqui – Sistema de Folha de Pagamento  
 
-Sobre o projeto:
-A folha de pagamento é um documento essencial que detalha todos os valores pagos e descontados dos funcionários em um período específico. Pensando nisso, o PagueAqui foi criado para automatizar esse processo e facilitar o trabalho do setor de RH.
+O **PagueAqui** é um sistema de gestão de **folha de pagamento** desenvolvido para auxiliar empresas no **cálculo de salários, benefícios, encargos e descontos**, garantindo **transparência** com os colaboradores e **conformidade** com as obrigações trabalhistas e fiscais.  
 
-Funcionalidades principais:
-Autenticação com login e senha (apenas usuários autorizados acessam o sistema)
-Cálculo de jornada de trabalho,
-Cálculo de adicionais,
-Cálculo de benefícios,
-Cálculo de descontos,
-Cálculo de salário líquido,
-Relatório completo da folha de pagamento,
-Armazenamento seguro dos dados por até 5 anos
+---
 
-Requisitos não funcionais:
--Usabilidade: interface simples e intuitiva
--Manutenibilidade: arquitetura organizada e de fácil evolução
+## 📑 Sumário
+- [📖 Sobre o Projeto](#-sobre-o-projeto)  
+- [🚀 Funcionalidades Principais](#-funcionalidades-principais)  
+- [📌 Requisitos Não Funcionais](#-requisitos-não-funcionais)  
+- [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)  
+- [📦 Entregas – Sprint 1](#-entregas--sprint-1)  
+- [🖼️ Diagrama UML](#️-diagrama-uml)  
 
-Tecnologias utilizadas:
-Frontend: React
-Backend: Java com Spring Boot e dependências
-Banco de Dados: Sistema robusto para armazenamento seguro de informações
+---
 
-# Entrega Sprint 1
+## 📖 Sobre o Projeto  
+A folha de pagamento é um documento essencial que detalha todos os valores pagos e descontados dos funcionários em um período específico.  
+Pensando nisso, o **PagueAqui** foi criado para **automatizar esse processo** e **facilitar o trabalho do setor de RH**.  
 
-- **figma**: https://www.figma.com/design/vlSw482Gcr3kPkM5rQNaC6/PagueAqui?node-id=1-4&p=f&t=mjGwYE3Rx7nn2pj3-0
-- **cartoes crc**: ./docs/cartoes-crc.pdf
-- **plano de testes**: ./docs/plano-de-testes.pdf
-- **uml**: ./docs/uml.drawio (https://drive.google.com/file/d/1ZkdH4p--TR9MdA6cPMf-qQCYig-e-cFP/view?usp=sharing)
+---
 
-- # Uml
-<img width="1020" height="969" alt="image" src="https://github.com/user-attachments/assets/00838fbe-e471-4c08-810a-bd6ca375bc6e" />
+## 🚀 Funcionalidades Principais  
+- 🔐 Autenticação com login e senha (acesso restrito a usuários autorizados)  
+- ⏱️ Cálculo de jornada de trabalho  
+- ➕ Cálculo de adicionais  
+- 🎁 Cálculo de benefícios  
+- ➖ Cálculo de descontos  
+- 💵 Cálculo de salário líquido  
+- 📊 Geração de relatórios completos da folha de pagamento  
+- 🗄️ Armazenamento seguro dos dados por até **5 anos**  
+
+---
+
+## 📌 Requisitos Não Funcionais  
+- **Usabilidade** → Interface simples e intuitiva  
+- **Manutenibilidade** → Arquitetura organizada e de fácil evolução  
+
+---
+
+## 🛠️ Tecnologias Utilizadas  
+- **Frontend:** React ⚛️  
+- **Backend:** Java com Spring Boot ☕  
+- **Banco de Dados:** Sistema robusto para armazenamento seguro de informações 🗃️  
+
+---
+
+## 📦 Entregas – Sprint 1  
+
+- 🎨 [Figma](https://www.figma.com/design/vlSw482Gcr3kPkM5rQNaC6/PagueAqui?node-id=1-4&p=f&t=mjGwYE3Rx7nn2pj3-0)  
+- 📝 [Cartões CRC](./docs/cartoes-crc.pdf)  
+- ✅ [Plano de Testes](./docs/plano-de-testes.pdf)  
+- 📐 [UML (arquivo)](./docs/uml.drawio) | [UML (Drive)](https://drive.google.com/file/d/1ZkdH4p--TR9MdA6cPMf-qQCYig-e-cFP/view?usp=sharing)  
+
+---
+
+## 🖼️ Diagrama UML  
+
+<img width="1020" height="969" alt="UML do projeto" src="https://github.com/user-attachments/assets/00838fbe-e471-4c08-810a-bd6ca375bc6e" />  
+
+---
+
+✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
