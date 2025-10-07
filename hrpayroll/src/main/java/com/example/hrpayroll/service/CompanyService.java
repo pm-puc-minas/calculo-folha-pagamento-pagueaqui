@@ -29,7 +29,7 @@ public class CompanyService {
                 return companyRepository.findAll();
         }
 
-        public Optional<CompanyModel> findOneById(Long id) {
+        public Optional<CompanyModel> findById(Long id) {
                 return companyRepository.findById(id);
         }
 
@@ -51,4 +51,5 @@ public class CompanyService {
 
                 return companyRepository.save(company);
         }
+
 }
