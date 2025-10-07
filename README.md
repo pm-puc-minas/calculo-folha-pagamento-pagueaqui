@@ -54,15 +54,6 @@ Pensando nisso, o **PagueAqui** foi criado para **automatizar esse processo** e 
 
 ---
 
-## 📦 Entregas – Sprint 2 
-
-- 🎨 [Figma](https://www.figma.com/design/vlSw482Gcr3kPkM5rQNaC6/PagueAqui?node-id=1-4&p=f&t=mjGwYE3Rx7nn2pj3-0)  
-- 📝 [Cartões CRC](./docs/cartoes-crc.pdf)  
-- ✅ [Plano de Testes](./docs/plano-de-testes.pdf)  
-- 📐 [UML (arquivo)](./docs/uml.drawio) | [UML (Drive)](https://drive.google.com/file/d/1ZkdH4p--TR9MdA6cPMf-qQCYig-e-cFP/view?usp=sharing)  
-
----
-
 ## 🖼️ Diagrama UML  
 
 <img width="1020" height="969" alt="UML do projeto" src="https://github.com/user-attachments/assets/00838fbe-e471-4c08-810a-bd6ca375bc6e" />  
