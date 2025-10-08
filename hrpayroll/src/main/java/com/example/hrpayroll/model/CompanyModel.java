@@ -1,9 +1,6 @@
 package com.example.hrpayroll.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -24,5 +21,12 @@ public class CompanyModel {
     private String cnpj;
 
     @NotBlank
+    @Column(name = "razao_social")
     private String razaoSocial;
+
+    @Column(name = "nome_fantasia")
+    private String nomeFantasia;
+
+    @Column(name = "inscricao_estadual")
+    private String inscricaoEstadual;
 }
