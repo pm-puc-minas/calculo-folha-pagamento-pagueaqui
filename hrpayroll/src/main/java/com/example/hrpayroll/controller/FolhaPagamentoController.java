@@ -13,39 +13,47 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/folhas")
-
 public class FolhaPagamentoController {
-        private final FolhaPagamentoService service;
+        private final FolhaPagamentoService folhaPagamentoService;
 
-        public FolhaPagamentoController(FolhaPagamentoService service) {
-            this.service = service;
+        public FolhaPagamentoController(FolhaPagamentoService folhaPagamentoService) {
+            this.folhaPagamentoService = folhaPagamentoService;
         }
 
         @GetMapping()
         public List<FolhaPagamentoModel> listarTodas() {
-            return service.findAll();
+            return folhaPagamentoService.findAll();
         }
+
         @GetMapping ("/{id}")
-        public Optional<FolhaPagamentoModel> buscarPorId (@PathVariable Long id){
-            return service.findById(id);
+        public ResponseEntity buscarPorId (@PathVariable Long id){
+            FolhaPagamentoModel folhaPagamentoModel = folhaPagamentoService.findById(id);
+
+            return ResponseEntity.ok(folhaPagamentoModel);
         }
+
         @PostMapping("/create")
-        public ResponseEntity<FolhaPagamentoModel> criar (@RequestBody FolhaPagamentoModel folha) {
-            FolhaPagamentoModel salva = service.save(folha);
+        public ResponseEntity criar (@RequestBody FolhaPagamentoModel folha) {
+            FolhaPagamentoModel salva = folhaPagamentoService.save(folha);
             return ResponseEntity.status(HttpStatus.CREATED).body(salva);
         }
 
         @GetMapping ("/empresa/{companyId}")
-        public List<FolhaPagamentoModel> buscarPorEmpresa(@PathVariable Long companyId) {
-            return service.findByCompanyId(companyId);
+        public ResponseEntity buscarPorEmpresa(@PathVariable Long companyId) {
+
+            List<FolhaPagamentoModel> folhaPagamento = folhaPagamentoService.findByCompanyId(companyId);
+
+            return ResponseEntity.ok().body(folhaPagamento);
+
         }
+
         @PostMapping("/gerar/{companyId}")
         public ResponseEntity<FolhaPagamentoModel> gerarNovaFolha(
             @PathVariable Long companyId,
             @RequestParam LocalDate dataInicio,
             @RequestParam LocalDate dataFim,
             @RequestParam BigDecimal salarioBase) {
-        FolhaPagamentoModel nova = service.gerarNovaFolha(companyId, dataInicio, dataFim, salarioBase);
+        FolhaPagamentoModel nova = folhaPagamentoService.gerarNovaFolha(companyId, dataInicio, dataFim, salarioBase);
         return ResponseEntity.status(HttpStatus.CREATED).body(nova);
     }
 
