@@ -1,8 +1,10 @@
 package com.example.hrpayroll.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,17 +25,25 @@ public class UserController {
     }
 
     @PostMapping("/users/create")
-    public FuncionarioModel createUser(@Valid @RequestBody FuncionarioModel funcionarioModel) {
-        return userService.create(funcionarioModel);
+    public ResponseEntity createUser(@Valid @RequestBody FuncionarioModel funcionarioModel) {
+        userService.create(funcionarioModel);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/users/{id}")
-    public Optional<FuncionarioModel> getUser(@Valid @PathVariable Long id) {
-        return userService.findOneById(id);
+    public ResponseEntity getUser(@Valid @PathVariable Long id) {
+
+        FuncionarioModel funcionario = userService.findOneById(id);
+
+        return ResponseEntity.ok(funcionario);
     }
 
     @GetMapping("/users")
-    public Iterable<FuncionarioModel> listUsers() {
-        return userService.list();
+    public ResponseEntity listUsers() {
+
+        List<FuncionarioModel> funcioanrio = userService.list();
+
+        return ResponseEntity.ok().body(funcioanrio);
     }
 }
