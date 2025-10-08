@@ -27,8 +27,14 @@ public class UserService {
                 return userRepository.findAll();
         }
 
-        public Optional<FuncionarioModel> findOneById(Long id) {
-                return userRepository.findById(id);
+        public FuncionarioModel findOneById(Long id) {
+                Optional<FuncionarioModel> funcionario = userRepository.findById(id);
+
+                if (funcionario.isPresent()) {
+                    return funcionario.get();
+                }
+
+                return null;
         }
 
     public FuncionarioModel atualizarCadastro(Long id, FuncionarioModel novosDados) {
@@ -45,21 +51,6 @@ public class UserService {
         usuario.setEmail(novosDados.getEmail());
         usuario.setEndereco(novosDados.getEndereco());
         usuario.setDataNascimento(novosDados.getDataNascimento());
-
-        return userRepository.save(usuario);
-    }
-
-    public FuncionarioModel informarAfastamento(Long id, String motivo, LocalDate inicio, LocalDate fim) {
-        Optional<FuncionarioModel> usuarioOpt = userRepository.findById(id);
-
-        if (usuarioOpt.isEmpty()) {
-            throw new RuntimeException("Usuário não encontrado.");
-        }
-
-        FuncionarioModel usuario = usuarioOpt.get();
-        usuario.setMotivoAfastamento(motivo);
-        usuario.setDataInicioAfastamento(inicio);
-        usuario.setDataFimAfastamento(fim);
 
         return userRepository.save(usuario);
     }

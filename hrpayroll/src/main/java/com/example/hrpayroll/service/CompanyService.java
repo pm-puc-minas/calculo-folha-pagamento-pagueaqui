@@ -29,8 +29,17 @@ public class CompanyService {
                 return companyRepository.findAll();
         }
 
-        public Optional<CompanyModel> findById(Long id) {
-                return companyRepository.findById(id);
+        public CompanyModel findById(Long id) {
+                Optional<CompanyModel> companyOptional = companyRepository.findById(id);
+
+                if (companyOptional.isPresent()) {
+
+                    CompanyModel companyModel = companyOptional.get();
+                    return companyModel;
+
+                }
+
+                return null;
         }
 
         public CompanyModel update(Long id, CompanyPatchDTO updatedCompany) {

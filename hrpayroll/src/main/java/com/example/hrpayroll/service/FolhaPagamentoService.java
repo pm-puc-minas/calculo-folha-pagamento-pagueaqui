@@ -22,8 +22,14 @@ public class FolhaPagamentoService {
         this.companyService = companyService;
     }
 
-    public Optional<FolhaPagamentoModel> findById(Long id) {
-        return repository.findById(id);
+    public FolhaPagamentoModel findById(Long id) {
+        Optional<FolhaPagamentoModel> folhaPagamentoOptional = repository.findById(id);
+
+        if (folhaPagamentoOptional.isPresent()) {
+            return folhaPagamentoOptional.get();
+        }
+
+        return null;
     }
 
     public List<FolhaPagamentoModel> findAll() {
