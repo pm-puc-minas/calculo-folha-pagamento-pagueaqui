@@ -1,0 +1,45 @@
+{
+  "name": "calculo-folha-pagamento-pagueaqui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
+    "@nextui-org/input": "^2.4.8",
+    "@nextui-org/system": "^2.4.6",
+    "@nextui-org/theme": "^2.4.5",
+    "@phosphor-icons/react": "^2.1.10",
+    "@tanstack/react-query": "^5.90.2",
+    "axios": "^1.12.2",
+    "clsx": "^2.1.1",
+    "cookies-next": "^4.2.1",
+    "input-otp": "^1.4.2",
+    "lucide-react": "^0.446.0",
+    "next": "^15.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.0",
+    "react-number-format": "^5.4.4",
+    "recharts": "^3.2.1",
+    "tailwind-merge": "^2.5.2",
+    "use-mask-input": "^3.5.2",
+    "yup": "^1.7.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.10",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.14",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.2"
+  }
+}
