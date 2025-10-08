@@ -10,6 +10,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Past;
 import java.time.LocalDate;
+import java.util.Date;
+
 import lombok.*;
 
 @Entity
@@ -30,10 +32,11 @@ public class UserModel {
 
     @NotBlank(message = "O CPF é obrigatório")
     @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos")
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, name = "CPF")
     private String cpf;
 
     @NotBlank(message = "O RG é obrigatório")
+    @Column(name = "RG")
     private String rg;
 
     @Email(message = "E-mail inválido")
@@ -45,11 +48,17 @@ public class UserModel {
     private String endereco;
 
     @Past(message = "A data de nascimento deve ser anterior à data atual")
-    private LocalDate dataNascimento;
+    @Column(name = "data_de_nascimento")
+    private Date dataNascimento;
 
-    private String motivoAfastamento; //"Atestado médico", "Licença maternidade"...
-    private LocalDate dataInicioAfastamento;
-    private LocalDate dataFimAfastamento;
+    @Column(name = "PIS")
+    private Double pis;
+
+    @Column(name = "data_de_admissao")
+    private Date dataDeAdmissao;
+
+    @Column(name = "cargo")
+    private String cargo;
 
     @NotBlank()
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Senha fraca. A senha deve ter no mínimo 8 caracteres, incluindo uma letra maiúscula, uma minúscula, um número e um caractere especial.")
