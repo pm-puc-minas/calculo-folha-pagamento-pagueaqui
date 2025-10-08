@@ -50,7 +50,7 @@ Pensando nisso, o **PagueAqui** foi criado para **automatizar esse processo** e 
 - 🎨 [Figma](https://www.figma.com/design/vlSw482Gcr3kPkM5rQNaC6/PagueAqui?node-id=1-4&p=f&t=mjGwYE3Rx7nn2pj3-0)  
 - 📝 [Cartões CRC](./docs/cartoes-crc.pdf)  
 - ✅ [Plano de Testes](./docs/plano-de-testes.pdf)  
-- 📐 [UML (arquivo)](./docs/uml.png)
+- 📐 [UML (arquivo)](./docs/UML.png)
 
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
