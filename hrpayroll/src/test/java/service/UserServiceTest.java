@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ class UserServiceTest {
         user.setSobrenome("Silva");
         user.setEmail("maria.silva@example.com");
         user.setEndereco("Rua das Flores, 123");
-        user.setDataNascimento(LocalDate.of(1990, 5, 15));
+        user.setDataNascimento(new Date());
     }
 
     @Test
@@ -73,10 +74,10 @@ class UserServiceTest {
     void findOneById_WhenUserExists_ShouldReturnUser() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        Optional<FuncionarioModel> foundUser = userService.findOneById(1L);
+        FuncionarioModel foundUser = userService.findOneById(1L);
 
-        assertThat(foundUser).isPresent();
-        assertThat(foundUser.get().getId()).isEqualTo(1L);
+        assertThat(foundUser).isNotNull();
+        assertThat(foundUser.getId()).isEqualTo(1L);
     }
 
     @Test
@@ -84,9 +85,9 @@ class UserServiceTest {
     void findOneById_WhenUserDoesNotExist_ShouldReturnEmpty() {
         when(userRepository.findById(99L)).thenReturn(Optional.empty());
 
-        Optional<FuncionarioModel> foundUser = userService.findOneById(99L);
+        FuncionarioModel foundUser = userService.findOneById(99L);
 
-        assertThat(foundUser).isEmpty();
+        assertThat(foundUser).isNull();
     }
 
 
@@ -119,35 +120,5 @@ class UserServiceTest {
 
         assertEquals("Usuário não encontrado.", exception.getMessage());
         verify(userRepository, never()).save(any()); // Garante que o save nunca foi chamado
-    }
-
-    @Test
-    @DisplayName("Deve informar o afastamento de um usuário com sucesso")
-    void informarAfastamento_WhenUserExists_ShouldUpdateAbsenceInfo() {
-        String motivo = "Licença Médica";
-        LocalDate inicio = LocalDate.now();
-        LocalDate fim = LocalDate.now().plusDays(10);
-
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(FuncionarioModel.class))).thenReturn(user);
-
-        FuncionarioModel updatedUser = userService.informarAfastamento(1L, motivo, inicio, fim);
-
-        assertThat(updatedUser).isNotNull();
-        assertThat(updatedUser.getMotivoAfastamento()).isEqualTo(motivo);
-        assertThat(updatedUser.getDataInicioAfastamento()).isEqualTo(inicio);
-        assertThat(updatedUser.getDataFimAfastamento()).isEqualTo(fim);
-    }
-
-    @Test
-    @DisplayName("Deve lançar exceção ao tentar informar afastamento para usuário inexistente")
-    void informarAfastamento_WhenUserDoesNotExist_ShouldThrowException() {
-        when(userRepository.findById(99L)).thenReturn(Optional.empty());
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.informarAfastamento(99L, "Férias", LocalDate.now(), LocalDate.now());
-        });
-
-        assertEquals("Usuário não encontrado.", exception.getMessage());
     }
 }

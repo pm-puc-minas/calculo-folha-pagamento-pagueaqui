@@ -8,6 +8,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
+import java.util.Date;
 import java.util.Set;
 import java.time.LocalDate;
 import com.example.hrpayroll.model.FuncionarioModel;
@@ -32,7 +33,7 @@ class UserValidationTest {
         user.setRg("MG12345678");
         user.setEmail("maria.silva@example.com");
         user.setEndereco("Rua XXXX, 123");
-        user.setDataNascimento(LocalDate.of(1995, 10, 20));
+        user.setDataNascimento(new Date());
         user.setSenha("Senha@Forte123");
         return user;
     }

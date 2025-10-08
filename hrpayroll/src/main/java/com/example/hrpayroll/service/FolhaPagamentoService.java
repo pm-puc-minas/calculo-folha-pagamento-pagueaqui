@@ -59,8 +59,7 @@ public class FolhaPagamentoService {
             throw new IllegalArgumentException("Data de início deve ser anterior à data de fim.");
         }
 
-        CompanyModel empresa = companyService.findById(companyId)
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada com ID: " + companyId));
+        CompanyModel empresa = companyService.findById(companyId);
 
         FolhaPagamentoModel novaFolha = new FolhaPagamentoModel();
         novaFolha.setCompany(empresa);
