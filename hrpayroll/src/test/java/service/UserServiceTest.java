@@ -1,6 +1,6 @@
 package com.example.hrpayroll.service;
 
-import com.example.hrpayroll.model.UserModel;
+import com.example.hrpayroll.model.FuncionarioModel;
 import com.example.hrpayroll.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,11 +30,11 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-    private UserModel user;
+    private FuncionarioModel user;
 
     @BeforeEach
     void setUp() {
-        user = new UserModel();
+        user = new FuncionarioModel();
         user.setId(1L);
         user.setNome("Maria");
         user.setSobrenome("Silva");
@@ -46,23 +46,23 @@ class UserServiceTest {
     @Test
     @DisplayName("Deve criar um usuário com sucesso")
     void create_ShouldReturnSavedUser() {
-        when(userRepository.save(any(UserModel.class))).thenReturn(user);
+        when(userRepository.save(any(FuncionarioModel.class))).thenReturn(user);
 
-        UserModel newUser = new UserModel(); // Um novo usuário sem ID
+        FuncionarioModel newUser = new FuncionarioModel(); // Um novo usuário sem ID
         newUser.setNome("Maria");
-        UserModel savedUser = userService.create(newUser);
+        FuncionarioModel savedUser = userService.create(newUser);
 
         assertThat(savedUser).isNotNull();
         assertThat(savedUser.getId()).isEqualTo(1L);
-        verify(userRepository, times(1)).save(any(UserModel.class)); // Verifica se o save foi chamado exatamente 1 vez.
+        verify(userRepository, times(1)).save(any(FuncionarioModel.class)); // Verifica se o save foi chamado exatamente 1 vez.
     }
 
     @Test
     @DisplayName("Deve listar todos os usuários")
     void list_ShouldReturnAllUsers() {
-        when(userRepository.findAll()).thenReturn(List.of(user, new UserModel()));
+        when(userRepository.findAll()).thenReturn(List.of(user, new FuncionarioModel()));
 
-        List<UserModel> users = userService.list();
+        List<FuncionarioModel> users = userService.list();
 
         assertThat(users).isNotNull();
         assertThat(users).hasSize(2);
@@ -73,7 +73,7 @@ class UserServiceTest {
     void findOneById_WhenUserExists_ShouldReturnUser() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        Optional<UserModel> foundUser = userService.findOneById(1L);
+        Optional<FuncionarioModel> foundUser = userService.findOneById(1L);
 
         assertThat(foundUser).isPresent();
         assertThat(foundUser.get().getId()).isEqualTo(1L);
@@ -84,7 +84,7 @@ class UserServiceTest {
     void findOneById_WhenUserDoesNotExist_ShouldReturnEmpty() {
         when(userRepository.findById(99L)).thenReturn(Optional.empty());
 
-        Optional<UserModel> foundUser = userService.findOneById(99L);
+        Optional<FuncionarioModel> foundUser = userService.findOneById(99L);
 
         assertThat(foundUser).isEmpty();
     }
@@ -93,14 +93,14 @@ class UserServiceTest {
     @Test
     @DisplayName("Deve atualizar o cadastro de um usuário existente")
     void atualizarCadastro_WhenUserExists_ShouldReturnUpdatedUser() {
-        UserModel novosDados = new UserModel();
+        FuncionarioModel novosDados = new FuncionarioModel();
         novosDados.setNome("Maria Joaquina");
         novosDados.setEmail("maria.joaquina@example.com");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(UserModel.class))).thenReturn(user); // O save retorna o obj modificado
+        when(userRepository.save(any(FuncionarioModel.class))).thenReturn(user); // O save retorna o obj modificado
 
-        UserModel updatedUser = userService.atualizarCadastro(1L, novosDados);
+        FuncionarioModel updatedUser = userService.atualizarCadastro(1L, novosDados);
 
         assertThat(updatedUser).isNotNull();
         assertThat(updatedUser.getNome()).isEqualTo("Maria Joaquina");
@@ -114,7 +114,7 @@ class UserServiceTest {
         when(userRepository.findById(99L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.atualizarCadastro(99L, new UserModel());
+            userService.atualizarCadastro(99L, new FuncionarioModel());
         });
 
         assertEquals("Usuário não encontrado.", exception.getMessage());
@@ -129,9 +129,9 @@ class UserServiceTest {
         LocalDate fim = LocalDate.now().plusDays(10);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(UserModel.class))).thenReturn(user);
+        when(userRepository.save(any(FuncionarioModel.class))).thenReturn(user);
 
-        UserModel updatedUser = userService.informarAfastamento(1L, motivo, inicio, fim);
+        FuncionarioModel updatedUser = userService.informarAfastamento(1L, motivo, inicio, fim);
 
         assertThat(updatedUser).isNotNull();
         assertThat(updatedUser.getMotivoAfastamento()).isEqualTo(motivo);

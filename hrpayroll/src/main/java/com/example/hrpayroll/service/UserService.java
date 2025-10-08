@@ -1,6 +1,6 @@
 package com.example.hrpayroll.service;
 
-import com.example.hrpayroll.model.UserModel;
+import com.example.hrpayroll.model.FuncionarioModel;
 import com.example.hrpayroll.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,26 +19,26 @@ public class UserService {
                 this.userRepository = userRepository;
         }
 
-        public UserModel create(UserModel userModel) {
-                return userRepository.save(userModel);
+        public FuncionarioModel create(FuncionarioModel funcionarioModel) {
+                return userRepository.save(funcionarioModel);
         }
 
-        public List<UserModel> list() {
+        public List<FuncionarioModel> list() {
                 return userRepository.findAll();
         }
 
-        public Optional<UserModel> findOneById(Long id) {
+        public Optional<FuncionarioModel> findOneById(Long id) {
                 return userRepository.findById(id);
         }
 
-    public UserModel atualizarCadastro(Long id, UserModel novosDados) {
-        Optional<UserModel> usuarioOpt = userRepository.findById(id);
+    public FuncionarioModel atualizarCadastro(Long id, FuncionarioModel novosDados) {
+        Optional<FuncionarioModel> usuarioOpt = userRepository.findById(id);
 
         if (usuarioOpt.isEmpty()) {
             throw new RuntimeException("Usuário não encontrado.");
         }
 
-        UserModel usuario = usuarioOpt.get();
+        FuncionarioModel usuario = usuarioOpt.get();
 
         usuario.setNome(novosDados.getNome());
         usuario.setSobrenome(novosDados.getSobrenome());
@@ -49,14 +49,14 @@ public class UserService {
         return userRepository.save(usuario);
     }
 
-    public UserModel informarAfastamento(Long id, String motivo, LocalDate inicio, LocalDate fim) {
-        Optional<UserModel> usuarioOpt = userRepository.findById(id);
+    public FuncionarioModel informarAfastamento(Long id, String motivo, LocalDate inicio, LocalDate fim) {
+        Optional<FuncionarioModel> usuarioOpt = userRepository.findById(id);
 
         if (usuarioOpt.isEmpty()) {
             throw new RuntimeException("Usuário não encontrado.");
         }
 
-        UserModel usuario = usuarioOpt.get();
+        FuncionarioModel usuario = usuarioOpt.get();
         usuario.setMotivoAfastamento(motivo);
         usuario.setDataInicioAfastamento(inicio);
         usuario.setDataFimAfastamento(fim);

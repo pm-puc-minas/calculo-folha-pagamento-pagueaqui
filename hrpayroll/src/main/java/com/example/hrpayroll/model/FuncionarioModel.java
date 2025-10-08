@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Past;
-import java.time.LocalDate;
+
 import java.util.Date;
 
 import lombok.*;
@@ -18,7 +18,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserModel {
+public class FuncionarioModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

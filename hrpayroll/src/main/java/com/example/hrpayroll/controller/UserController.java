@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
-import com.example.hrpayroll.model.UserModel;
+import com.example.hrpayroll.model.FuncionarioModel;
 import com.example.hrpayroll.service.UserService;
 @RestController
 public class UserController {
@@ -23,17 +23,17 @@ public class UserController {
     }
 
     @PostMapping("/users/create")
-    public UserModel createUser(@Valid @RequestBody UserModel userModel) {
-        return userService.create(userModel);
+    public FuncionarioModel createUser(@Valid @RequestBody FuncionarioModel funcionarioModel) {
+        return userService.create(funcionarioModel);
     }
 
     @GetMapping("/users/{id}")
-    public Optional<UserModel> getUser(@Valid @PathVariable Long id) {
+    public Optional<FuncionarioModel> getUser(@Valid @PathVariable Long id) {
         return userService.findOneById(id);
     }
 
     @GetMapping("/users")
-    public Iterable<UserModel> listUsers() {
+    public Iterable<FuncionarioModel> listUsers() {
         return userService.list();
     }
 }

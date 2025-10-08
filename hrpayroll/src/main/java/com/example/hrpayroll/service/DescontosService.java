@@ -83,11 +83,11 @@ public class DescontosService {
             }
 
             // Atualiza o objeto DescontosModel
-            d.setInss(inss);
+//            d.setInss(inss);
 
             // Calcula o salário líquido e salva no objeto
             double salarioLiquido = salario - inss;
-            d.setSalarioLiquido(salarioLiquido);
+//            d.setSalarioLiquido(salarioLiquido);
 
             // Salva as alterações no banco
             descontosRepository.save(d);
