@@ -1,14 +1,12 @@
 package com.example.hrpayroll.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
@@ -17,6 +15,7 @@ import com.example.hrpayroll.model.CompanyModel;
 import com.example.hrpayroll.service.CompanyService;
 
 @RestController
+@RequestMapping("/companies")
 public class CompanyController {
     @Autowired
     private final CompanyService companyService;
@@ -25,23 +24,48 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @PostMapping("/companies/create")
-    public CompanyModel createCompany(@Valid @RequestBody CompanyModel companyModel) {
-        return companyService.create(companyModel);
+    @PostMapping("/create")
+    public ResponseEntity createCompany(@Valid @RequestBody CompanyModel companyModel) {
+        companyService.create(companyModel);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/companies/{id}")
-    public Optional<CompanyModel> getCompany(@Valid @PathVariable Long id) {
-        return companyService.findById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity getCompany(@Valid @PathVariable Long id) {
+
+        CompanyModel company = companyService.findById(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(company);
     }
 
-    @GetMapping("/companies")
-    public Iterable<CompanyModel> listCompanies() {
-        return companyService.list();
+    @GetMapping("/list")
+    public ResponseEntity listCompanies() {
+
+        List<CompanyModel> companies =  companyService.list();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(companies);
+
     }
 
-    @PatchMapping("/companies/{id}")
-    public CompanyModel patchCompany(@PathVariable Long id, @Valid @RequestBody CompanyPatchDTO companyPatchDto) {
-        return companyService.update(id, companyPatchDto);
+    @PatchMapping("/update/{id}")
+    public ResponseEntity patchCompany(@PathVariable Long id, @Valid @RequestBody CompanyPatchDTO companyPatchDto) {
+        companyService.update(id, companyPatchDto);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+        return ResponseEntity.ok()
+                .headers(headers)
+                .build();
     }
 }
