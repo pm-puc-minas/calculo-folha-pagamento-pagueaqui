@@ -82,11 +82,31 @@ public class DescontosService {
                 inss += faixa * 0.14;
             }
 
+
+            // Calculo do imposto de reda conforme tabela 2024
+            double baseCalculo = salario - inss - 528.00; // desconto simplificado
+
+            double irrf = 0.0;
+
+            if (baseCalculo <= 2112.00) {
+                irrf = 0.0;
+            } else if (baseCalculo <= 2826.65) {
+                irrf = (baseCalculo * 0.075) - 158.40;
+            } else if (baseCalculo <= 3751.05) {
+                irrf = (baseCalculo * 0.15) - 370.40;
+            } else if (baseCalculo <= 4664.68) {
+                irrf = (baseCalculo * 0.225) - 651.73;
+            } else {
+                irrf = (baseCalculo * 0.275) - 884.96;
+            }
+
+            if (irrf < 0) irrf = 0.0; // não pode ter imposto negativo
+
             // Atualiza o objeto DescontosModel
 //            d.setInss(inss);
 
             // Calcula o salário líquido e salva no objeto
-            double salarioLiquido = salario - inss;
+            double salarioLiquido = salario - inss - irrf;
 //            d.setSalarioLiquido(salarioLiquido);
 
             // Salva as alterações no banco
