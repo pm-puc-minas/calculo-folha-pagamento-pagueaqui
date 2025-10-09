@@ -14,10 +14,15 @@ import java.util.Optional;
 public class FuncionarioService {
         private FuncionarioRepository funcionarioRepository;
         private DescontosService descontoService;
+        private AdicionalService adicionalService;
 
-        public FuncionarioService(FuncionarioRepository funcionarioRepository, DescontosService descontoService) {
+        public FuncionarioService(
+                FuncionarioRepository funcionarioRepository,
+                DescontosService descontoService,
+                AdicionalService adicionalService) {
                 this.funcionarioRepository = funcionarioRepository;
                 this.descontoService = descontoService;
+                this.adicionalService = adicionalService;
         }
 
         public FuncionarioModel create(FuncionarioModel funcionarioModel) {
@@ -63,17 +68,35 @@ public class FuncionarioService {
         ProventosModel proventos = funcionario.getProventos();
         Double salarioLiquido = proventos.getSalarioBruto();
 
-        if (proventos.getAdicionalNoturno()) {
-            salarioLiquido = descontoService.calcularAdicionalNoturno(salarioLiquido);
+        if (proventos.getAdicionalNoturno() == true) {
+            salarioLiquido = adicionalService.calcularAdicionalNoturno(salarioLiquido);
         }
 
-        if (proventos.getAdicionalInsalubridade()) {
-            salarioLiquido = descontoService.calcularAdicionalInsalubridade(salarioLiquido);
+        if (proventos.getAdicionalInsalubridade() == true) {
+            salarioLiquido = adicionalService.calcularAdicionalInsalubridade(salarioLiquido);
         }
 
-        if (proventos.getAdicionalPericulosidade()) {
-            salarioLiquido = descontoService.
+        if (proventos.getAdicionalPericulosidade() == true) {
+            salarioLiquido = adicionalService.calcularAdicionalPericulosidade(salarioLiquido);
         }
+
+        if (proventos.getValeTransporte() == true) {
+            salarioLiquido = descontoService.calcularDescontoValeTransporte(salarioLiquido);
+        }
+
+        if (proventos.getPlanoDeSaude() == true) {
+            salarioLiquido = descontoService.calcularDescontoPlanoDeSaude(salarioLiquido);
+        }
+
+        if (proventos.getValeAlimentacaoRefeicao() == true) {
+            salarioLiquido = descontoService.calcularDescontoValeAlimentacao(salarioLiquido);
+        }
+
+        if (proventos.getHorasExtras() > 0) {
+            salarioLiquido = adicionalService.calcularAdicionalHorasExtras(proventos.getHorasExtras(), salarioLiquido);
+        }
+
+        return salarioLiquido;
 
     }
 }

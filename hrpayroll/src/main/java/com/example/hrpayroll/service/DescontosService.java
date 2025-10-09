@@ -97,16 +97,16 @@ public class DescontosService {
         }
     }
 
-    public Double calcularAdicionalNoturno(Double salario) {
-        return null;
+
+    public Double calcularDescontoValeTransporte(Double salarioLiquido) {
+        return salarioLiquido;
     }
 
-    public Double calcularAdicionalInsalubridade(Double salario) {
-        return null;
+    public Double calcularDescontoPlanoDeSaude(Double salarioLiquido) {
+        return salarioLiquido;
     }
 
-    public Double calcularAdicionalPericulosidade(Double salario) {
-        return null;
+    public Double calcularDescontoValeAlimentacao(Double salarioLiquido) {
+        return salarioLiquido;
     }
-
 }
