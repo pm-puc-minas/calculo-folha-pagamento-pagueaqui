@@ -1,8 +1,11 @@
-package com.example.hrpayroll.service;
+package service;
 
 import com.example.hrpayroll.model.CompanyModel;
 import com.example.hrpayroll.model.FolhaPagamentoModel;
 import com.example.hrpayroll.repository.FolhaPagamentoRepository;
+import com.example.hrpayroll.service.CompanyService;
+import com.example.hrpayroll.service.FolhaPagamentoService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class FolhaPagamentoServiceTest {
-
     @Mock
     private FolhaPagamentoRepository repository;
 
