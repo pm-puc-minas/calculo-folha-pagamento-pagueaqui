@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "empresa")
 public class CompanyModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
