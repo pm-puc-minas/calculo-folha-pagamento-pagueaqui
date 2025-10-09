@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 public class AdicionalService {
 
     public Double calcularAdicionalNoturno(Double salario) {
-        return salario;
+        Double adicional = salario * 0.20;
+        return salario + adicional;
     }
 
     public Double calcularAdicionalInsalubridade(Double salario) {
+
         return salario;
     }
 
