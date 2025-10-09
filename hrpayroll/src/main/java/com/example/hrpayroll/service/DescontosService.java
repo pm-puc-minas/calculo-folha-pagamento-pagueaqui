@@ -96,4 +96,17 @@ public class DescontosService {
             System.out.println("Nenhum desconto encontrado para o id: " + id);
         }
     }
+
+    public Double calcularAdicionalNoturno(Double salario) {
+        return null;
+    }
+
+    public Double calcularAdicionalInsalubridade(Double salario) {
+        return null;
+    }
+
+    public Double calcularAdicionalPericulosidade(Double salario) {
+        return null;
+    }
+
 }
