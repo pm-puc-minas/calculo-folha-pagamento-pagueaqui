@@ -42,4 +42,11 @@ public class FuncionarioController {
 
         return ResponseEntity.ok().body(funcioanrio);
     }
+
+    @GetMapping("/getSalarioLiquidoById/{id}")
+    public ResponseEntity getSalarioLiquido(@Valid @PathVariable Long id) {
+        Double salarioLiquido = funcionarioService.salarioLiquidoById(id);
+
+        return ResponseEntity.ok().body(salarioLiquido);
+    }
 }
