@@ -96,4 +96,17 @@ public class DescontosService {
             System.out.println("Nenhum desconto encontrado para o id: " + id);
         }
     }
+
+
+    public Double calcularDescontoValeTransporte(Double salarioLiquido) {
+        return salarioLiquido;
+    }
+
+    public Double calcularDescontoPlanoDeSaude(Double salarioLiquido) {
+        return salarioLiquido;
+    }
+
+    public Double calcularDescontoValeAlimentacao(Double salarioLiquido) {
+        return salarioLiquido;
+    }
 }
