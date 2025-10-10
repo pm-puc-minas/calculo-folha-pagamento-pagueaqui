@@ -4,9 +4,9 @@ import type { Mask } from '@/app/types';
 import { cn } from '@/app/lib/utils';
 import type { ClassValue } from 'clsx';
 import { AlertCircle, Eye } from 'lucide-react';
-import { type ReactNode, useState, forwardRef } from 'react';
+import { type ReactNode, useState, forwardRef, useId } from 'react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
-import { NumericFormat } from 'react-number-format';
+import { NumericFormat, PatternFormat } from 'react-number-format';
 import { withMask } from 'use-mask-input';
 import { EyeClosed } from '@phosphor-icons/react';
 
@@ -41,6 +41,7 @@ interface BaseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   };
   labelPlacement?: 'inside' | 'outside' | 'outside-left';
   endContent?: ReactNode;
+  startContent?: ReactNode;
   isDisabled?: boolean;
   isRequired?: boolean;
 }
@@ -57,10 +58,41 @@ const CustomInput = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
     innerWrapper?: string;
   };
   endContent?: ReactNode;
+  startContent?: ReactNode;
   isDisabled?: boolean;
   isRequired?: boolean;
-}>(({ label, labelPlacement, classNames, endContent, isDisabled, isRequired, className, type, ...props }, ref) => {
-  const inputId = props.id || `input-${Math.random().toString(36).substr(2, 9)}`;
+  customMessage?: ReactNode;
+  customMessageClass?: ClassValue;
+  containerClass?: ClassValue;
+  labelClass?: ClassValue;
+  mask?: Mask;
+  isNumeric?: boolean;
+  isPercentage?: boolean;
+  methods?: any;
+  onValueChange?: (e: number | string) => void;
+}>(({ 
+  label, 
+  labelPlacement, 
+  classNames, 
+  endContent, 
+  startContent, 
+  isDisabled, 
+  isRequired, 
+  className, 
+  type, 
+  customMessage,
+  customMessageClass,
+  containerClass,
+  labelClass,
+  mask,
+  isNumeric,
+  isPercentage,
+  methods,
+  onValueChange,
+  ...props 
+}, ref) => {
+  const generatedId = useId();
+  const inputId = props.id || generatedId;
   
   return (
     <div className="relative">
@@ -74,6 +106,11 @@ const CustomInput = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
         </label>
       )}
       <div className={cn("relative", classNames?.inputWrapper)}>
+        {startContent && (
+          <div className={cn("absolute left-2 top-1/2 -translate-y-1/2", classNames?.innerWrapper)}>
+            {startContent}
+          </div>
+        )}
         <input
           {...props}
           ref={ref}
@@ -126,6 +163,7 @@ export const Input = ({
     ),
     input: cn(
       'text-[#25262B] placeholder:text-[#343A404D] caret-[#25262B]',
+      props.startContent ? 'pl-8' : undefined,
       {
         'text-destructive': methods?.formState?.errors[props.name]?.message,
       },
@@ -160,6 +198,7 @@ export const Input = ({
                   }
                   customInput={CustomInput}
                   label={label}
+                  startContent={props.startContent}
                   onValueChange={(e) => {
                     if (isNumeric) {
                       onChange(e.floatValue);
@@ -214,6 +253,30 @@ export const Input = ({
                     )
                   }
                 />
+              ) : mask ? (
+                <PatternFormat
+                  {...(props as any)}
+                  customInput={CustomInput}
+                  format={mask as any}
+                  allowEmptyFormatting
+                  label={label}
+                  startContent={props.startContent}
+                  onValueChange={(values) => {
+                    onChange(values.formattedValue);
+                    if (methods.setValue) {
+                      methods.setValue(name, values.formattedValue as any);
+                    }
+                    if (props.onValueChange) props.onValueChange(values.formattedValue);
+                  }}
+                  classNames={classNamesUsed}
+                  labelPlacement="outside"
+                  name={name}
+                  value={value}
+                  disabled={disabled}
+                  onBlur={onBlur}
+                  required={props.required}
+                  endContent={props.endContent}
+                />
               ) : (
                 <CustomInput
                   {...props}
@@ -223,6 +286,7 @@ export const Input = ({
                   }
                   required={props.required}
                   label={label}
+                  startContent={props.startContent}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     onChange(e.target.value);
                   }}
@@ -266,6 +330,7 @@ export const Input = ({
               labelPlacement="outside"
               classNames={classNamesUsed}
               label={label}
+              startContent={props.startContent}
               isAllowed={(e) => {
                 if (props.suffix === '%' || isPercentage) {
                   const notAllowed = e.floatValue && e.floatValue > 100;
@@ -305,6 +370,36 @@ export const Input = ({
                 )
               }
             />
+          ) : mask ? (
+            <PatternFormat
+              {...(props as any)}
+              customInput={CustomInput}
+              format={mask as any}
+              allowEmptyFormatting
+              labelPlacement="outside"
+              classNames={classNamesUsed}
+              label={label}
+              startContent={props.startContent}
+              endContent={
+                props.type === 'password' ? (
+                  showPassword ? (
+                    <EyeClosed
+                      className="size-5 mx-2 cursor-pointer text-gray-300"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label="Ocultar senha"
+                    />
+                  ) : (
+                    <Eye
+                      className="size-5 mx-2 cursor-pointer text-gray-300"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label="Mostrar senha"
+                    />
+                  )
+                ) : (
+                  props.endContent
+                )
+              }
+            />
           ) : (
             <CustomInput
               {...props}
@@ -312,6 +407,7 @@ export const Input = ({
               type={props.type === 'password' ? (showPassword ? 'text' : 'password') : props.type}
               classNames={classNamesUsed}
               label={label}
+              startContent={props.startContent}
               endContent={
                 props.type === 'password' ? (
                   showPassword ? (

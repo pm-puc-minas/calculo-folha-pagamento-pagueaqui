@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:api": "orval",
+    "generate:api:watch": "orval --watch"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -38,6 +40,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.14",
+    "orval": "^7.13.2",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.6.2"

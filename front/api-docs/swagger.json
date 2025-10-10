@@ -1,0 +1,1236 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "HR Payroll API",
+    "description": "API para sistema de folha de pagamento",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/api/public/auth/register": {
+      "post": {
+        "tags": ["PublicAuth"],
+        "summary": "Register new account",
+        "operationId": "publicAuthControllerRegister",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicRegisterAccountDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicAuthControllerRegister201"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestGenericResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/auth/login": {
+      "post": {
+        "tags": ["PublicAuth"],
+        "summary": "Login to account",
+        "operationId": "publicAuthControllerLogin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicLoginAccountDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicAuthControllerLogin200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestGenericResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/auth/forget-password": {
+      "post": {
+        "tags": ["PublicAuth"],
+        "summary": "Request password reset",
+        "operationId": "publicAuthControllerForgotPassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicForgetPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset email sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicAuthControllerForgotPassword200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestGenericResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/auth/send-verification-code": {
+      "post": {
+        "tags": ["PublicAuth"],
+        "summary": "Send verification code",
+        "operationId": "publicAuthControllerSendVerificationCode",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicSendVerificationCodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification code sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicAuthControllerSendVerificationCode200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestGenericResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/auth/verify": {
+      "post": {
+        "tags": ["PublicAuth"],
+        "summary": "Verify email",
+        "operationId": "publicAuthControllerVerify",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicVerifyEmailDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email verified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicAuthControllerVerify200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestGenericResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/create": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Create a new user",
+        "operationId": "createUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FuncionarioModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User created successfully"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get user by ID",
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FuncionarioModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["User"],
+        "summary": "List all users",
+        "operationId": "listUsers",
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FuncionarioModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies/create": {
+      "post": {
+        "tags": ["Company"],
+        "summary": "Create a new company",
+        "operationId": "createCompany",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Company created successfully"
+          }
+        }
+      }
+    },
+    "/companies/{id}": {
+      "get": {
+        "tags": ["Company"],
+        "summary": "Get company by ID",
+        "operationId": "getCompany",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Company found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies/list": {
+      "get": {
+        "tags": ["Company"],
+        "summary": "List all companies",
+        "operationId": "listCompanies",
+        "responses": {
+          "200": {
+            "description": "List of companies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CompanyModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies/update/{id}": {
+      "patch": {
+        "tags": ["Company"],
+        "summary": "Update company",
+        "operationId": "patchCompany",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyPatchDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Company updated successfully"
+          }
+        }
+      }
+    },
+    "/folhas": {
+      "get": {
+        "tags": ["FolhaPagamento"],
+        "summary": "List all payroll sheets",
+        "operationId": "listarTodas",
+        "responses": {
+          "200": {
+            "description": "List of payroll sheets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FolhaPagamentoModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/folhas/{id}": {
+      "get": {
+        "tags": ["FolhaPagamento"],
+        "summary": "Get payroll sheet by ID",
+        "operationId": "buscarPorId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payroll sheet found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FolhaPagamentoModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/folhas/create": {
+      "post": {
+        "tags": ["FolhaPagamento"],
+        "summary": "Create payroll sheet",
+        "operationId": "criar",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FolhaPagamentoModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Payroll sheet created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FolhaPagamentoModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/folhas/empresa/{companyId}": {
+      "get": {
+        "tags": ["FolhaPagamento"],
+        "summary": "Get payroll sheets by company",
+        "operationId": "buscarPorEmpresa",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payroll sheets found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FolhaPagamentoModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/folhas/gerar/{companyId}": {
+      "post": {
+        "tags": ["FolhaPagamento"],
+        "summary": "Generate new payroll sheet",
+        "operationId": "gerarNovaFolha",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "dataInicio",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "dataFim",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "salarioBase",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "decimal"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "New payroll sheet generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FolhaPagamentoModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/descontos": {
+      "get": {
+        "tags": ["Descontos"],
+        "summary": "List all discounts",
+        "operationId": "listarTodos",
+        "responses": {
+          "200": {
+            "description": "List of discounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DescontosModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Descontos"],
+        "summary": "Create discount",
+        "operationId": "criar",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DescontosModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Discount created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DescontosModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/descontos/ativos": {
+      "get": {
+        "tags": ["Descontos"],
+        "summary": "List active discounts",
+        "operationId": "listarAtivos",
+        "responses": {
+          "200": {
+            "description": "List of active discounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DescontosModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/descontos/{id}": {
+      "get": {
+        "tags": ["Descontos"],
+        "summary": "Get discount by ID",
+        "operationId": "buscarPorId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Discount found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DescontosModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Discount not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Descontos"],
+        "summary": "Update discount",
+        "operationId": "atualizar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DescontosModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Discount updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DescontosModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Descontos"],
+        "summary": "Delete discount",
+        "operationId": "deletar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Discount deleted"
+          }
+        }
+      }
+    },
+    "/api/descontos/{id}/inativar": {
+      "patch": {
+        "tags": ["Descontos"],
+        "summary": "Deactivate discount",
+        "operationId": "inativar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Discount deactivated"
+          }
+        }
+      }
+    },
+    "/api/employee/auth/change-password": {
+      "patch": {
+        "tags": ["EmployeeAuth"],
+        "summary": "Change employee password",
+        "operationId": "employeeAuthControllerRegister",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeAuthControllerRegister200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestGenericResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedGenericResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenGenericResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundGenericResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/employee/auth/list-users": {
+      "get": {
+        "tags": ["EmployeeAuth"],
+        "summary": "List all users",
+        "operationId": "employeeAuthControllerListUsers",
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeAuthControllerListUsers200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestGenericResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedGenericResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenGenericResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundGenericResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FuncionarioModel": {
+        "type": "object",
+        "required": ["nome", "sobrenome", "cpf", "rg", "email", "endereco", "senha"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "sobrenome": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string",
+            "pattern": "\\d{11}",
+            "description": "CPF deve conter 11 dígitos numéricos"
+          },
+          "rg": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "endereco": {
+            "type": "string"
+          },
+          "dataNascimento": {
+            "type": "string",
+            "format": "date"
+          },
+          "pis": {
+            "type": "number",
+            "format": "double"
+          },
+          "dataDeAdmissao": {
+            "type": "string",
+            "format": "date"
+          },
+          "cargo": {
+            "type": "string"
+          },
+          "senha": {
+            "type": "string",
+            "minLength": 8,
+            "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+          }
+        }
+      },
+      "CompanyModel": {
+        "type": "object",
+        "required": ["cnpj", "razaoSocial"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "cnpj": {
+            "type": "string",
+            "pattern": "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}",
+            "description": "CNPJ no formato XX.XXX.XXX/XXXX-XX"
+          },
+          "razaoSocial": {
+            "type": "string"
+          },
+          "nomeFantasia": {
+            "type": "string"
+          },
+          "inscricaoEstadual": {
+            "type": "string"
+          }
+        }
+      },
+      "CompanyPatchDTO": {
+        "type": "object",
+        "properties": {
+          "cnpj": {
+            "type": "string"
+          },
+          "razaoSocial": {
+            "type": "string"
+          }
+        }
+      },
+      "FolhaPagamentoModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dataInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataFim": {
+            "type": "string",
+            "format": "date"
+          },
+          "salarioBase": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
+      },
+      "DescontosModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "valor": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PublicRegisterAccountDto": {
+        "type": "object",
+        "required": ["nome", "sobrenome", "email", "password", "cpf"],
+        "properties": {
+          "nome": { "type": "string" },
+          "sobrenome": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string", "minLength": 8 },
+          "cpf": { "type": "string", "pattern": "\\d{11}" },
+          "rg": { "type": "string" },
+          "endereco": { "type": "string" }
+        }
+      },
+      "PublicLoginAccountDto": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string" }
+        }
+      },
+      "PublicForgetPasswordDto": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "PublicSendVerificationCodeDto": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "PublicVerifyEmailDto": {
+        "type": "object",
+        "required": ["email", "verificationCode"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "verificationCode": {
+            "type": "string"
+          }
+        }
+      },
+      "PublicAuthControllerRegister201": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PublicAuthControllerLogin200": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PublicAuthControllerForgotPassword200": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "PublicAuthControllerSendVerificationCode200": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "PublicAuthControllerVerify200": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "BadRequestGenericResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "UnauthorizedGenericResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "ForbiddenGenericResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "NotFoundGenericResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "EmployeeChangePasswordDto": {
+        "type": "object",
+        "required": ["token", "newPassword", "confirmPassword"],
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Token de autenticação"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "Nova senha"
+          },
+          "confirmPassword": {
+            "type": "string",
+            "description": "Confirmação da nova senha"
+          }
+        }
+      },
+      "EmployeeAuthControllerRegister200": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        }
+      },
+      "EmployeeAuthControllerListUsers200": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserSummaryDto"
+            }
+          },
+          "totalUsers": {
+            "type": "integer"
+          }
+        }
+      },
+      "UserSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "sobrenome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "cargo": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
