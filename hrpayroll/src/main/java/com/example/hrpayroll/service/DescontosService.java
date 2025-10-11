@@ -150,7 +150,23 @@ public class DescontosService {
         double ps = calcularDescontoPlanoDeSaude(salario);
         double va = calcularDescontoValeAlimentacao(salario);
 
-        totalDescontos = calcularDescontoValeTransporte(salario) + calcularDescontoValeAlimentacao(salario) + calcularDescontoPlanoDeSaude(salario);
+        return vt + ps + va;
+    }
+
+    public Double calcularSalarioLiquido(Long idFuncionario, Double salario) {
+        Optional<DescontosModel> descontoEncontrado = buscarPorId(idFuncionario);
+
+        if (descontoEncontrado.isPresent()) {
+            DescontosModel d = descontoEncontrado.get();
+
+            double inss = calcularINSS(idFuncionario, salario);
+            double irrf = calcularIRRF(idFuncionario, salario);
+
+            // salva no DescontosModel
+            d.setInss(inss);
+            d.setIrrf(irrf);
+            d.setSalarioLiquido(salario - inss - irrf - calcularTotalDescontos(salario));
+            descontosRepository.save(d);
 
         return salario - totalDescontos;
     }
