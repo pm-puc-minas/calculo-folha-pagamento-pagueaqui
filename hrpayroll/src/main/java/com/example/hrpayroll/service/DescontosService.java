@@ -144,4 +144,11 @@ public class DescontosService {
         return salario - (salario * 0.1);
     }
 
+    public Double calcularTotalDescontos(Double salario) {
+        double totalDescontos = 0.0;
+
+        totalDescontos = calcularDescontoValeTransporte(salario) + calcularDescontoValeAlimentacao(salario) + calcularDescontoPlanoDeSaude(salario);
+
+        return salario - totalDescontos;
+    }
 }
