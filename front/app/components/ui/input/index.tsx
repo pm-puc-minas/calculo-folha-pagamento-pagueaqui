@@ -18,6 +18,8 @@ interface NumericFormatProps {
   prefix?: string;
   suffix?: string;
   isAllowed?: (e: { floatValue: number }) => boolean;
+  allowNegative?: boolean;
+  format?: string;
 }
 
 interface BaseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -45,7 +47,10 @@ interface BaseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   isRequired?: boolean;
 }
 
-export interface InputProps extends BaseInputProps, Partial<NumericFormatProps> {}
+export interface InputProps extends BaseInputProps, Partial<NumericFormatProps> {
+  valueIsNumericString?: boolean;
+}
+type NumberFormatOnValueChange = (values: { formattedValue: string; value: string; floatValue?: number }) => void;
 
 const CustomInput = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
@@ -107,6 +112,7 @@ export const Input = ({
   isPercentage,
   methods,
   classNames,
+  valueIsNumericString,
   ...props
 }: InputProps) => {
   props.isDisabled = props.disabled;
@@ -142,6 +148,14 @@ export const Input = ({
     innerWrapper: cn('ml-0 [&>svg]:size-5 text-[#9F9F9F]', classNames?.innerWrapper),
   };
 
+  const {
+    customMessage: _customMessage,
+    customMessageClass: _customMessageClass,
+    onValueChange: _onValueChange,
+    endContent: _endContent,
+    ...safeProps
+  } = props;
+
   return (
     <div className={cn('flex flex-col flex-1 gap-1.5', containerClass)}>
       {methods?.control ? (
@@ -154,18 +168,34 @@ export const Input = ({
             render={({ field: { name, onChange, value, disabled, onBlur } }) =>
               isNumeric ? (
                 <NumericFormat
-                  {...(props as any)}
+                  {...(safeProps as any)}
                   type={
                     props.type === 'password' ? (showPassword ? 'text' : 'password') : (props.type as any)
                   }
                   customInput={CustomInput}
+                  getInputRef={
+                    mask
+                      ? withMask(mask, {
+                          showMaskOnHover: false,
+                          showMaskOnFocus: false,
+                        })
+                      : undefined
+                  }
                   label={label}
-                  onValueChange={(e) => {
-                    if (isNumeric) {
-                      onChange(e.floatValue);
+                  onValueChange={(e: any) => {
+                    if (!isNumeric) return;
+                    if (valueIsNumericString) {
+                      const formatted = (e as { formattedValue: string }).formattedValue;
+                      onChange(formatted);
                       if (methods.setValue) {
-                        methods.setValue(name, e.floatValue);
+                        methods.setValue(name, formatted);
                       }
+                      return;
+                    }
+                    const fv = (e as { floatValue?: number }).floatValue;
+                    onChange(fv);
+                    if (methods.setValue) {
+                      methods.setValue(name, fv as any);
                     }
                   }}
                   isAllowed={(e) => {
@@ -216,7 +246,7 @@ export const Input = ({
                 />
               ) : (
                 <CustomInput
-                  {...props}
+                  {...safeProps}
                   className={props.className}
                   type={
                     props.type === 'password' ? (showPassword ? 'text' : 'password') : props.type
@@ -232,6 +262,14 @@ export const Input = ({
                   value={value}
                   disabled={disabled}
                   onBlur={onBlur}
+                  ref={
+                    mask
+                      ? withMask(mask, {
+                          showMaskOnHover: false,
+                          showMaskOnFocus: false,
+                        })
+                      : undefined
+                  }
                   endContent={
                     props.type === 'password' ? (
                       showPassword ? (
@@ -260,12 +298,28 @@ export const Input = ({
         <>
           {isNumeric ? (
             <NumericFormat
-              {...(props as any)}
+              {...(safeProps as any)}
               type={props.type === 'password' ? (showPassword ? 'text' : 'password') : (props.type as any)}
               customInput={CustomInput}
+              getInputRef={
+                mask
+                  ? withMask(mask, {
+                      showMaskOnHover: false,
+                      showMaskOnFocus: false,
+                    })
+                  : undefined
+              }
               labelPlacement="outside"
               classNames={classNamesUsed}
               label={label}
+              onValueChange={(e: any) => {
+                if (!isNumeric) return;
+                if ((props as any).valueIsNumericString) {
+                  const formatted = (e as { formattedValue: string }).formattedValue;
+                  (props as any).onChange?.(formatted);
+                  return;
+                }
+              }}
               isAllowed={(e) => {
                 if (props.suffix === '%' || isPercentage) {
                   const notAllowed = e.floatValue && e.floatValue > 100;
@@ -307,11 +361,22 @@ export const Input = ({
             />
           ) : (
             <CustomInput
-              {...props}
+              {...safeProps}
               labelPlacement="outside"
               type={props.type === 'password' ? (showPassword ? 'text' : 'password') : props.type}
               classNames={classNamesUsed}
               label={label}
+              ref={
+                mask
+                  ? withMask(mask, {
+                      showMaskOnHover: false,
+                      showMaskOnFocus: false,
+                    })
+                  : undefined
+              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                (props as any).onChange?.(e.target.value);
+              }}
               endContent={
                 props.type === 'password' ? (
                   showPassword ? (

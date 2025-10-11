@@ -22,20 +22,14 @@ import { toast } from 'sonner';
 // props
 interface DeleteConfirmationModalProps {
   children: React.ReactNode;
-  /** título do modal. Ex: "Excluir Usuário". */
   title: string;
-  /** nome do item a ser excluido. Ex: "Usuário". */
   item: string;
-  /** nome específico do item a ser excluído. Ex: "João da Silva". */
   itemName: string;
-  /** função que efetivamente chama a API para deletar. Deve retornar uma Promise. */
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   deleteFn: () => Promise<any>;
-  /** chave da query do React Query que deve ser invalidada após o sucesso. Ex: ['users']. */
   queryKey: string[];
-  /** mensagem de sucesso customizada. */
   successMessage?: string;
-  /** mensagem de erro customizada. */
   errorMessage?: string;
 }
 
