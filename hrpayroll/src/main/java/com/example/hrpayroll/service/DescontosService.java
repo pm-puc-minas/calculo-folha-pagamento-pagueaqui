@@ -1,7 +1,7 @@
 package com.example.hrpayroll.service;
 
 import com.example.hrpayroll.model.DescontosModel;
-/*import com.example.hrpayroll.model.FuncionarioModel;*/
+import com.example.hrpayroll.model.FuncionarioModel;
 import com.example.hrpayroll.model.ProventosModel;
 import com.example.hrpayroll.repository.DescontosRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -143,7 +143,7 @@ class DescontosServiceTest {
         Double salarioLiquido = spyService.calcularSalarioLiquido(1L, salario);
 
         // Assert
-        double esperado = salario - 200.0 - 100.0 - 50.0; // 1650.0
+        Double esperado = salario - 200.0 - 100.0 - 50.0; // 1650.0
         assertEquals(esperado, salarioLiquido, 0.0001);
 
         verify(descontosRepository, times(1)).save(any(DescontosModel.class));
@@ -156,7 +156,7 @@ class DescontosServiceTest {
 
         Double resultado = descontosService.calcularDescontoValeTransporte(salario);
 
-        double esperado = 2000.0 * 0.06; // 120
+        Double esperado = 2000.0 * 0.06; // 120
         assertEquals(esperado, resultado, 0.0001);
     }
 
@@ -167,7 +167,7 @@ class DescontosServiceTest {
 
         Double resultado = descontosService.calcularDescontoPlanoDeSaude(salario);
 
-        double esperado = 2000.0 * 0.03; //60
+        Double esperado = 2000.0 * 0.03; //60
         assertEquals(esperado, resultado, 0.0001);
 
     }
