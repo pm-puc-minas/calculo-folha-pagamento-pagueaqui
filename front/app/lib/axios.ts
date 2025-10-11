@@ -8,7 +8,7 @@ import axios, { AxiosError } from 'axios';
 import { deleteCookie, getCookie } from 'cookies-next';
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8080',
   headers: {
     'Content-Type': 'application/json',
     'ngrok-skip-browser-warning': '4000',
@@ -47,7 +47,7 @@ api.interceptors.response.use(
     if (response.status === 401) {
       deleteCookie('token');
       deleteCookie('user');
-      window.location.href = '/auth/login';
+  window.location.href = '/auth/hr/login';
     }
 
     return response;
@@ -56,7 +56,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !error.response?.config?.url?.includes('login')) {
       deleteCookie('token');
       deleteCookie('user');
-      window.location.href = '/auth/login';
+      window.location.href = '/auth/hr/login';
     }
 
     return Promise.reject(error);
@@ -64,3 +64,18 @@ api.interceptors.response.use(
 );
 
 export default api;
+
+export const customInstance = <T>(config: any, options?: any): Promise<T> => {
+  const source = axios.CancelToken.source();
+  const promise = api({
+    ...config,
+    cancelToken: source.token,
+  }).then(({ data }) => data);
+
+  // @ts-ignore
+  promise.cancel = () => {
+    source.cancel('Query was cancelled');
+  };
+
+  return promise;
+};

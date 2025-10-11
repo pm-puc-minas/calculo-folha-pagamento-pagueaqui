@@ -62,3 +62,10 @@ export interface FolhaPagamentoDto {
   salarioBase?: number;
   observacoes?: string;
 }
+
+export interface AuthUserDto {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
