@@ -118,4 +118,27 @@ class DescontosServiceTest {
 
         verify(descontosRepository, times(1)).save(any(DescontosModel.class));
     }
+
+    @Test
+    void deveCalcularDescontoValeTransporteCorretamente() {
+        DescontosService descontosService = new DescontosService();
+        Double salario = 2000.0;
+
+        Double resultado = descontosService.calcularDescontoValeTransporte(salario);
+
+        Double esperado = 2000.0 - (2000.0 * 0.06); // 1880.0
+        assertEquals(esperado, resultado, 0.0001);
+    }
+
+    @Test
+    void deveCalcularPlanoSaudeCorretamente() {
+        DescontosService descontosService = new DescontosService();
+        Double salario = 2000.0;
+
+        Double resultado = descontosService.calcularDescontoPlanoDeSaude(salario);
+
+        Double esperado = 2000.0 - (2000.0 * 0.03); // 1940
+        assertEquals(esperado, resultado, 0.0001);
+
+    }
 }

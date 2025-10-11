@@ -1,6 +1,8 @@
 package com.example.hrpayroll.service;
 
 import com.example.hrpayroll.model.DescontosModel;
+import com.example.hrpayroll.model.FuncionarioModel;
+import com.example.hrpayroll.model.ProventosModel;
 import com.example.hrpayroll.repository.DescontosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,7 +84,6 @@ public class DescontosService {
                 inss += faixa * 0.14;
             }
 
-
             // Calculo do imposto de reda conforme tabela 2024
             double baseCalculo = salario - inss - 528.00; // desconto simplificado
 
@@ -117,16 +118,30 @@ public class DescontosService {
         }
     }
 
+    public Double calcularDescontoValeTransporte(Double salario) {
+        Optional<DescontosModel> descontoEncontrado;
+        double baseCalculo = salario;
+        double salarioLiquido;
+        return salarioLiquido = salario - (salario * 0.06);
 
-    public Double calcularDescontoValeTransporte(Double salarioLiquido) {
-        return salarioLiquido;
     }
 
-    public Double calcularDescontoPlanoDeSaude(Double salarioLiquido) {
-        return salarioLiquido;
+    public Double calcularDescontoPlanoDeSaude(Double salario) {
+        ProventosModel proventos = new ProventosModel();
+        proventos.setPlanoDeSaude(true); // ou false, dependendo do teste
+
+        if (!proventos.getPlanoDeSaude()) {
+            return salario;
+        } else {
+            return salario - (salario * 0.03);
+        }
     }
 
-    public Double calcularDescontoValeAlimentacao(Double salarioLiquido) {
-        return salarioLiquido;
+
+
+
+    public Double calcularDescontoValeAlimentacao(Double salario) {
+        return salario - (salario * 0.1);
     }
+
 }
