@@ -118,6 +118,40 @@ class DescontosServiceTest {
     }
 
     @Test
+    void deveCalcularIRRFComSucesso() {
+        when(descontosRepository.findById(1L)).thenReturn(Optional.of(desconto));
+        when(descontosRepository.save(any())).thenReturn(desconto);
+
+        descontosService.calcularIRRF(1L, 3500.00);
+
+        // verify(descontosRepository, times(1)).save(any(DescontosModel.class));
+    }
+
+    @Test
+    void deveCalcularSalarioComSucesso() {
+        // Arrange
+        Double salario = 2000.0;
+        when(descontosRepository.findById(1L)).thenReturn(Optional.of(desconto));
+
+        // Mock dos métodos internos do serviço (se não forem privados)
+        DescontosService spyService = spy(descontosService);
+        doReturn(200.0).when(spyService).calcularINSS(1L, salario);
+        doReturn(100.0).when(spyService).calcularIRRF(1L, salario);
+        doReturn(50.0).when(spyService).calcularTotalDescontos(salario);
+
+        // Act
+        Double salarioLiquido = spyService.calcularSalarioLiquido(1L, salario);
+
+        // Assert
+        Double esperado = salario - 200.0 - 100.0 - 50.0; // 1650.0
+        assertEquals(esperado, salarioLiquido, 0.0001);
+
+        verify(descontosRepository, times(1)).save(any(DescontosModel.class));
+    }
+
+
+
+    @Test
     void deveCalcularDescontoValeTransporteCorretamente() {
         DescontosService descontosService = new DescontosService();
         Double salario = 2000.0;
