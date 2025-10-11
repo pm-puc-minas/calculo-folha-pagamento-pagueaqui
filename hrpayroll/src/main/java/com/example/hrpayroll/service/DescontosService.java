@@ -145,7 +145,9 @@ public class DescontosService {
     }
 
     public Double calcularTotalDescontos(Double salario) {
-        double totalDescontos = 0.0;
+        double vt = calcularDescontoValeTransporte(salario);
+        double ps = calcularDescontoPlanoDeSaude(salario);
+        double va = calcularDescontoValeAlimentacao(salario);
 
         totalDescontos = calcularDescontoValeTransporte(salario) + calcularDescontoValeAlimentacao(salario) + calcularDescontoPlanoDeSaude(salario);
 
