@@ -51,43 +51,52 @@ public class DescontosService {
         descontosRepository.save(desconto);
     }
 
-    public void calcularINSS(Long id, DescontosModel desconto, Double salario) {
+    public Double calcularINSS(Long id, Double salario) {
         Optional<DescontosModel> descontoEncontrado = buscarPorId(id);
 
         if (descontoEncontrado.isPresent()) {
             DescontosModel d = descontoEncontrado.get();
 
-            // Cálculo progressivo do INSS
             double inss = 0.0;
 
-            // Faixa 1: até R$ 1.412,00 → 7,5%
             if (salario > 0) {
                 double faixa = Math.min(salario, 1412.00);
                 inss += faixa * 0.075;
             }
 
-            // Faixa 2: 1.412,01 até 2.666,68 → 9%
             if (salario > 1412.00) {
                 double faixa = Math.min(salario, 2666.68) - 1412.00;
                 inss += faixa * 0.09;
             }
 
-            // Faixa 3: 2.666,69 até 4.000,03 → 12%
             if (salario > 2666.68) {
                 double faixa = Math.min(salario, 4000.03) - 2666.68;
                 inss += faixa * 0.12;
             }
 
-            // Faixa 4: 4.000,04 até 7.786,02 → 14%
             if (salario > 4000.03) {
                 double faixa = Math.min(salario, 7786.02) - 4000.03;
                 inss += faixa * 0.14;
             }
+            d.setInss(inss);
 
-            // Calculo do imposto de reda conforme tabela 2024
-            double baseCalculo = salario - inss - 528.00; // desconto simplificado
+            return inss;
+        } else {
+            System.out.println("Nenhum desconto encontrado para o id: " + id);
+            return 0.0;
+        }
+    }
 
-            double irrf = 0.0;
+    public Double calcularIRRF(Long id, Double salario) {
+        Optional<DescontosModel> descontoEncontrado = buscarPorId(id);
+
+        if (descontoEncontrado.isPresent()) {
+            DescontosModel d = descontoEncontrado.get();
+
+            double inss = calcularINSS(id, salario);
+
+            double baseCalculo = salario - inss - 528.00;
+            double irrf;
 
             if (baseCalculo <= 2112.00) {
                 irrf = 0.0;
@@ -101,29 +110,20 @@ public class DescontosService {
                 irrf = (baseCalculo * 0.275) - 884.96;
             }
 
-            if (irrf < 0) irrf = 0.0; // não pode ter imposto negativo
+            irrf = Math.max(irrf, 0.0);
 
-            // Atualiza o objeto DescontosModel
-//            d.setInss(inss);
+            d.setIrrf(irrf);
 
-            // Calcula o salário líquido e salva no objeto
-            double salarioLiquido = salario - inss - irrf;
-//            d.setSalarioLiquido(salarioLiquido);
-
-            // Salva as alterações no banco
-            descontosRepository.save(d);
+            return irrf;
 
         } else {
             System.out.println("Nenhum desconto encontrado para o id: " + id);
+            return 0.0;
         }
     }
 
     public Double calcularDescontoValeTransporte(Double salario) {
-        Optional<DescontosModel> descontoEncontrado;
-        double baseCalculo = salario;
-        double salarioLiquido;
-        return salarioLiquido = salario - (salario * 0.06);
-
+        return salario * 0.06;
     }
 
     public Double calcularDescontoPlanoDeSaude(Double salario) {
@@ -131,17 +131,43 @@ public class DescontosService {
         proventos.setPlanoDeSaude(true); // ou false, dependendo do teste
 
         if (!proventos.getPlanoDeSaude()) {
-            return salario;
+            return 0.0;
         } else {
-            return salario - (salario * 0.03);
+            return salario * 0.03;
         }
     }
 
-
-
-
     public Double calcularDescontoValeAlimentacao(Double salario) {
-        return salario - (salario * 0.1);
+        return salario * 0.10;
     }
 
+    public Double calcularTotalDescontos(Double salario) {
+        double vt = calcularDescontoValeTransporte(salario);
+        double ps = calcularDescontoPlanoDeSaude(salario);
+        double va = calcularDescontoValeAlimentacao(salario);
+
+        return vt + ps + va;
+    }
+
+    public Double calcularSalarioLiquido(Long idFuncionario, Double salario) {
+        Optional<DescontosModel> descontoEncontrado = buscarPorId(idFuncionario);
+
+        if (descontoEncontrado.isPresent()) {
+            DescontosModel d = descontoEncontrado.get();
+
+            double inss = calcularINSS(idFuncionario, salario);
+            double irrf = calcularIRRF(idFuncionario, salario);
+
+            // salva no DescontosModel
+            d.setInss(inss);
+            d.setIrrf(irrf);
+            d.setSalarioLiquido(salario - inss - irrf - calcularTotalDescontos(salario));
+            descontosRepository.save(d);
+
+            return d.getSalarioLiquido();
+        } else {
+            System.out.println("Nenhum desconto encontrado para o id: " + idFuncionario);
+            return salario;
+        }
+    }
 }

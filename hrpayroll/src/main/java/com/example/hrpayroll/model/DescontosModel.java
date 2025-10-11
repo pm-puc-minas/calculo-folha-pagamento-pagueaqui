@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class DescontosModel {
 
     @Id
@@ -40,4 +42,8 @@ public class DescontosModel {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private TipoDesconto tipo; // PERCENTUAL ou FIXO
+
+    private Double inss;
+    private Double irrf;
+    private Double salarioLiquido;
 }
