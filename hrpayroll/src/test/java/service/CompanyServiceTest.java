@@ -1,8 +1,10 @@
-package com.example.hrpayroll.service;
+package service;
 
 import com.example.hrpayroll.dto.CompanyPatchDTO;
 import com.example.hrpayroll.model.CompanyModel;
 import com.example.hrpayroll.repository.CompanyRepository;
+import com.example.hrpayroll.service.CompanyService;
+
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,7 +1,9 @@
-package com.example.hrpayroll.service;
+package service;
 
 import com.example.hrpayroll.model.DescontosModel;
 import com.example.hrpayroll.repository.DescontosRepository;
+import com.example.hrpayroll.service.DescontosService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;

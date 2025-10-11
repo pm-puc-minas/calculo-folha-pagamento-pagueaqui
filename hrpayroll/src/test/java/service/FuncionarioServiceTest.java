@@ -1,7 +1,9 @@
-package com.example.hrpayroll.service;
+package service;
 
 import com.example.hrpayroll.model.FuncionarioModel;
 import com.example.hrpayroll.repository.FuncionarioRepository;
+import com.example.hrpayroll.service.FuncionarioService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
