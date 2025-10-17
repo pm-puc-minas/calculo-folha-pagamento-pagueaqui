@@ -2,7 +2,7 @@ package service;
 
 import com.example.hrpayroll.model.CompanyModel;
 import com.example.hrpayroll.model.FolhaPagamentoModel;
-import com.example.hrpayroll.repository.FolhaPagamentoRepository;
+import com.example.hrpayroll.repository.IFolhaPagamentoRepository;
 import com.example.hrpayroll.service.CompanyService;
 import com.example.hrpayroll.service.FolhaPagamentoService;
 
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 class FolhaPagamentoServiceTest {
     @Mock
-    private FolhaPagamentoRepository repository;
+    private IFolhaPagamentoRepository repository;
 
     @Mock
     private CompanyService companyService;

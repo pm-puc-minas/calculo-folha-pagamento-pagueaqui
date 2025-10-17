@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface FolhaPagamentoRepository extends JpaRepository <FolhaPagamentoModel, Long> {
+public interface IFolhaPagamentoRepository extends JpaRepository <FolhaPagamentoModel, Long> {
 
     List<FolhaPagamentoModel> findByCompanyId(Long companyId);
 

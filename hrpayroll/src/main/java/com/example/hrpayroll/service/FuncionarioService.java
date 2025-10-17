@@ -2,9 +2,8 @@ package com.example.hrpayroll.service;
 
 import com.example.hrpayroll.model.FuncionarioModel;
 import com.example.hrpayroll.model.ProventosModel;
-import com.example.hrpayroll.repository.FuncionarioRepository;
+import com.example.hrpayroll.repository.IFuncionarioRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,29 +11,29 @@ import java.util.Optional;
 
 @Service
 public class FuncionarioService {
-        private FuncionarioRepository funcionarioRepository;
+        private IFuncionarioRepository IFuncionarioRepository;
         private DescontosService descontoService;
         private AdicionalService adicionalService;
 
         public FuncionarioService(
-                FuncionarioRepository funcionarioRepository,
+                IFuncionarioRepository IFuncionarioRepository,
                 DescontosService descontoService,
                 AdicionalService adicionalService) {
-                this.funcionarioRepository = funcionarioRepository;
+                this.IFuncionarioRepository = IFuncionarioRepository;
                 this.descontoService = descontoService;
                 this.adicionalService = adicionalService;
         }
 
         public FuncionarioModel create(FuncionarioModel funcionarioModel) {
-                return funcionarioRepository.save(funcionarioModel);
+                return IFuncionarioRepository.save(funcionarioModel);
         }
 
         public List<FuncionarioModel> list() {
-                return funcionarioRepository.findAll();
+                return IFuncionarioRepository.findAll();
         }
 
         public FuncionarioModel findOneById(Long id) {
-                Optional<FuncionarioModel> funcionario = funcionarioRepository.findById(id);
+                Optional<FuncionarioModel> funcionario = IFuncionarioRepository.findById(id);
 
                 if (funcionario.isPresent()) {
                     return funcionario.get();
@@ -44,7 +43,7 @@ public class FuncionarioService {
         }
 
     public FuncionarioModel atualizarCadastro(Long id, FuncionarioModel novosDados) {
-        Optional<FuncionarioModel> usuarioOpt = funcionarioRepository.findById(id);
+        Optional<FuncionarioModel> usuarioOpt = IFuncionarioRepository.findById(id);
 
         if (usuarioOpt.isEmpty()) {
             throw new RuntimeException("Usuário não encontrado.");
@@ -58,7 +57,7 @@ public class FuncionarioService {
         usuario.setEndereco(novosDados.getEndereco());
         usuario.setDataNascimento(novosDados.getDataNascimento());
 
-        return funcionarioRepository.save(usuario);
+        return IFuncionarioRepository.save(usuario);
     }
 
     public Double salarioLiquidoById(Long id) {

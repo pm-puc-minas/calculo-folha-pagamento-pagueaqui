@@ -2,7 +2,7 @@ package service;
 
 import com.example.hrpayroll.dto.CompanyPatchDTO;
 import com.example.hrpayroll.model.CompanyModel;
-import com.example.hrpayroll.repository.CompanyRepository;
+import com.example.hrpayroll.repository.ICompanyRepository;
 import com.example.hrpayroll.service.CompanyService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 class CompanyServiceTest {
 
     @Mock
-    private CompanyRepository companyRepository;
+    private ICompanyRepository ICompanyRepository;
 
     @InjectMocks
     private CompanyService companyService;
@@ -48,20 +48,20 @@ class CompanyServiceTest {
     @Test
     @DisplayName("Deve criar uma nova empresa com sucesso")
     void create_shouldReturnSavedCompany() {
-        when(companyRepository.save(any(CompanyModel.class))).thenReturn(company);
+        when(ICompanyRepository.save(any(CompanyModel.class))).thenReturn(company);
 
         CompanyModel newCompany = new CompanyModel();
         CompanyModel savedCompany = companyService.create(newCompany);
 
         assertThat(savedCompany).isNotNull();
         assertThat(savedCompany.getId()).isEqualTo(1L);
-        verify(companyRepository, times(1)).save(any(CompanyModel.class));
+        verify(ICompanyRepository, times(1)).save(any(CompanyModel.class));
     }
 
     @Test
     @DisplayName("Deve listar todas as empresas")
     void list_shouldReturnListOfCompanies() {
-        when(companyRepository.findAll()).thenReturn(List.of(company));
+        when(ICompanyRepository.findAll()).thenReturn(List.of(company));
 
         List<CompanyModel> companies = companyService.list();
 
@@ -72,7 +72,7 @@ class CompanyServiceTest {
     @Test
     @DisplayName("Deve encontrar uma empresa por ID com sucesso")
     void findById_whenCompanyExists_shouldReturnCompany() {
-        when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
+        when(ICompanyRepository.findById(1L)).thenReturn(Optional.of(company));
 
         CompanyModel foundCompany = companyService.findById(1L);
 
@@ -83,7 +83,7 @@ class CompanyServiceTest {
     @Test
     @DisplayName("Deve retornar nulo ao procurar por um ID que não existe")
     void findById_whenCompanyDoesNotExist_shouldReturnNull() {
-        when(companyRepository.findById(99L)).thenReturn(Optional.empty());
+        when(ICompanyRepository.findById(99L)).thenReturn(Optional.empty());
 
         CompanyModel foundCompany = companyService.findById(99L);
 
@@ -93,27 +93,27 @@ class CompanyServiceTest {
     @Test
     @DisplayName("Deve atualizar uma empresa com sucesso")
     void update_whenCompanyExists_shouldReturnUpdatedCompany() {
-        when(companyRepository.findById(1L)).thenReturn(Optional.of(company));
-        when(companyRepository.save(any(CompanyModel.class))).thenReturn(company);
+        when(ICompanyRepository.findById(1L)).thenReturn(Optional.of(company));
+        when(ICompanyRepository.save(any(CompanyModel.class))).thenReturn(company);
 
         CompanyModel updatedCompany = companyService.update(1L, companyPatchDTO);
 
         assertThat(updatedCompany).isNotNull();
         assertThat(updatedCompany.getCnpj()).isEqualTo("98765432000100");
         assertThat(updatedCompany.getRazaoSocial()).isEqualTo("Nova Razão Social");
-        verify(companyRepository).save(company);
+        verify(ICompanyRepository).save(company);
     }
 
     @Test
     @DisplayName("Deve lançar exceção ao tentar atualizar uma empresa que não existe")
     void update_whenCompanyDoesNotExist_shouldThrowException() {
-        when(companyRepository.findById(99L)).thenReturn(Optional.empty());
+        when(ICompanyRepository.findById(99L)).thenReturn(Optional.empty());
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
             companyService.update(99L, companyPatchDTO);
         });
 
         assertEquals("Company not found with id 99", exception.getMessage());
-        verify(companyRepository, never()).save(any());
+        verify(ICompanyRepository, never()).save(any());
     }
 }
