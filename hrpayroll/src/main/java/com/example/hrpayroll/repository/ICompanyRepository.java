@@ -4,4 +4,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.hrpayroll.model.CompanyModel;
 
-public interface CompanyRepository extends JpaRepository<CompanyModel, Long>{}
+public interface ICompanyRepository extends JpaRepository<CompanyModel, Long>{}

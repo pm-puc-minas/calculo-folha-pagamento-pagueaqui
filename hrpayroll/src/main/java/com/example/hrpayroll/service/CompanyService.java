@@ -2,7 +2,7 @@ package com.example.hrpayroll.service;
 
 import com.example.hrpayroll.dto.CompanyPatchDTO;
 import com.example.hrpayroll.model.CompanyModel;
-import com.example.hrpayroll.repository.CompanyRepository;
+import com.example.hrpayroll.repository.ICompanyRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -15,22 +15,22 @@ import java.util.Optional;
 @Service
 public class CompanyService {
         @Autowired
-        private final CompanyRepository companyRepository;
+        private final ICompanyRepository ICompanyRepository;
 
-        public CompanyService(CompanyRepository companyRepository) {
-                this.companyRepository = companyRepository;
+        public CompanyService(ICompanyRepository ICompanyRepository) {
+                this.ICompanyRepository = ICompanyRepository;
         }
 
         public CompanyModel create(CompanyModel companyModel) {
-                return companyRepository.save(companyModel);
+                return ICompanyRepository.save(companyModel);
         }
 
         public List<CompanyModel> list() {
-                return companyRepository.findAll();
+                return ICompanyRepository.findAll();
         }
 
         public CompanyModel findById(Long id) {
-                Optional<CompanyModel> companyOptional = companyRepository.findById(id);
+                Optional<CompanyModel> companyOptional = ICompanyRepository.findById(id);
 
                 if (companyOptional.isPresent()) {
 
@@ -43,7 +43,7 @@ public class CompanyService {
         }
 
         public CompanyModel update(Long id, CompanyPatchDTO updatedCompany) {
-                Optional<CompanyModel> optionalCompany = companyRepository.findById(id);
+                Optional<CompanyModel> optionalCompany = ICompanyRepository.findById(id);
 
                 if (optionalCompany.isEmpty()) {
                         throw new EntityNotFoundException("Company not found with id " + id);
@@ -58,7 +58,7 @@ public class CompanyService {
                         company.setRazaoSocial(updatedCompany.razaoSocial());
                 }
 
-                return companyRepository.save(company);
+                return ICompanyRepository.save(company);
         }
 
 }

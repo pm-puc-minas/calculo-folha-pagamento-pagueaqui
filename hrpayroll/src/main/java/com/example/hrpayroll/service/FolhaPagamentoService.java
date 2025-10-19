@@ -2,7 +2,7 @@ package com.example.hrpayroll.service;
 
 import com.example.hrpayroll.model.CompanyModel;
 import com.example.hrpayroll.model.FolhaPagamentoModel;
-import com.example.hrpayroll.repository.FolhaPagamentoRepository;
+import com.example.hrpayroll.repository.IFolhaPagamentoRepository;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -14,10 +14,10 @@ import java.util.Optional;
 @Service
 public class FolhaPagamentoService {
 
-    private final FolhaPagamentoRepository repository;
+    private final IFolhaPagamentoRepository repository;
     private final CompanyService companyService;
 
-    public FolhaPagamentoService(FolhaPagamentoRepository repository, CompanyService companyService) {
+    public FolhaPagamentoService(IFolhaPagamentoRepository repository, CompanyService companyService) {
         this.repository = repository;
         this.companyService = companyService;
     }

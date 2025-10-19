@@ -9,7 +9,7 @@ import com.example.hrpayroll.model.DescontosModel;
 
 
 @Repository
-public interface DescontosRepository extends JpaRepository<DescontosModel, Long> {
+public interface IDescontosRepository extends JpaRepository<DescontosModel, Long> {
     
     List<DescontosModel> findByAtivoTrue();
     

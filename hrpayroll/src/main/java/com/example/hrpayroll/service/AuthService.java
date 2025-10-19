@@ -17,8 +17,8 @@ import com.example.hrpayroll.dto.auth.ResetPasswordRequest;
 import com.example.hrpayroll.dto.auth.VerifyCodeRequest;
 import com.example.hrpayroll.model.CompanyModel;
 import com.example.hrpayroll.model.User;
-import com.example.hrpayroll.repository.CompanyRepository;
-import com.example.hrpayroll.repository.UserRepository;
+import com.example.hrpayroll.repository.ICompanyRepository;
+import com.example.hrpayroll.repository.IUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,20 +26,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
     
-    private final UserRepository userRepository;
+    private final IUserRepository IUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
-    private final CompanyRepository companyRepository;
+    private final ICompanyRepository ICompanyRepository;
     
     @Transactional
     public String register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (IUserRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email já está em uso");
         }
         // validar empresa
-        CompanyModel company = companyRepository.findById(request.getCompanyId())
+        CompanyModel company = ICompanyRepository.findById(request.getCompanyId())
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
         
         User user = new User();
@@ -55,7 +55,7 @@ public class AuthService {
         user.setVerificationCode(verificationCode);
         user.setVerificationCodeExpiresAt(LocalDateTime.now().plusHours(24));
         
-        userRepository.save(user);
+        IUserRepository.save(user);
         
         // enviar email de verificação
         emailService.sendVerificationEmail(user.getEmail(), verificationCode);
@@ -71,7 +71,7 @@ public class AuthService {
                 )
         );
         
-        User user = userRepository.findByEmail(request.getEmail())
+        User user = IUserRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         
         if (!user.isEmailVerified()) {
@@ -105,7 +105,7 @@ public class AuthService {
     
     @Transactional
     public AuthResponse verifyEmail(VerifyCodeRequest request) {
-        User user = userRepository.findByVerificationCode(request.getCode())
+        User user = IUserRepository.findByVerificationCode(request.getCode())
                 .orElseThrow(() -> new RuntimeException("Código de verificação inválido"));
         
         if (user.getVerificationCodeExpiresAt().isBefore(LocalDateTime.now())) {
@@ -115,7 +115,7 @@ public class AuthService {
         user.setEmailVerified(true);
         user.setVerificationCode(null);
         user.setVerificationCodeExpiresAt(null);
-        userRepository.save(user);
+        IUserRepository.save(user);
         
         String jwtToken = jwtService.generateToken(user);
         AuthResponse.UserDto userDto = new AuthResponse.UserDto(
@@ -130,7 +130,7 @@ public class AuthService {
     
     @Transactional
     public String resendVerificationCode(ForgotPasswordRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
+        User user = IUserRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         if (request.getAccountType() != null && !request.getAccountType().isBlank()) {
@@ -151,7 +151,7 @@ public class AuthService {
         String verificationCode = generateVerificationCode();
         user.setVerificationCode(verificationCode);
         user.setVerificationCodeExpiresAt(LocalDateTime.now().plusHours(24));
-        userRepository.save(user);
+        IUserRepository.save(user);
         
         emailService.sendVerificationEmail(user.getEmail(), verificationCode);
         
@@ -160,7 +160,7 @@ public class AuthService {
     
     @Transactional
     public String forgotPassword(ForgotPasswordRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
+        User user = IUserRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         // validar tipo de conta solicitado x perfil do usuário
@@ -180,7 +180,7 @@ public class AuthService {
         String resetToken = generateResetToken();
         user.setResetPasswordToken(resetToken);
         user.setResetPasswordExpiresAt(LocalDateTime.now().plusHours(1));
-        userRepository.save(user);
+        IUserRepository.save(user);
         
         emailService.sendPasswordResetEmail(user.getEmail(), resetToken);
         
@@ -189,7 +189,7 @@ public class AuthService {
     
     @Transactional
     public String resetPassword(ResetPasswordRequest request) {
-        User user = userRepository.findByResetPasswordToken(request.getToken())
+        User user = IUserRepository.findByResetPasswordToken(request.getToken())
                 .orElseThrow(() -> new RuntimeException("Token de reset inválido"));
         
         if (user.getResetPasswordExpiresAt().isBefore(LocalDateTime.now())) {
@@ -199,7 +199,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         user.setResetPasswordToken(null);
         user.setResetPasswordExpiresAt(null);
-        userRepository.save(user);
+        IUserRepository.save(user);
         
         return "Senha alterada com sucesso";
     }

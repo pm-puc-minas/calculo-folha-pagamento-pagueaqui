@@ -8,48 +8,48 @@ import org.springframework.stereotype.Service;
 
 import com.example.hrpayroll.model.DescontosModel;
 import com.example.hrpayroll.model.ProventosModel;
-import com.example.hrpayroll.repository.DescontosRepository;
+import com.example.hrpayroll.repository.IDescontosRepository;
 
 //Aqui eu esperava ver uso de composição ou interfaces, não uma classe extensa com os descontos
 @Service
 public class DescontosService {
 
     @Autowired
-    private DescontosRepository descontosRepository;
+    private IDescontosRepository IDescontosRepository;
 
     public List<DescontosModel> listarTodos() {
-        return descontosRepository.findAll();
+        return IDescontosRepository.findAll();
     }
 
     public List<DescontosModel> listarAtivos() {
-        return descontosRepository.findByAtivoTrue();
+        return IDescontosRepository.findByAtivoTrue();
     }
 
     public Optional<DescontosModel> buscarPorId(Long id) {
-        return descontosRepository.findById(id);
+        return IDescontosRepository.findById(id);
     }
 
     public DescontosModel salvar(DescontosModel desconto) {
-        return descontosRepository.save(desconto);
+        return IDescontosRepository.save(desconto);
     }
 
     public DescontosModel atualizar(Long id, DescontosModel desconto) {
-        if (!descontosRepository.existsById(id)) {
+        if (!IDescontosRepository.existsById(id)) {
             throw new RuntimeException("Desconto não encontrado");
         }
         desconto.setId(id);
-        return descontosRepository.save(desconto);
+        return IDescontosRepository.save(desconto);
     }
 
     public void deletar(Long id) {
-        descontosRepository.deleteById(id);
+        IDescontosRepository.deleteById(id);
     }
 
     public void inativar(Long id) {
-        DescontosModel desconto = descontosRepository.findById(id)
+        DescontosModel desconto = IDescontosRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Desconto não encontrado"));
         desconto.setAtivo(false);
-        descontosRepository.save(desconto);
+        IDescontosRepository.save(desconto);
     }
 
     public Double calcularINSS(Long id, Double salario) {
@@ -163,7 +163,7 @@ public class DescontosService {
             d.setInss(inss);
             d.setIrrf(irrf);
             d.setSalarioLiquido(salario - inss - irrf - calcularTotalDescontos(salario));
-            descontosRepository.save(d);
+            IDescontosRepository.save(d);
 
             return d.getSalarioLiquido();
         } else {
