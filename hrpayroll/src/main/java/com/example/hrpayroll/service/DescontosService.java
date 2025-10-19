@@ -1,15 +1,16 @@
 package com.example.hrpayroll.service;
 
-import com.example.hrpayroll.model.DescontosModel;
-import com.example.hrpayroll.model.FuncionarioModel;
-import com.example.hrpayroll.model.ProventosModel;
-import com.example.hrpayroll.repository.DescontosRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.hrpayroll.model.DescontosModel;
+import com.example.hrpayroll.model.ProventosModel;
+import com.example.hrpayroll.repository.DescontosRepository;
+
+//Aqui eu esperava ver uso de composição ou interfaces, não uma classe extensa com os descontos
 @Service
 public class DescontosService {
 

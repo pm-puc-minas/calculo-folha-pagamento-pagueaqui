@@ -2,6 +2,7 @@ package com.example.hrpayroll.service;
 
 import org.springframework.stereotype.Service;
 
+// Melhor usar um ENUM pra armazenar as variáveis globais, talvez?
 @Service
 public class AdicionalService {
     private static final double SALARIO_MINIMO = 1.518;
