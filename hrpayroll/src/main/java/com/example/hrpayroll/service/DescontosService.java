@@ -3,6 +3,7 @@ package com.example.hrpayroll.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.hrpayroll.model.FaixaIRRF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,16 @@ public class DescontosService {
     public List<DescontosModel> listarTodos() {
         return IDescontosRepository.findAll();
     }
+
+    private static final double DEDUCAO_DEPENDENTE = 528.00;
+
+    public List<FaixaIRRF> FAIXAS_IRRF = List.of(
+            new FaixaIRRF(0.00, 2112.00, 0.00, 0.00),
+            new FaixaIRRF(2112.01, 2826.65, 0.075, 158.40),
+            new FaixaIRRF(2826.66, 3751.05, 0.15, 370.40),
+            new FaixaIRRF(3751.06, 4664.68, 0.225, 651.73),
+            new FaixaIRRF(4664.69, Double.MAX_VALUE, 0.275, 884.96)
+    );
 
     public List<DescontosModel> listarAtivos() {
         return IDescontosRepository.findByAtivoTrue();
@@ -47,7 +58,7 @@ public class DescontosService {
 
     public void inativar(Long id) {
         DescontosModel desconto = IDescontosRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Desconto não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Desconto não encontrado"));
         desconto.setAtivo(false);
         IDescontosRepository.save(desconto);
     }
@@ -89,38 +100,28 @@ public class DescontosService {
     }
 
     public Double calcularIRRF(Long id, Double salario) {
-        Optional<DescontosModel> descontoEncontrado = buscarPorId(id);
+        return buscarPorId(id)
+                .map(desconto -> {
+                    double inss = calcularINSS(id, salario);
+                    double baseCalculo = salario - inss - DEDUCAO_DEPENDENTE;
+                    double irrf = calcularValorIRRF(baseCalculo);
+                    desconto.setIrrf(irrf);
+                    return irrf;
+                })
+                .orElseGet(() -> {
+                    System.out.println("Nenhum desconto encontrado para o id: " + id);
+                    return 0.0;
+                });
+    }
 
-        if (descontoEncontrado.isPresent()) {
-            DescontosModel d = descontoEncontrado.get();
-
-            double inss = calcularINSS(id, salario);
-
-            double baseCalculo = salario - inss - 528.00;
-            double irrf;
-
-            if (baseCalculo <= 2112.00) {
-                irrf = 0.0;
-            } else if (baseCalculo <= 2826.65) {
-                irrf = (baseCalculo * 0.075) - 158.40;
-            } else if (baseCalculo <= 3751.05) {
-                irrf = (baseCalculo * 0.15) - 370.40;
-            } else if (baseCalculo <= 4664.68) {
-                irrf = (baseCalculo * 0.225) - 651.73;
-            } else {
-                irrf = (baseCalculo * 0.275) - 884.96;
+    private double calcularValorIRRF(double baseCalculo) {
+        for (FaixaIRRF faixa : FAIXAS_IRRF) {
+            if (baseCalculo >= faixa.min && baseCalculo <= faixa.max) {
+                double valor = (baseCalculo * faixa.aliquota) - faixa.deducao;
+                return Math.max(valor, 0.0);
             }
-
-            irrf = Math.max(irrf, 0.0);
-
-            d.setIrrf(irrf);
-
-            return irrf;
-
-        } else {
-            System.out.println("Nenhum desconto encontrado para o id: " + id);
-            return 0.0;
         }
+        return 0.0;
     }
 
     public Double calcularDescontoValeTransporte(Double salario) {
