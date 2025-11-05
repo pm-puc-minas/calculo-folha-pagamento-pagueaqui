@@ -62,10 +62,17 @@ public class FuncionarioService {
 
     public Double salarioLiquidoById(Long id) {
         FuncionarioModel funcionario = this.findOneById(id);
-        if (funcionario == null) return null;
+        if (funcionario == null) {
+            throw new IllegalArgumentException("Funcionário com ID " + id + " não encontrado.");
+        }
+
+        if (funcionario.getCargo() == null) {
+            throw new IllegalStateException("Funcionário com ID " + id + " não possui cargo atribuído.");
+        }
 
         ProventosModel proventos = funcionario.getProventos();
-        Double salarioLiquido = proventos.getSalarioBruto();
+
+        Double salarioLiquido = funcionario.getCargo().getSalarioBase();
 
         if (proventos.getAdicionalNoturno() == true) {
             salarioLiquido = adicionalService.calcularAdicionalNoturno(salarioLiquido);
