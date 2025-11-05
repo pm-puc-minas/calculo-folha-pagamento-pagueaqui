@@ -1,11 +1,13 @@
 package com.example.hrpayroll.service;
 
+import com.example.hrpayroll.model.FuncionarioModel;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
@@ -16,11 +18,14 @@ public class RelatorioService {
 
     public RelatorioService(FuncionarioService funcionarioService) {}
 
-    public static void gerarRelatorioByFuncionarioId(FuncionarioModel funcionario)
+    public  ByteArrayOutputStream gerarRelatorioByFuncionarioId(Long id)
             throws FileNotFoundException, DocumentException {
 
-        Document document = new Document(PageSize.A4, 36, 36, 36, 36);
-        PdfWriter.getInstance(document, new FileOutputStream("holerite_" + funcionario.getNome() + ".pdf"));
+        FuncionarioModel funcionario = funcionarioService.findOneById(id);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, baos);
         document.open();
 
         Font fTitulo = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
@@ -111,6 +116,8 @@ public class RelatorioService {
 
         document.close();
         System.out.println("✅ Holerite gerado com sucesso!");
+
+        return baos;
     }
 
     private static PdfPCell cellCabecalho(String texto, Font font) {
@@ -131,26 +138,6 @@ public class RelatorioService {
         cell.setBorder(Rectangle.NO_BORDER);
         cell.setHorizontalAlignment(align);
         return cell;
-    }
-
-    // Mock de exemplo
-    public static class FuncionarioModel {
-        private Long id;
-        private String nome;
-
-        public FuncionarioModel(Long id, String nome) {
-            this.id = id;
-            this.nome = nome;
-        }
-
-        public Long getId() { return id; }
-        public String getNome() { return nome; }
-    }
-
-    // Teste rápido
-    public static void main(String[] args) throws Exception {
-        FuncionarioModel f = new FuncionarioModel(12L, "FULANO DA SILVA");
-        gerarRelatorioByFuncionarioId(f);
     }
 
 }

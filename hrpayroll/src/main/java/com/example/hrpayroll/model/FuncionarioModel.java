@@ -53,7 +53,8 @@ public class FuncionarioModel {
     @Column(name = "data_de_admissao")
     private Date dataDeAdmissao;
 
-    @Column(name = "cargo")
+    @ManyToOne
+    @JoinColumn(name = "cargo_id")
     private CargoModel cargo;
 
     @NotBlank

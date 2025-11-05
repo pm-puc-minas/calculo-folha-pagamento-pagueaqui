@@ -2,6 +2,7 @@ package com.example.hrpayroll.controller;
 
 import com.example.hrpayroll.model.DescontosModel;
 import com.example.hrpayroll.service.DescontosService;
+import com.example.hrpayroll.service.RelatorioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,10 @@ public class DescontosController {
 
     @Autowired
     private DescontosService descontosService;
+
+    public DescontosController(DescontosService descontosService) {
+        this.descontosService = descontosService;
+    }
 
     @GetMapping
     public ResponseEntity<List<DescontosModel>> listarTodos() {

@@ -11,7 +11,7 @@ import jakarta.validation.Valid;
 import com.example.hrpayroll.model.FuncionarioModel;
 import com.example.hrpayroll.service.FuncionarioService;
 @RestController
-@RequestMapping("funcionario")
+@RequestMapping("/funcionario")
 public class FuncionarioController {
     @Autowired
     private final FuncionarioService funcionarioService;
