@@ -1,6 +1,8 @@
 package com.example.hrpayroll.controller;
 
+import com.example.hrpayroll.model.CargoModel;
 import com.example.hrpayroll.model.DepartamentoModel;
+import com.example.hrpayroll.service.CargoService;
 import com.example.hrpayroll.service.DepartamentoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class CargoController {
 
     @Autowired
-    private DepartamentoService departamentoService;
+    private CargoService cargoService;
 
 
     @PostMapping
-    public ResponseEntity<DepartamentoModel> criar(@Valid @RequestBody DepartamentoModel departamento) {
+    public ResponseEntity<CargoModel> criar(@Valid @RequestBody CargoModel cargoModel) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(departamentoService.create(departamento));
+                .body(cargoService.create(cargoModel));
     }
 
 }
