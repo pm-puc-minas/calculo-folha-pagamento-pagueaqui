@@ -67,13 +67,25 @@ export default function EmployeeRegisterStep2() {
               <TabsTrigger value="professional" className="gap-2">
                 <IdCard className="w-4 h-4" /> Informações Profissionais
               </TabsTrigger>
-              <TabsTrigger value="documents" disabled className="gap-2">
+              <TabsTrigger 
+                value="documents" 
+                className="gap-2"
+                onClick={() => router.push("/main/employees/register/documents")}
+              >
                 <Calendar className="w-4 h-4" /> Documentos
               </TabsTrigger>
-              <TabsTrigger value="bank" disabled className="gap-2">
+              <TabsTrigger 
+                value="bank" 
+                className="gap-2"
+                onClick={() => router.push("/main/employees/register/bank")}
+              >
                 <Wallet className="w-4 h-4" /> Dados Bancários
               </TabsTrigger>
-              <TabsTrigger value="credentials" disabled className="gap-2">
+              <TabsTrigger 
+                value="credentials" 
+                className="gap-2"
+                onClick={() => router.push("/main/employees/register/credentials")}
+              >
                 <Lock className="w-4 h-4" /> Credenciais
               </TabsTrigger>
             </TabsList>

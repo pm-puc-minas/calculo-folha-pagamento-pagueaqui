@@ -2,13 +2,47 @@
 
 import Image from "next/image";
 import { Button } from "@/app/components/ui/button";
-import { UserPlusIcon, Users as UsersIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { UserPlusIcon, Users as UsersIcon, CheckCircle2, X } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function EmployeesContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("success") === "true") {
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        router.replace("/main/employees");
+      }, 5000);
+    }
+  }, [searchParams, router]);
+
   return (
     <div className="flex-1 flex flex-col h-full">
+      {showSuccessMessage && (
+        <div className="fixed top-4 right-4 z-50 bg-green-50 border border-green-200 rounded-lg p-4 shadow-lg flex items-start gap-3 max-w-md animate-in slide-in-from-top-5">
+          <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+          <div className="flex-1">
+            <h3 className="font-semibold text-green-900 text-sm mb-1">
+              Colaborador adicionado com sucesso
+            </h3>
+            <p className="text-xs text-green-700">
+              O convite foi enviado para o e-mail do colaborador.
+            </p>
+          </div>
+          <button
+            onClick={() => setShowSuccessMessage(false)}
+            className="text-green-600 hover:text-green-800"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+      
       <div className="px-8 py-6 bg-white border-b border-gray-200">
         <div className="flex items-center gap-2 mb-6">
           <UsersIcon className="w-5 h-5 text-gray-500" />
