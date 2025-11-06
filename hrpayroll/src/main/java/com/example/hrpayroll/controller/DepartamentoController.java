@@ -24,7 +24,7 @@ public class DepartamentoController {
         this.departamentoService = departamentoService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<DepartamentoModel> criar(@Valid @RequestBody DepartamentoModel departamento) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(departamentoService.create(departamento));

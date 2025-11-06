@@ -16,7 +16,9 @@ public class RelatorioService {
 
     private FuncionarioService funcionarioService;
 
-    public RelatorioService(FuncionarioService funcionarioService) {}
+    public RelatorioService(FuncionarioService funcionarioService) {
+        this.funcionarioService = funcionarioService;
+    }
 
     public  ByteArrayOutputStream gerarRelatorioByFuncionarioId(Long id)
             throws FileNotFoundException, DocumentException {
