@@ -105,4 +105,12 @@ public class FuncionarioService {
         return salarioLiquido;
 
     }
+
+    public void delete(Long id) {
+        FuncionarioModel funcionario = this.findOneById(id);
+
+        if (funcionario != null) {
+            IFuncionarioRepository.delete(funcionario);
+        }
+    }
 }

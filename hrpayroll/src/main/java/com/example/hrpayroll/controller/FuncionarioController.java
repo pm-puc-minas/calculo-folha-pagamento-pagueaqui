@@ -47,6 +47,20 @@ public class FuncionarioController {
         return ResponseEntity.ok().body(funcioanrio);
     }
 
+    @DeleteMapping("/deleteById/{id}")
+    public ResponseEntity deleteUser(@Valid @PathVariable Long id) {
+        funcionarioService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity update() {
+
+        List<FuncionarioModel> funcioanrio = funcionarioService.list();
+
+        return ResponseEntity.ok().body(funcioanrio);
+    }
+
     @GetMapping("/getSalarioLiquidoById/{id}")
     public ResponseEntity getSalarioLiquido(@Valid @PathVariable Long id) {
         Double salarioLiquido = funcionarioService.salarioLiquidoById(id);

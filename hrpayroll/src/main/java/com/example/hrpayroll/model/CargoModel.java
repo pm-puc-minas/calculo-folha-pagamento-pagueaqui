@@ -1,6 +1,7 @@
 package com.example.hrpayroll.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,9 @@ public class CargoModel {
     @Column(name = "nome")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "departamento_id")
+    @NotNull(message = "O cargo deve estar associado a um departamento.")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "departamento_id", nullable = false)
     private DepartamentoModel departamento;
 
     @Column(name = "salario_base")

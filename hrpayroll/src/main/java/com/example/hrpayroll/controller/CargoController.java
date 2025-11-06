@@ -9,10 +9,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/cargo")
@@ -25,10 +24,33 @@ public class CargoController {
         this.cargoService = cargoService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<CargoModel> criar(@Valid @RequestBody CargoModel cargoModel) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(cargoService.create(cargoModel));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<CargoModel>> listar() {
+        List<CargoModel> list = cargoService.listar();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(list);
+    }
+
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<CargoModel> findById(@PathVariable Long id) {
+        CargoModel cargo = cargoService.findById(id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(cargo);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<CargoModel> deletar(@PathVariable Long id) {
+        cargoService.deleteById(id);
+
+        return ResponseEntity.ok().build();
     }
 
 }

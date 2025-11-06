@@ -6,6 +6,9 @@ import com.example.hrpayroll.repository.ICargoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CargoService {
 
@@ -20,4 +23,21 @@ public class CargoService {
         return cargoRepository.save(cargoModel);
     }
 
+    public List<CargoModel> listar() {
+        return cargoRepository.findAll();
+    }
+
+    public CargoModel findById(Long id) {
+        Optional<CargoModel> cargo =  cargoRepository.findById(id);
+
+        if (cargo.isPresent()) {
+            return cargo.get();
+        }
+
+        return null;
+    }
+
+    public void deleteById(Long id) {
+        cargoRepository.deleteById(id);
+    }
 }
