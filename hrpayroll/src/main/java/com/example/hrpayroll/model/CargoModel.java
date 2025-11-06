@@ -1,5 +1,6 @@
 package com.example.hrpayroll.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class CargoModel {
     @NotNull(message = "O cargo deve estar associado a um departamento.")
     @ManyToOne(optional = false)
     @JoinColumn(name = "departamento_id", nullable = false)
+    @JsonBackReference
     private DepartamentoModel departamento;
 
     @Column(name = "salario_base")

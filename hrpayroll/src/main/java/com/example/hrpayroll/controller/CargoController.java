@@ -46,7 +46,7 @@ public class CargoController {
                 .body(cargo);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<CargoModel> deletar(@PathVariable Long id) {
         cargoService.deleteById(id);
 

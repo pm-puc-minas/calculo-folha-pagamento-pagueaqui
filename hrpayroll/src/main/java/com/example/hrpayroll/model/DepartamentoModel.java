@@ -1,5 +1,6 @@
 package com.example.hrpayroll.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -23,5 +24,6 @@ public class DepartamentoModel {
     private String nome;
 
     @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<CargoModel> cargos;
 }
