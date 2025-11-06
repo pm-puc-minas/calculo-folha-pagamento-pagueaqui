@@ -4,12 +4,30 @@ import Image from "next/image";
 import { Button } from "@/app/components/ui/button";
 import { UserPlusIcon, Users as UsersIcon, CheckCircle2, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useListUsers } from "@/app/lib/api/generated";
+import { toTitleCase, formatDateBR } from "@/app/lib/formatters";
 
 export function EmployeesContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const listQuery = useListUsers();
+
+  const employees = useMemo(() => {
+    const d = listQuery.data as unknown;
+    if (!d) return [] as any[];
+    if (Array.isArray(d)) return d as any[];
+    if (typeof d === "string") {
+      try {
+        const parsed = JSON.parse(d);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  }, [listQuery.data]);
 
   useEffect(() => {
     if (searchParams.get("success") === "true") {
@@ -46,7 +64,7 @@ export function EmployeesContent() {
       <div className="px-8 py-6 bg-white border-b border-gray-200">
         <div className="flex items-center gap-2 mb-6">
           <UsersIcon className="w-5 h-5 text-gray-500" />
-          <span className="text-2xl font-semibold text-gray-900">0</span>
+          <span className="text-2xl font-semibold text-gray-900">{employees.length}</span>
           <span className="text-sm text-gray-500">Colaboradores</span>
         </div>
         <div className="flex items-center justify-between gap-4">
@@ -63,17 +81,47 @@ export function EmployeesContent() {
         </div>
       </div>
       <div className="flex-1 bg-background overflow-y-auto">
-        <div className="flex items-center justify-center h-full">
-          <div className="text-center max-w-md px-4">
-            <Image
-              src="/mocks/EmptyState.png"
-              alt="Nenhum colaborador cadastrado"
-              width={285}
-              height={177}
-              className="mx-auto mb-6 opacity-100"
-            />
+        {listQuery.isLoading ? (
+          <div className="flex items-center justify-center h-full text-sm text-gray-500">Carregando...</div>
+        ) : employees.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center max-w-md px-4">
+              <Image
+                src="/mocks/EmptyState.png"
+                alt="Nenhum colaborador cadastrado"
+                width={285}
+                height={177}
+                className="mx-auto mb-6 opacity-100"
+              />
+              <p className="text-gray-500">Nenhum colaborador cadastrado.</p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="p-6">
+            <div className="overflow-x-auto bg-white rounded-lg border">
+              <table className="min-w-full text-left text-sm">
+                <thead className="bg-gray-50 text-gray-600">
+                  <tr>
+                    <th className="px-4 py-3 font-medium">Nome</th>
+                    <th className="px-4 py-3 font-medium">Cargo</th>
+                    <th className="px-4 py-3 font-medium">E-mail</th>
+                    <th className="px-4 py-3 font-medium">Admissão</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {employees.map((emp: any, idx: number) => (
+                    <tr key={emp.id ?? idx} className="border-t">
+                      <td className="px-4 py-3">{toTitleCase([emp.nome, emp.sobrenome].filter(Boolean).join(" "))}</td>
+                      <td className="px-4 py-3">{toTitleCase(emp.cargo) || "-"}</td>
+                      <td className="px-4 py-3">{emp.email ?? "-"}</td>
+                      <td className="px-4 py-3">{emp.dataDeAdmissao ? formatDateBR(emp.dataDeAdmissao) : "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
