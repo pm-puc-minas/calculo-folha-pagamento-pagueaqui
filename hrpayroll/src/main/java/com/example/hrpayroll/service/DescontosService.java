@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.hrpayroll.model.DescontosModel;
-import com.example.hrpayroll.model.ProventosModel;
 import com.example.hrpayroll.repository.IDescontosRepository;
 
 //Aqui eu esperava ver uso de composição ou interfaces, não uma classe extensa com os descontos
@@ -52,11 +51,7 @@ public class DescontosService {
         IDescontosRepository.save(desconto);
     }
 
-    public Double calcularINSS(Long id, Double salario) {
-        Optional<DescontosModel> descontoEncontrado = buscarPorId(id);
-
-        if (descontoEncontrado.isPresent()) {
-            DescontosModel d = descontoEncontrado.get();
+    public Double calcularINSS(Double salario) {
 
             double inss = 0.0;
 
@@ -79,22 +74,13 @@ public class DescontosService {
                 double faixa = Math.min(salario, 7786.02) - 4000.03;
                 inss += faixa * 0.14;
             }
-            d.setInss(inss);
 
             return inss;
-        } else {
-            System.out.println("Nenhum desconto encontrado para o id: " + id);
-            return 0.0;
-        }
     }
 
-    public Double calcularIRRF(Long id, Double salario) {
-        Optional<DescontosModel> descontoEncontrado = buscarPorId(id);
+    public Double calcularIRRF(Double salario) {
 
-        if (descontoEncontrado.isPresent()) {
-            DescontosModel d = descontoEncontrado.get();
-
-            double inss = calcularINSS(id, salario);
+            double inss = calcularINSS(salario);
 
             double baseCalculo = salario - inss - 528.00;
             double irrf;
@@ -111,16 +97,9 @@ public class DescontosService {
                 irrf = (baseCalculo * 0.275) - 884.96;
             }
 
-            irrf = Math.max(irrf, 0.0);
-
-            d.setIrrf(irrf);
 
             return irrf;
 
-        } else {
-            System.out.println("Nenhum desconto encontrado para o id: " + id);
-            return 0.0;
-        }
     }
 
     public Double calcularDescontoValeTransporte(Double salario) {
@@ -128,14 +107,7 @@ public class DescontosService {
     }
 
     public Double calcularDescontoPlanoDeSaude(Double salario) {
-        ProventosModel proventos = new ProventosModel();
-        proventos.setPlanoDeSaude(true); // ou false, dependendo do teste
-
-        if (!proventos.getPlanoDeSaude()) {
-            return 0.0;
-        } else {
-            return salario * 0.03;
-        }
+        return salario * 0.03;
     }
 
     public Double calcularDescontoValeAlimentacao(Double salario) {
@@ -148,27 +120,5 @@ public class DescontosService {
         double va = calcularDescontoValeAlimentacao(salario);
 
         return vt + ps + va;
-    }
-
-    public Double calcularSalarioLiquido(Long idFuncionario, Double salario) {
-        Optional<DescontosModel> descontoEncontrado = buscarPorId(idFuncionario);
-
-        if (descontoEncontrado.isPresent()) {
-            DescontosModel d = descontoEncontrado.get();
-
-            double inss = calcularINSS(idFuncionario, salario);
-            double irrf = calcularIRRF(idFuncionario, salario);
-
-            // salva no DescontosModel
-            d.setInss(inss);
-            d.setIrrf(irrf);
-            d.setSalarioLiquido(salario - inss - irrf - calcularTotalDescontos(salario));
-            IDescontosRepository.save(d);
-
-            return d.getSalarioLiquido();
-        } else {
-            System.out.println("Nenhum desconto encontrado para o id: " + idFuncionario);
-            return salario;
-        }
     }
 }

@@ -13,28 +13,22 @@ public class AdicionalService {
 
     // normalmente equivale a 20% do salario normal
     public Double calcularAdicionalNoturno(Double salarioLiquido) {
-        Double adicional = salarioLiquido * TAXA_NOTURNO;
-        return salarioLiquido + adicional;
+        return salarioLiquido * TAXA_NOTURNO;
     }
 
     // levando em consideração 20% (grau medio)
     public Double calcularAdicionalInsalubridade(Double salarioLiquido) {
-        Double insalubridade = SALARIO_MINIMO * TAXA_INSALUBRIDADE;
-        return salarioLiquido + insalubridade;
+        return SALARIO_MINIMO * TAXA_INSALUBRIDADE;
     }
 
     // normalmente equivale a 30% do salario normal
     public Double calcularAdicionalPericulosidade(Double salarioLiquido) {
-        Double adicional = salarioLiquido * TAXA_PERICULOSIDADE;
-        
-        return salarioLiquido + adicional;
+        return salarioLiquido * TAXA_PERICULOSIDADE;
     }
 
     // normalmente equivale a 100% do valor da hora normal
     public Double calcularAdicionalHorasExtras(Long horasExtras, Double salarioLiquido) {
         Double valorHora = salarioLiquido / 220;
-        Double totalHorasExtra = valorHora * horasExtras * TAXA_HORA_EXTRA;
-
-        return salarioLiquido + totalHorasExtra;
+        return valorHora * horasExtras * TAXA_HORA_EXTRA;
     }
 }

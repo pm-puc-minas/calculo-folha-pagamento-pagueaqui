@@ -1,13 +1,13 @@
 package com.example.hrpayroll.service;
 
-import com.example.hrpayroll.model.FuncionarioModel;
-import com.example.hrpayroll.model.ProventosModel;
-import com.example.hrpayroll.repository.IFuncionarioRepository;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.example.hrpayroll.model.FuncionarioModel;
+import com.example.hrpayroll.model.ProventosModel;
+import com.example.hrpayroll.repository.IFuncionarioRepository;
 
 @Service
 public class FuncionarioService {
@@ -72,34 +72,40 @@ public class FuncionarioService {
 
         ProventosModel proventos = funcionario.getProventos();
 
-        Double salarioLiquido = funcionario.getCargo().getSalarioBase();
+        Double salarioBruto = funcionario.getCargo().getSalarioBase();
+
+        Double salarioLiquido = salarioBruto;
+
+        salarioLiquido -= descontoService.calcularINSS(salarioBruto);
+        
+        salarioLiquido -= descontoService.calcularIRRF(salarioBruto);
 
         if (proventos.getAdicionalNoturno() == true) {
-            salarioLiquido = adicionalService.calcularAdicionalNoturno(salarioLiquido);
+            salarioLiquido += adicionalService.calcularAdicionalNoturno(salarioBruto);
         }
 
         if (proventos.getAdicionalInsalubridade() == true) {
-            salarioLiquido = adicionalService.calcularAdicionalInsalubridade(salarioLiquido);
+            salarioLiquido += adicionalService.calcularAdicionalInsalubridade(salarioBruto);
         }
 
         if (proventos.getAdicionalPericulosidade() == true) {
-            salarioLiquido = adicionalService.calcularAdicionalPericulosidade(salarioLiquido);
+            salarioLiquido += adicionalService.calcularAdicionalPericulosidade(salarioBruto);
         }
 
         if (proventos.getValeTransporte() == true) {
-            salarioLiquido = descontoService.calcularDescontoValeTransporte(salarioLiquido);
+            salarioLiquido -= descontoService.calcularDescontoValeTransporte(salarioBruto);
         }
 
         if (proventos.getPlanoDeSaude() == true) {
-            salarioLiquido = descontoService.calcularDescontoPlanoDeSaude(salarioLiquido);
+            salarioLiquido -= descontoService.calcularDescontoPlanoDeSaude(salarioBruto);
         }
 
         if (proventos.getValeAlimentacaoRefeicao() == true) {
-            salarioLiquido = descontoService.calcularDescontoValeAlimentacao(salarioLiquido);
+            salarioLiquido -= descontoService.calcularDescontoValeAlimentacao(salarioBruto);
         }
 
         if (proventos.getHorasExtras() > 0) {
-            salarioLiquido = adicionalService.calcularAdicionalHorasExtras(proventos.getHorasExtras(), salarioLiquido);
+            salarioLiquido += adicionalService.calcularAdicionalHorasExtras(proventos.getHorasExtras(), salarioBruto);
         }
 
         return salarioLiquido;

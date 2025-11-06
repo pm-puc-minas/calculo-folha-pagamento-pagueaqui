@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,6 +11,7 @@ import { Select, SelectItem } from "@/app/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
 import { Calendar, IdCard, Lock, User2, Wallet } from "lucide-react";
 import { useEmployeeRegistration } from "@/app/context/employeeRegistrationContext";
+import api, { formatError } from "@/app/lib/axios";
 
 const professionalSchema = z.object({
   username: z.string().optional(),
@@ -38,6 +40,24 @@ export default function EmployeeRegisterStep2() {
     resolver: zodResolver(professionalSchema),
     defaultValues: professionalData,
   });
+
+  // Cargo options loaded from backend (singular endpoint: /cargo)
+  const [cargoOptions, setCargoOptions] = useState<Array<{ value: string; label: string }>>([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get("/cargo");
+        const opts = (res.data || []).map((c: { id: number | string; name: string }) => ({
+          value: String(c.id),
+          label: c.name,
+        }));
+        setCargoOptions(opts);
+      } catch (e) {
+        console.warn("Falha ao carregar cargos:", formatError(e as any));
+      }
+    })();
+  }, []);
 
   const onSubmit = (data: ProfessionalForm) => {
     updateProfessionalData(data);
@@ -97,17 +117,17 @@ export default function EmployeeRegisterStep2() {
           className="px-6 md:px-8 pb-6 md:pb-8"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Cargo */}
             <Select
               methods={methods}
               name="position"
               placeholder="Cargo"
               label="Cargo"
             >
-              <SelectItem value="desenvolvedor">Desenvolvedor</SelectItem>
-              <SelectItem value="gerente">Gerente</SelectItem>
-              <SelectItem value="analista">Analista</SelectItem>
-              <SelectItem value="coordenador">Coordenador</SelectItem>
+              {cargoOptions.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
             </Select>
 
             {/* E-mail profissional */}
