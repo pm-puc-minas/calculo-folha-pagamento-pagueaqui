@@ -10,6 +10,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/ta
 import { Calendar, IdCard, Lock, User2, Wallet } from "lucide-react";
 import { useState } from "react";
 import { useEmployeeRegistration } from "@/app/context/employeeRegistrationContext";
+import { useCreateUser } from "@/app/lib/api/generated";
+import { toIsoNoonUTC } from "@/app/lib/formatters";
+import api from "@/app/lib/axios";
 
 const credentialsSchema = z.object({
   professionalEmail: z.string().email("E-mail inválido"),
@@ -31,6 +34,7 @@ export default function EmployeeRegisterStep5() {
   } = useEmployeeRegistration();
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const createUserMutation = useCreateUser();
   
   const methods = useForm<CredentialsForm>({
     resolver: zodResolver(credentialsSchema),
@@ -45,60 +49,53 @@ export default function EmployeeRegisterStep5() {
       setIsSubmitting(true);
       updateCredentialsData(data);
 
-      const employeePayload = {
-        // Dados pessoais
-        firstName: personalData.firstName,
-        lastName: personalData.lastName,
-        phone: personalData.phone,
-        email: personalData.email,
-        birthDate: personalData.birthDate,
-        maritalStatus: personalData.maritalStatus,
-        gender: personalData.gender,
-        nationality: personalData.nationality,
-        address: {
-          street: personalData.street,
-          district: personalData.district,
-          number: personalData.number,
-          city: personalData.city,
-          state: personalData.state,
-          zip: personalData.zip,
-        },
-        // Dados profissionais
-        employeeId: professionalData.employeeId,
-        position: professionalData.position,
-        professionalEmail: data.professionalEmail,
-        department: professionalData.department,
-        admissionDate: professionalData.admissionDate,
-        pisPasep: professionalData.pisPasep,
-        dependents: professionalData.dependents,
-        // Dados bancários
-        bankAccount: {
-          account: bankData.account,
-          agency: bankData.agency,
-          verificationDigit: bankData.verificationDigit,
-          bank: bankData.bank,
-        },
-        // Credenciais
-        credentials: {
-          professionalEmail: data.professionalEmail,
-          password: data.password,
-        },
+      const enderecoParts = [
+        personalData.street,
+        personalData.number,
+        personalData.district,
+        personalData.city,
+        personalData.state,
+        personalData.zip,
+      ].filter(Boolean);
+
+      const funcionario = {
+        nome: personalData.firstName || undefined,
+        sobrenome: personalData.lastName || undefined,
+        cpf: personalData.cpf ? personalData.cpf.replace(/\D/g, "") : undefined,
+        rg: personalData.rg ? personalData.rg.replace(/\D/g, "") : undefined,
+        email: data.professionalEmail || personalData.email || undefined,
+        endereco: enderecoParts.join(", ") || undefined,
+        dataNascimento: personalData.birthDate ? toIsoNoonUTC(personalData.birthDate) : undefined,
+        pis: professionalData.pisPasep
+          ? Number((professionalData.pisPasep as string).replace(/\D/g, ""))
+          : undefined,
+        dataDeAdmissao: professionalData.admissionDate
+          ? toIsoNoonUTC(professionalData.admissionDate)
+          : undefined,
+        cargo: professionalData.position || undefined,
+        senha: data.password,
       };
 
-      console.log("Payload completo:", employeePayload);
-      console.log("Documentos:", documentsData);
+      await createUserMutation.mutateAsync({ data: funcionario });
 
-      // aqui tem que esperar o back para implementar a chamada da api
-    
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-       // aqui tem que esperar o back para implementar o envio do email
+      try {
+        const nomeCompleto = [personalData.firstName, personalData.lastName]
+          .filter(Boolean)
+          .join(" ");
+        await api.post("/funcionario/invite", {
+          email: data.professionalEmail,
+          nome: nomeCompleto || undefined,
+          empresa: undefined,
+          senha: data.password,
+        });
+      } catch (e) {
+        console.warn("Falha ao enviar convite por email:", e);
+      }
 
       clearAll();
       router.push("/main/employees?success=true");
     } catch (error) {
       console.error("Erro ao criar colaborador:", error);
-      alert("Erro ao criar colaborador. Tente novamente.");
     } finally {
       setIsSubmitting(false);
     }

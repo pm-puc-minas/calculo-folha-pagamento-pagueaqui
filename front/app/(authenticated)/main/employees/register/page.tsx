@@ -11,12 +11,18 @@ import { Select, SelectItem } from "@/app/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
 import { Calendar, IdCard, Lock, User2, Wallet, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { useEmployeeRegistration } from "@/app/context/employeeRegistrationContext";
+import api from "@/app/lib/axios";
 
 const personalSchema = z.object({
   firstName: z.string().min(1, "Informe o nome"),
   lastName: z.string().min(1, "Informe o sobrenome"),
   phone: z.string().optional(),
   email: z.string().email("E-mail inválido").optional(),
+  cpf: z
+    .string()
+    .min(11, "CPF é obrigatório")
+    .refine((val) => (val || "").replace(/\D/g, "").length === 11, "CPF deve ter 11 dígitos"),
+  rg: z.string().optional(),
   birthDate: z.string().optional(),
   maritalStatus: z.string().optional(),
   gender: z.string().optional(),
@@ -56,9 +62,12 @@ export default function EmployeeRegisterStep1() {
     defaultValues: personalData,
   });
   const zipValue = methods.watch("zip");
+  const cpfValue = methods.watch("cpf");
   const [cepLoading, setCepLoading] = useState(false);
   const [cepError, setCepError] = useState<string | null>(null);
   const lastCepRef = useRef<string | null>(null);
+  const [cpfChecking, setCpfChecking] = useState(false);
+  const lastCpfRef = useRef<string | null>(null);
 
   useEffect(() => {
     const onlyDigits = (zipValue || "").replace(/\D/g, "");
@@ -100,6 +109,55 @@ export default function EmployeeRegisterStep1() {
 
     return () => controller.abort();
   }, [zipValue, methods]);
+
+  useEffect(() => {
+    const onlyDigits = (cpfValue || "").replace(/\D/g, "");
+    if (onlyDigits.length !== 11) {
+      methods.clearErrors("cpf");
+      return;
+    }
+
+    // evita reconsultas duplicadas
+    if (lastCpfRef.current === onlyDigits) return;
+    lastCpfRef.current = onlyDigits;
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        setCpfChecking(true);
+        const res = await api.get("/funcionario/list", {
+          signal: controller.signal as any,
+          headers: { Accept: "application/json" },
+        });
+        let list: any[] = [];
+        if (Array.isArray(res.data)) {
+          list = res.data as any[];
+        } else if (typeof res.data === "string") {
+          try {
+            const parsed = JSON.parse(res.data);
+            list = Array.isArray(parsed) ? parsed : [];
+          } catch {
+            list = [];
+          }
+        }
+        const exists = list.some((u) => String(u?.cpf || "").replace(/\D/g, "") === onlyDigits);
+        if (exists) {
+          methods.setError("cpf", { type: "validate", message: "CPF já cadastrado" });
+        } else {
+          methods.clearErrors("cpf");
+        }
+      } catch (_) {
+        // em falha de rede, não travar o usuário, apenas limpar estado
+      } finally {
+        setCpfChecking(false);
+      }
+    }, 300);
+
+    return () => {
+      controller.abort();
+      clearTimeout(timer);
+    };
+  }, [cpfValue, methods]);
 
   const onSubmit = (data: PersonalForm) => {
     updatePersonalData(data);
@@ -162,6 +220,25 @@ export default function EmployeeRegisterStep1() {
               label="Telefone"
               placeholder="(00) 00000-0000"
               mask={["(99) 9999-9999", "(99) 99999-9999"]}
+            />
+            <Input
+              methods={methods}
+              name="cpf"
+              label="CPF"
+              placeholder="000.000.000-00"
+              mask={"999.999.999-99"}
+              endContent={
+                cpfChecking ? (
+                  <Loader2 className="animate-spin text-gray-300 mr-3" />
+                ) : null
+              }
+            />
+            <Input
+              methods={methods}
+              name="rg"
+              label="RG"
+              placeholder="00.000.000"
+              mask={"99.999.999"}
             />
             <Input methods={methods} name="email" label="E-mail" placeholder="email@exemplo.com" />
 
@@ -249,7 +326,11 @@ export default function EmployeeRegisterStep1() {
             >
               Cancelar
             </Button>
-            <Button type="submit" className="bg-primary text-white">
+            <Button
+              type="submit"
+              className="bg-primary text-white"
+              disabled={!!methods.formState.errors.cpf || cpfChecking}
+            >
               Próximo
             </Button>
           </div>
