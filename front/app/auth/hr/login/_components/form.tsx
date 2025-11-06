@@ -43,7 +43,7 @@ export function LoginForm() {
     onSuccess: (response: any) => {
       setToken(response.accessToken);
       setUser(response.user as AuthUserDto);
-      router.push("/dashboard");
+      router.push("/main/dashboard");
       toast.success("Bem vindo de volta!");
     },
     onError: (error: any) => {
