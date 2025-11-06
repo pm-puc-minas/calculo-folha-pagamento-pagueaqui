@@ -45,7 +45,7 @@ Pensando nisso, o **PagueAqui** foi criado para **automatizar esse processo** e 
 
 ---
 
-## 📦 Entregas – Sprint 1/2
+## 📦 Entregas – Sprint 1/2/3
 
 - 🎨 [Figma](https://www.figma.com/design/vlSw482Gcr3kPkM5rQNaC6/PagueAqui?node-id=1-4&p=f&t=mjGwYE3Rx7nn2pj3-0)  
 - 📝 [Cartões CRC](./docs/cartoes-crc.pdf)  
