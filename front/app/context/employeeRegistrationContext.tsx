@@ -40,6 +40,7 @@ export type BankData = {
   agency?: string;
   verificationDigit?: string;
   bank?: string;
+  bankCode?: string;
 };
 
 export type CredentialsData = {

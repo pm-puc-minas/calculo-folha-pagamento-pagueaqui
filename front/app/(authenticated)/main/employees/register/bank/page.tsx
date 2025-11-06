@@ -6,44 +6,35 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
-import { Select, SelectItem } from "@/app/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
-import { Calendar, IdCard, Lock, User2, Wallet } from "lucide-react";
-import { useEffect } from "react";
+import { Calendar, IdCard, Lock, User2, Wallet, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useEmployeeRegistration } from "@/app/context/employeeRegistrationContext";
+import { getBankByCode } from "@/app/lib/external/brasilapi";
 
 const bankSchema = z.object({
   account: z.string().min(1, "Conta é obrigatória"),
   agency: z.string().min(1, "Agência é obrigatória"),
   verificationDigit: z.string().min(1, "Dígito verificador é obrigatório"),
   bank: z.string().min(1, "Banco é obrigatório"),
+  bankCode: z.string().optional(),
 });
 
 type BankForm = z.infer<typeof bankSchema>;
 
-const bankOptions = [
-  { value: "001", label: "001 - Banco do Brasil" },
-  { value: "033", label: "033 - Santander" },
-  { value: "104", label: "104 - Caixa Econômica Federal" },
-  { value: "237", label: "237 - Bradesco" },
-  { value: "341", label: "341 - Itaú" },
-  { value: "356", label: "356 - Banco Real" },
-  { value: "389", label: "389 - Banco Mercantil do Brasil" },
-  { value: "399", label: "399 - HSBC" },
-  { value: "422", label: "422 - Banco Safra" },
-  { value: "453", label: "453 - Banco Rural" },
-  { value: "633", label: "633 - Banco Rendimento" },
-  { value: "652", label: "652 - Itaú Unibanco Holding" },
-  { value: "745", label: "745 - Citibank" },
-];
-
 export default function EmployeeRegisterStep4() {
   const router = useRouter();
   const { bankData, updateBankData } = useEmployeeRegistration();
+  const [bankLookupLoading, setBankLookupLoading] = useState(false);
+  const [bankLookupError, setBankLookupError] = useState<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
   
   const methods = useForm<BankForm>({
     resolver: zodResolver(bankSchema),
-    defaultValues: bankData,
+    defaultValues: {
+      ...bankData,
+      bankCode: bankData.bankCode || "",
+    },
   });
 
   const onSubmit = (data: BankForm) => {
@@ -56,6 +47,39 @@ export default function EmployeeRegisterStep4() {
     updateBankData(formData);
     router.push("/main/employees/register/documents");
   };
+
+  const bankCode = methods.watch("bankCode");
+  useEffect(() => {
+    const code = (bankCode || "").toString().trim();
+    setBankLookupError(null);
+
+    if (!code || !/^\d{3}$/.test(code)) {
+      methods.setValue("bank", "", { shouldValidate: true, shouldDirty: true });
+      setBankLookupLoading(false);
+      if (abortRef.current) abortRef.current.abort();
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        if (abortRef.current) abortRef.current.abort();
+        const ctrl = new AbortController();
+        abortRef.current = ctrl;
+        setBankLookupLoading(true);
+        const data = await getBankByCode(code, { signal: ctrl.signal });
+        methods.setValue("bank", data.name, { shouldValidate: true, shouldDirty: true });
+      } catch (err: any) {
+        methods.setValue("bank", "", { shouldValidate: true, shouldDirty: true });
+        setBankLookupError(err?.message || "Não foi possível buscar o banco");
+      } finally {
+        setBankLookupLoading(false);
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [bankCode]);
 
   return (
     <div className="p-6 md:p-8">
@@ -122,18 +146,43 @@ export default function EmployeeRegisterStep4() {
               label="Dígito Verificador" 
               placeholder="Dígito Verificador" 
             />
-            <Select
+            <Input
+              methods={methods}
+              name="bankCode"
+              label="Código do Banco"
+              placeholder="Ex.: 001, 033, 341"
+              inputMode="numeric"
+              maxLength={3}
+              mask="999"
+              endContent={
+                (methods.watch("bankCode") || "").toString().length > 0 ? (
+                  <button
+                    type="button"
+                    className="text-gray-400 hover:text-gray-600 mr-2"
+                    aria-label="Limpar código"
+                    onClick={() => {
+                      methods.setValue("bankCode", "");
+                      setBankLookupError(null);
+                    }}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                ) : null
+              }
+            />
+            <Input
               methods={methods}
               name="bank"
               label="Banco"
-              placeholder="Selecione o banco"
-            >
-              {bankOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </Select>
+              placeholder="Preenchido automaticamente pelo código"
+              readOnly
+            />
+            <div className="hidden md:block" />
+            {bankLookupError && (
+              <div className="md:col-span-2 -mt-2">
+                <p className="text-red-500 text-sm">{bankLookupError}</p>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-between items-center mt-6 pt-6 border-t">
