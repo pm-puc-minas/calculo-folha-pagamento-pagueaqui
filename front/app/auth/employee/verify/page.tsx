@@ -84,7 +84,7 @@ export default function VerifyToken({ searchParams }: AsyncPageProps) {
           </div>
 
           <Link
-            href="/dashboard"
+            href="/main/dashboard"
             className={buttonVariants({ className: "max-w-[300px]" })}
           >
             Acessar o PagueAqui

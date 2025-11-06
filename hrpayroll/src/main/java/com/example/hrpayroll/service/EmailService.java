@@ -71,4 +71,43 @@ public class EmailService {
             throw new RuntimeException("Erro ao enviar email de recuperação de senha");
         }
     }
+
+    public void sendInviteEmail(String toEmail, String userName, String companyName, String tempPassword) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(toEmail);
+            message.setSubject("Convite - Acesso ao Portal PagueAqui");
+
+            String loginLink = frontendUrl + "/auth/login";
+
+            StringBuilder body = new StringBuilder();
+            body.append("Olá");
+            if (userName != null && !userName.isBlank()) {
+                body.append(", ").append(userName);
+            }
+            body.append("!\n\n");
+            body.append("Você foi convidado(a)");
+            if (companyName != null && !companyName.isBlank()) {
+                body.append(" pela ").append(companyName);
+            }
+            body.append(" para acessar o portal da PagueAqui.\n\n");
+            if (tempPassword != null && !tempPassword.isBlank()) {
+                body.append("Sua senha temporária é: ").append(tempPassword).append("\n\n");
+            }
+            body.append("Acesse o portal pelo link abaixo e realize o login:").append("\n");
+            body.append(loginLink).append("\n\n");
+            body.append("Recomendamos alterar sua senha no primeiro acesso.\n\n");
+            body.append("Se você não esperava este convite, ignore este email.\n\n");
+            body.append("Atenciosamente,\nEquipe PagueAqui");
+
+            message.setText(body.toString());
+
+            mailSender.send(message);
+            log.info("Email de convite enviado para: {}", toEmail);
+        } catch (Exception e) {
+            log.error("Erro ao enviar email de convite para: {}", toEmail, e);
+            throw new RuntimeException("Erro ao enviar email de convite");
+        }
+    }
 }
