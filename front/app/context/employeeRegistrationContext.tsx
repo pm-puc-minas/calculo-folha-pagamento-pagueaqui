@@ -6,6 +6,8 @@ export type PersonalData = {
   lastName?: string;
   phone?: string;
   email?: string;
+  cpf?: string;
+  rg?: string;
   birthDate?: string;
   maritalStatus?: string;
   gender?: string;

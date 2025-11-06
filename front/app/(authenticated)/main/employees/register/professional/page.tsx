@@ -12,7 +12,6 @@ import { Calendar, IdCard, Lock, User2, Wallet } from "lucide-react";
 import { useEmployeeRegistration } from "@/app/context/employeeRegistrationContext";
 
 const professionalSchema = z.object({
-  employeeId: z.string().optional(),
   username: z.string().optional(),
   position: z.string().optional(),
   professionalEmail: z.string().email("E-mail inválido").optional().or(z.literal("")),
@@ -98,14 +97,6 @@ export default function EmployeeRegisterStep2() {
           className="px-6 md:px-8 pb-6 md:pb-8"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* ID do Colaborador */}
-            <Input 
-              methods={methods} 
-              name="employeeId" 
-              label="ID do Colaborador" 
-              placeholder="ID do Colaborador" 
-            />
-
             {/* Cargo */}
             <Select
               methods={methods}
