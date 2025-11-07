@@ -51,6 +51,7 @@ Pensando nisso, o **PagueAqui** foi criado para **automatizar esse processo** e 
 - 📝 [Cartões CRC](./docs/cartoes-crc.pdf)  
 - ✅ [Plano de Testes](./docs/plano-de-testes.pdf)  
 - 📐 [UML (arquivo)](./docs/UML.png)
+  <img src="./docs/UML.png" alt="Diagrama UML"/>
 
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
