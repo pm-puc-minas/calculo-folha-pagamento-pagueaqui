@@ -10,7 +10,6 @@ O **PagueAqui** é um sistema de gestão de **folha de pagamento** desenvolvido 
 - [📌 Requisitos Não Funcionais](#-requisitos-não-funcionais)  
 - [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)  
 - [📦 Entregas – Sprints](#-entregas--sprints)  
-- [🖼️ Diagrama UML](#️-diagrama-uml)  
 
 ---
 
