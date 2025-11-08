@@ -303,6 +303,10 @@ Busca todas as folhas de pagamento geradas para uma empresa específica.
 
 ---
 
+## 🧪 5. Testes
+
+Os testes unitários e de integração garantem o funcionamento das regras de negócio e dos endpoints principais.
+
 
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
