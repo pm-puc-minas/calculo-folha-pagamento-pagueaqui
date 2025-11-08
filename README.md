@@ -90,5 +90,27 @@ Navegue até o diretório da API (`hrpayroll`) e execute o comando Maven para co
 # Dentro da pasta /hrpayroll
 mvn clean install
 
+---
+
+### 🚀 1.3. Executando a API
+
+Após o build ser concluído com sucesso, você pode executar a aplicação de duas formas:
+
+#### ✅ Opção 1: Usando java -jar (Recomendado)
+bash
+java -jar target/hrpayroll-0.0.1-SNAPSHOT.jar
+
+
+#### ⚙️ Opção 2: Usando o plugin do Spring Boot
+bash
+# Dentro da pasta /hrpayroll
+mvn spring-boot:run
+
+
+A API estará disponível em:  
+👉 *http://localhost:8080*
+
+---
+
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
