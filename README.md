@@ -287,6 +287,8 @@ Busca todas as folhas de pagamento geradas para uma empresa específica.
 
 ---
 
+## 🧩 4. Estrutura dos Arquivos Principais
+
 
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
