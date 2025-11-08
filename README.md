@@ -316,5 +316,11 @@ mvn test
 
 ## 🧠 6. Observações
 
+- O sistema segue arquitetura *RESTful*.
+- As respostas seguem o padrão *JSON UTF-8*.
+- JWT é utilizado para autenticação e autorização.
+- O Swagger é habilitado apenas em ambientes de desenvolvimento.
+
+---
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
