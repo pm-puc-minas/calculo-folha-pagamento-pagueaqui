@@ -14,92 +14,80 @@ import com.example.hrpayroll.repository.IDescontosRepository;
 public class DescontosService {
 
     @Autowired
-    private IDescontosRepository IDescontosRepository;
+    private IDescontosRepository descontosRepository;
 
     public List<DescontosModel> listarTodos() {
-        return IDescontosRepository.findAll();
+        return descontosRepository.findAll();
     }
 
     public List<DescontosModel> listarAtivos() {
-        return IDescontosRepository.findByAtivoTrue();
+        return descontosRepository.findByAtivoTrue();
     }
 
     public Optional<DescontosModel> buscarPorId(Long id) {
-        return IDescontosRepository.findById(id);
+        return descontosRepository.findById(id);
     }
 
     public DescontosModel salvar(DescontosModel desconto) {
-        return IDescontosRepository.save(desconto);
+        return descontosRepository.save(desconto);
     }
 
     public DescontosModel atualizar(Long id, DescontosModel desconto) {
-        if (!IDescontosRepository.existsById(id)) {
+        if (!descontosRepository.existsById(id)) {
             throw new RuntimeException("Desconto não encontrado");
         }
         desconto.setId(id);
-        return IDescontosRepository.save(desconto);
+        return descontosRepository.save(desconto);
     }
 
     public void deletar(Long id) {
-        IDescontosRepository.deleteById(id);
+        descontosRepository.deleteById(id);
     }
 
     public void inativar(Long id) {
-        DescontosModel desconto = IDescontosRepository.findById(id)
+        DescontosModel desconto = descontosRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Desconto não encontrado"));
         desconto.setAtivo(false);
-        IDescontosRepository.save(desconto);
+        descontosRepository.save(desconto);
     }
 
     public Double calcularINSS(Double salario) {
+        double inss = 0.0;
 
-            double inss = 0.0;
+        if (salario > 0) {
+            inss += Math.min(salario, 1412.00) * 0.075;
+        }
+        if (salario > 1412.00) {
+            inss += (Math.min(salario, 2666.68) - 1412.00) * 0.09;
+        }
+        if (salario > 2666.68) {
+            inss += (Math.min(salario, 4000.03) - 2666.68) * 0.12;
+        }
+        if (salario > 4000.03) {
+            inss += (Math.min(salario, 7786.02) - 4000.03) * 0.14;
+        }
 
-            if (salario > 0) {
-                double faixa = Math.min(salario, 1412.00);
-                inss += faixa * 0.075;
-            }
-
-            if (salario > 1412.00) {
-                double faixa = Math.min(salario, 2666.68) - 1412.00;
-                inss += faixa * 0.09;
-            }
-
-            if (salario > 2666.68) {
-                double faixa = Math.min(salario, 4000.03) - 2666.68;
-                inss += faixa * 0.12;
-            }
-
-            if (salario > 4000.03) {
-                double faixa = Math.min(salario, 7786.02) - 4000.03;
-                inss += faixa * 0.14;
-            }
-
-            return inss;
+        return inss;
     }
 
     public Double calcularIRRF(Double salario) {
+        double inss = calcularINSS(salario);
+        double baseCalculo = salario - inss - 528.00;
+        double irrf;
 
-            double inss = calcularINSS(salario);
+        if (baseCalculo <= 2112.00) {
+            irrf = 0.0;
+        } else if (baseCalculo <= 2826.65) {
+            irrf = (baseCalculo * 0.075) - 158.40;
+        } else if (baseCalculo <= 3751.05) {
+            irrf = (baseCalculo * 0.15) - 370.40;
+        } else if (baseCalculo <= 4664.68) {
+            irrf = (baseCalculo * 0.225) - 651.73;
+        } else {
+            irrf = (baseCalculo * 0.275) - 884.96;
+        }
 
-            double baseCalculo = salario - inss - 528.00;
-            double irrf;
-
-            if (baseCalculo <= 2112.00) {
-                irrf = 0.0;
-            } else if (baseCalculo <= 2826.65) {
-                irrf = (baseCalculo * 0.075) - 158.40;
-            } else if (baseCalculo <= 3751.05) {
-                irrf = (baseCalculo * 0.15) - 370.40;
-            } else if (baseCalculo <= 4664.68) {
-                irrf = (baseCalculo * 0.225) - 651.73;
-            } else {
-                irrf = (baseCalculo * 0.275) - 884.96;
-            }
-
-
-            return irrf;
-
+        return Math.max(irrf, 0.0);
     }
 
     public Double calcularDescontoValeTransporte(Double salario) {
@@ -115,10 +103,8 @@ public class DescontosService {
     }
 
     public Double calcularTotalDescontos(Double salario) {
-        double vt = calcularDescontoValeTransporte(salario);
-        double ps = calcularDescontoPlanoDeSaude(salario);
-        double va = calcularDescontoValeAlimentacao(salario);
-
-        return vt + ps + va;
+        return calcularDescontoValeTransporte(salario)
+                + calcularDescontoPlanoDeSaude(salario)
+                + calcularDescontoValeAlimentacao(salario);
     }
 }
