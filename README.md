@@ -55,5 +55,40 @@ Pensando nisso, o **PagueAqui** foi criado para **automatizar esse processo** e 
 - 📐 [UML (arquivo)](./docs/UML.png)
   <img src="./docs/UML.png" alt="Diagrama UML"/>
 
+# API HR-Payroll (PagueAqui)
+
+Documentação da API de backend para o sistema de cálculo de folha de pagamento PagueAqui.
+
+## 1. Instruções de Build e Execução
+
+Este projeto é uma API Spring Boot 3 com Java 21 e Maven. Ele depende de um banco de dados PostgreSQL.
+
+### Pré-requisitos
+
+* Java 21 (JDK)
+* Apache Maven
+* Docker e Docker Compose (para o banco de dados)
+
+### 1.1. Configuração do Banco de Dados (PostgreSQL)
+
+A forma mais simples de subir o banco de dados é usando o `docker-compose.yml` fornecido na raiz do projeto.
+
+1.  Abra um terminal na raiz do projeto (onde o arquivo `docker-compose.yml` está).
+2.  Execute o seguinte comando para iniciar o contêiner do PostgreSQL em segundo plano:
+
+    ```bash
+    docker-compose up -d
+    ```
+
+    Isso iniciará um banco de dados PostgreSQL na porta `5433`, com o usuário `postgres` e senha `postgres`, conforme configurado no `application.properties`.
+
+### 1.2. Buildando a Aplicação (Maven)
+
+Navegue até o diretório da API (`hrpayroll`) e execute o comando Maven para compilar o projeto e gerar o arquivo `.jar`.
+
+```bash
+# Dentro da pasta /hrpayroll
+mvn clean install
+
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
