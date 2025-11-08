@@ -40,7 +40,10 @@ Pensando nisso, o **PagueAqui** foi criado para **automatizar esse processo** e 
 ## 🛠️ Tecnologias Utilizadas  
 - **Frontend:** React ⚛️  
 - **Backend:** Java com Spring Boot ☕  
-- **Banco de Dados:** Sistema robusto para armazenamento seguro de informações 🗃️  
+- **Banco de Dados:** PostgreSQL 🗃️  
+- **Gerenciamento de Dependências:** Maven  
+- **Documentação de API:** Swagger (SpringDoc OpenAPI)  
+- **Containerização:** Docker e Docker Compose  
 
 ---
 
