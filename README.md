@@ -87,25 +87,24 @@ A forma mais simples de subir o banco de dados é usando o `docker-compose.yml` 
 Navegue até o diretório da API (`hrpayroll`) e execute o comando Maven para compilar o projeto e gerar o arquivo `.jar`.
 
 ```bash
-# Dentro da pasta /hrpayroll
+Dentro da pasta /hrpayroll
 mvn clean install
-
----
-
-### 🚀 1.3. Executando a API
-
+```
+## 🚀 1.3. Executando a API
+  
 Após o build ser concluído com sucesso, você pode executar a aplicação de duas formas:
-
-#### ✅ Opção 1: Usando java -jar (Recomendado)
-bash
+  
+#### ✅ Opção 1: Usando java -jar
+```bash
 java -jar target/hrpayroll-0.0.1-SNAPSHOT.jar
-
+```
 
 #### ⚙️ Opção 2: Usando o plugin do Spring Boot
 bash
 # Dentro da pasta /hrpayroll
+```bash
 mvn spring-boot:run
-
+```
 
 A API estará disponível em:  
 👉 *http://localhost:8080*
