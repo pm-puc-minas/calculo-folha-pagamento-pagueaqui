@@ -28,20 +28,28 @@ public class RelatorioController {
         this.relatorioService = relatorioService;
     }
 
-    @GetMapping("/getFolhaDePagamento")
-    public ResponseEntity gerarFolha() throws DocumentException, FileNotFoundException {
+    @GetMapping("/getFolhaDePagamento/{id}")
+    public ResponseEntity<byte[]> gerarFolha(@PathVariable Long id) {
+        try {
+            var pdfStream = relatorioService.gerarRelatorioByFuncionarioId(id);
 
-        ByteArrayOutputStream pdfStream = relatorioService.gerarRelatorioByFuncionarioId(1L);
+            // Definir cabeçalhos para download
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=folha_de_pagamento.pdf");
 
-        // Definir cabeçalhos para download
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=folha_de_pagamento.pdf");
-
-        return ResponseEntity
-                .ok()
-                .headers(headers)
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(pdfStream.toByteArray());
+            return ResponseEntity
+                    .ok()
+                    .headers(headers)
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(pdfStream.toByteArray());
+        } catch (DocumentException e) {
+            // Trate o erro adequadamente
+            return ResponseEntity.internalServerError().build();
+        } catch (IllegalArgumentException e) {
+            // Funcionário não encontrado
+            return ResponseEntity.notFound().build();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 }

@@ -24,11 +24,16 @@ public class RelatorioService {
             throws FileNotFoundException, DocumentException {
 
         FuncionarioModel funcionario = funcionarioService.findOneById(id);
+        if (funcionario == null) {
+            throw new IllegalArgumentException("Funcionário com ID " + id + " não encontrado.");
+        }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, baos);
         document.open();
+
+        try {
 
         Font fTitulo = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
         Font fCabecalho = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
@@ -116,8 +121,10 @@ public class RelatorioService {
         rodape.addCell(cellSemBorda("DATA: ____/____/____\nASSINATURA DO FUNCIONÁRIO: ____________________", fMenor, Element.ALIGN_RIGHT));
         document.add(rodape);
 
-        document.close();
-        System.out.println("✅ Holerite gerado com sucesso!");
+        System.out.println("✅ Holerite gerado com sucesso para ID: " + id);
+        } finally {
+            document.close(); // Garante fechamento mesmo em erro
+        }
 
         return baos;
     }
