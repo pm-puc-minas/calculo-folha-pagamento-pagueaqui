@@ -24,6 +24,9 @@ public class RelatorioService {
             throws FileNotFoundException, DocumentException {
 
         FuncionarioModel funcionario = funcionarioService.findOneById(id);
+        if (funcionario == null) {
+            throw new IllegalArgumentException("Funcionário com ID " + id + " não encontrado.");
+        }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document(PageSize.A4);
