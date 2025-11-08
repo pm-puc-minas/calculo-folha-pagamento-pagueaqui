@@ -9,8 +9,7 @@ O **PagueAqui** é um sistema de gestão de **folha de pagamento** desenvolvido 
 - [🚀 Funcionalidades Principais](#-funcionalidades-principais)  
 - [📌 Requisitos Não Funcionais](#-requisitos-não-funcionais)  
 - [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)  
-- [📦 Entregas – Sprint 1](#-entregas--sprint-1)  
-- [🖼️ Diagrama UML](#️-diagrama-uml)  
+- [📦 Entregas – Sprints](#-entregas--sprints)  
 
 ---
 
@@ -45,12 +44,13 @@ Pensando nisso, o **PagueAqui** foi criado para **automatizar esse processo** e 
 
 ---
 
-## 📦 Entregas – Sprint 1  
+## 📦 Entregas – Sprints
 
 - 🎨 [Figma](https://www.figma.com/design/vlSw482Gcr3kPkM5rQNaC6/PagueAqui?node-id=1-4&p=f&t=mjGwYE3Rx7nn2pj3-0)  
 - 📝 [Cartões CRC](./docs/cartoes-crc.pdf)  
 - ✅ [Plano de Testes](./docs/plano-de-testes.pdf)  
 - 📐 [UML (arquivo)](./docs/UML.png)
+  <img src="./docs/UML.png" alt="Diagrama UML"/>
 
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  

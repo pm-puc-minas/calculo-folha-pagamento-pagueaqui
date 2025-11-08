@@ -19,6 +19,7 @@ public class CompanyModel {
 
     @NotBlank(message = "O CNPJ não pode estar em branco.")
     @Pattern(regexp = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}", message = "CNPJ inválido. O formato deve ser XX.XXX.XXX/XXXX-XX")
+    @Column(unique = true, name = "cnpj")
     private String cnpj;
 
     @NotBlank

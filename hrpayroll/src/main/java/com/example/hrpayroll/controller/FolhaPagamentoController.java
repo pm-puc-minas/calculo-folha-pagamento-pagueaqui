@@ -53,8 +53,10 @@ public class FolhaPagamentoController {
             @RequestParam LocalDate dataInicio,
             @RequestParam LocalDate dataFim,
             @RequestParam BigDecimal salarioBase) {
-        FolhaPagamentoModel nova = folhaPagamentoService.gerarNovaFolha(companyId, dataInicio, dataFim, salarioBase);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nova);
-    }
+            FolhaPagamentoModel nova = folhaPagamentoService.gerarNovaFolha(companyId, dataInicio, dataFim, salarioBase);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nova);
+        }
+
+
 
 }

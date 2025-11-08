@@ -18,9 +18,6 @@ public class ProventosModel {
     @JoinColumn(name = "funcionario_id")
     private FuncionarioModel funcionario;
 
-    @Column(name = "salario_bruto")
-    private Double salarioBruto;
-
     @Column(name = "horas_extras")
     private Long horasExtras;
 

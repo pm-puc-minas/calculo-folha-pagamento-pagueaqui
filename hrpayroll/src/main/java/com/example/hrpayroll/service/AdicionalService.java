@@ -2,27 +2,33 @@ package com.example.hrpayroll.service;
 
 import org.springframework.stereotype.Service;
 
+// Melhor usar um ENUM pra armazenar as variáveis globais, talvez?
 @Service
 public class AdicionalService {
     private static final double SALARIO_MINIMO = 1.518;
+    private static final double TAXA_NOTURNO = 0.2;
+    private static final double TAXA_INSALUBRIDADE = 0.2;
+    private static final Double TAXA_PERICULOSIDADE = 0.3;
+    private static final Double TAXA_HORA_EXTRA = 2.0;
 
     // normalmente equivale a 20% do salario normal
-    public Double calcularAdicionalNoturno(Double salario) {
-        Double adicional = salario * 0.20;
-        return salario + adicional;
+    public Double calcularAdicionalNoturno(Double salarioLiquido) {
+        return salarioLiquido * TAXA_NOTURNO;
     }
 
     // levando em consideração 20% (grau medio)
-    public Double calcularAdicionalInsalubridade(Double salario) {
-        Double insalubridade = SALARIO_MINIMO * 0.20;
-        return salario + insalubridade;
+    public Double calcularAdicionalInsalubridade(Double salarioLiquido) {
+        return SALARIO_MINIMO * TAXA_INSALUBRIDADE;
     }
 
-    public Double calcularAdicionalPericulosidade(Double salario) {
-        return salario;
+    // normalmente equivale a 30% do salario normal
+    public Double calcularAdicionalPericulosidade(Double salarioLiquido) {
+        return salarioLiquido * TAXA_PERICULOSIDADE;
     }
 
+    // normalmente equivale a 100% do valor da hora normal
     public Double calcularAdicionalHorasExtras(Long horasExtras, Double salarioLiquido) {
-        return salarioLiquido;
+        Double valorHora = salarioLiquido / 220;
+        return valorHora * horasExtras * TAXA_HORA_EXTRA;
     }
 }

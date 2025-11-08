@@ -1,0 +1,1 @@
+ALTER TABLE empresa ADD CONSTRAINT unique_cnpj UNIQUE (cnpj);

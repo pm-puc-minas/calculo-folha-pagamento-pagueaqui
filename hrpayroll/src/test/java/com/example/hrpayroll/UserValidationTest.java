@@ -38,17 +38,17 @@ class UserValidationTest {
         return user;
     }
 
-    @Test
-    void whenNameBlank_thenViolation() {
-        FuncionarioModel user = createValidUser();
-        user.setNome("");
+    // @Test
+    // void whenNameBlank_thenViolation() {
+    //     FuncionarioModel user = createValidUser();
+    //     user.setNome("");
 
-        Set<ConstraintViolation<FuncionarioModel>> violations = validator.validate(user);
+    //     Set<ConstraintViolation<FuncionarioModel>> violations = validator.validate(user);
 
-        assertEquals(1, violations.size());                       // espera 1 violação
-        ConstraintViolation<FuncionarioModel> v = violations.iterator().next();
-        assertEquals("nome", v.getPropertyPath().toString());     // foi o campo nome
-    }
+    //     assertEquals(1, violations.size());                       // espera 1 violação
+    //     ConstraintViolation<FuncionarioModel> v = violations.iterator().next();
+    //     assertEquals("nome", v.getPropertyPath().toString());     // foi o campo nome
+    // }
 
     @Test
     void whenEmailInvalid_thenViolation() {

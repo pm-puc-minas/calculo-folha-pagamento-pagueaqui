@@ -1,92 +1,89 @@
 package com.example.hrpayroll.service;
 
-import com.example.hrpayroll.model.DescontosModel;
-import com.example.hrpayroll.repository.DescontosRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.hrpayroll.model.DescontosModel;
+import com.example.hrpayroll.repository.IDescontosRepository;
+
+//Aqui eu esperava ver uso de composição ou interfaces, não uma classe extensa com os descontos
 @Service
 public class DescontosService {
 
     @Autowired
-    private DescontosRepository descontosRepository;
+    private IDescontosRepository IDescontosRepository;
 
     public List<DescontosModel> listarTodos() {
-        return descontosRepository.findAll();
+        return IDescontosRepository.findAll();
     }
 
     public List<DescontosModel> listarAtivos() {
-        return descontosRepository.findByAtivoTrue();
+        return IDescontosRepository.findByAtivoTrue();
     }
 
     public Optional<DescontosModel> buscarPorId(Long id) {
-        return descontosRepository.findById(id);
+        return IDescontosRepository.findById(id);
     }
 
     public DescontosModel salvar(DescontosModel desconto) {
-        return descontosRepository.save(desconto);
+        return IDescontosRepository.save(desconto);
     }
 
     public DescontosModel atualizar(Long id, DescontosModel desconto) {
-        if (!descontosRepository.existsById(id)) {
+        if (!IDescontosRepository.existsById(id)) {
             throw new RuntimeException("Desconto não encontrado");
         }
         desconto.setId(id);
-        return descontosRepository.save(desconto);
+        return IDescontosRepository.save(desconto);
     }
 
     public void deletar(Long id) {
-        descontosRepository.deleteById(id);
+        IDescontosRepository.deleteById(id);
     }
 
     public void inativar(Long id) {
-        DescontosModel desconto = descontosRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Desconto não encontrado"));
+        DescontosModel desconto = IDescontosRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Desconto não encontrado"));
         desconto.setAtivo(false);
-        descontosRepository.save(desconto);
+        IDescontosRepository.save(desconto);
     }
 
-    public void calcularINSS(Long id, DescontosModel desconto, Double salario) {
-        Optional<DescontosModel> descontoEncontrado = buscarPorId(id);
+    public Double calcularINSS(Double salario) {
 
-        if (descontoEncontrado.isPresent()) {
-            DescontosModel d = descontoEncontrado.get();
-
-            // Cálculo progressivo do INSS
             double inss = 0.0;
 
-            // Faixa 1: até R$ 1.412,00 → 7,5%
             if (salario > 0) {
                 double faixa = Math.min(salario, 1412.00);
                 inss += faixa * 0.075;
             }
 
-            // Faixa 2: 1.412,01 até 2.666,68 → 9%
             if (salario > 1412.00) {
                 double faixa = Math.min(salario, 2666.68) - 1412.00;
                 inss += faixa * 0.09;
             }
 
-            // Faixa 3: 2.666,69 até 4.000,03 → 12%
             if (salario > 2666.68) {
                 double faixa = Math.min(salario, 4000.03) - 2666.68;
                 inss += faixa * 0.12;
             }
 
-            // Faixa 4: 4.000,04 até 7.786,02 → 14%
             if (salario > 4000.03) {
                 double faixa = Math.min(salario, 7786.02) - 4000.03;
                 inss += faixa * 0.14;
             }
 
+            return inss;
+    }
 
-            // Calculo do imposto de reda conforme tabela 2024
-            double baseCalculo = salario - inss - 528.00; // desconto simplificado
+    public Double calcularIRRF(Double salario) {
 
-            double irrf = 0.0;
+            double inss = calcularINSS(salario);
+
+            double baseCalculo = salario - inss - 528.00;
+            double irrf;
 
             if (baseCalculo <= 2112.00) {
                 irrf = 0.0;
@@ -100,33 +97,28 @@ public class DescontosService {
                 irrf = (baseCalculo * 0.275) - 884.96;
             }
 
-            if (irrf < 0) irrf = 0.0; // não pode ter imposto negativo
 
-            // Atualiza o objeto DescontosModel
-//            d.setInss(inss);
+            return irrf;
 
-            // Calcula o salário líquido e salva no objeto
-            double salarioLiquido = salario - inss - irrf;
-//            d.setSalarioLiquido(salarioLiquido);
-
-            // Salva as alterações no banco
-            descontosRepository.save(d);
-
-        } else {
-            System.out.println("Nenhum desconto encontrado para o id: " + id);
-        }
     }
 
-
-    public Double calcularDescontoValeTransporte(Double salarioLiquido) {
-        return salarioLiquido;
+    public Double calcularDescontoValeTransporte(Double salario) {
+        return salario * 0.06;
     }
 
-    public Double calcularDescontoPlanoDeSaude(Double salarioLiquido) {
-        return salarioLiquido;
+    public Double calcularDescontoPlanoDeSaude(Double salario) {
+        return salario * 0.03;
     }
 
-    public Double calcularDescontoValeAlimentacao(Double salarioLiquido) {
-        return salarioLiquido;
+    public Double calcularDescontoValeAlimentacao(Double salario) {
+        return salario * 0.10;
+    }
+
+    public Double calcularTotalDescontos(Double salario) {
+        double vt = calcularDescontoValeTransporte(salario);
+        double ps = calcularDescontoPlanoDeSaude(salario);
+        double va = calcularDescontoValeAlimentacao(salario);
+
+        return vt + ps + va;
     }
 }

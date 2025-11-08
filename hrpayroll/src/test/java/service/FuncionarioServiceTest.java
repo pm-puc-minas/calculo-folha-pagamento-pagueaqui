@@ -1,7 +1,9 @@
-package com.example.hrpayroll.service;
+package service;
 
 import com.example.hrpayroll.model.FuncionarioModel;
-import com.example.hrpayroll.repository.FuncionarioRepository;
+import com.example.hrpayroll.repository.IFuncionarioRepository;
+import com.example.hrpayroll.service.FuncionarioService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +26,7 @@ import static org.mockito.Mockito.*;
 class FuncionarioServiceTest {
 
     @Mock
-    private FuncionarioRepository funcionarioRepository;
+    private IFuncionarioRepository IFuncionarioRepository;
 
     // Cria uma instância real do UserService, injetando os mocks que ele precisa.
     @InjectMocks
@@ -46,7 +48,7 @@ class FuncionarioServiceTest {
     @Test
     @DisplayName("Deve criar um usuário com sucesso")
     void create_ShouldReturnSavedUser() {
-        when(funcionarioRepository.save(any(FuncionarioModel.class))).thenReturn(user);
+        when(IFuncionarioRepository.save(any(FuncionarioModel.class))).thenReturn(user);
 
         FuncionarioModel newUser = new FuncionarioModel(); // Um novo usuário sem ID
         newUser.setNome("Maria");
@@ -54,13 +56,13 @@ class FuncionarioServiceTest {
 
         assertThat(savedUser).isNotNull();
         assertThat(savedUser.getId()).isEqualTo(1L);
-        verify(funcionarioRepository, times(1)).save(any(FuncionarioModel.class)); // Verifica se o save foi chamado exatamente 1 vez.
+        verify(IFuncionarioRepository, times(1)).save(any(FuncionarioModel.class)); // Verifica se o save foi chamado exatamente 1 vez.
     }
 
     @Test
     @DisplayName("Deve listar todos os usuários")
     void list_ShouldReturnAllUsers() {
-        when(funcionarioRepository.findAll()).thenReturn(List.of(user, new FuncionarioModel()));
+        when(IFuncionarioRepository.findAll()).thenReturn(List.of(user, new FuncionarioModel()));
 
         List<FuncionarioModel> users = funcionarioService.list();
 
@@ -71,7 +73,7 @@ class FuncionarioServiceTest {
     @Test
     @DisplayName("Deve encontrar um usuário pelo ID com sucesso")
     void findOneById_WhenUserExists_ShouldReturnUser() {
-        when(funcionarioRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(IFuncionarioRepository.findById(1L)).thenReturn(Optional.of(user));
 
         FuncionarioModel foundUser = funcionarioService.findOneById(1L);
 
@@ -82,7 +84,7 @@ class FuncionarioServiceTest {
     @Test
     @DisplayName("Não deve encontrar um usuário com ID inexistente")
     void findOneById_WhenUserDoesNotExist_ShouldReturnEmpty() {
-        when(funcionarioRepository.findById(99L)).thenReturn(Optional.empty());
+        when(IFuncionarioRepository.findById(99L)).thenReturn(Optional.empty());
 
         FuncionarioModel foundUser = funcionarioService.findOneById(99L);
 
@@ -97,27 +99,27 @@ class FuncionarioServiceTest {
         novosDados.setNome("Maria Joaquina");
         novosDados.setEmail("maria.joaquina@example.com");
 
-        when(funcionarioRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(funcionarioRepository.save(any(FuncionarioModel.class))).thenReturn(user); // O save retorna o obj modificado
+        when(IFuncionarioRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(IFuncionarioRepository.save(any(FuncionarioModel.class))).thenReturn(user); // O save retorna o obj modificado
 
         FuncionarioModel updatedUser = funcionarioService.atualizarCadastro(1L, novosDados);
 
         assertThat(updatedUser).isNotNull();
         assertThat(updatedUser.getNome()).isEqualTo("Maria Joaquina");
         assertThat(updatedUser.getEmail()).isEqualTo("maria.joaquina@example.com");
-        verify(funcionarioRepository).save(user); // Verifica se o save foi chamado com o 'user'
+        verify(IFuncionarioRepository).save(user); // Verifica se o save foi chamado com o 'user'
     }
 
     @Test
     @DisplayName("Deve lançar exceção ao tentar atualizar um usuário inexistente")
     void atualizarCadastro_WhenUserDoesNotExist_ShouldThrowException() {
-        when(funcionarioRepository.findById(99L)).thenReturn(Optional.empty());
+        when(IFuncionarioRepository.findById(99L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             funcionarioService.atualizarCadastro(99L, new FuncionarioModel());
         });
 
         assertEquals("Usuário não encontrado.", exception.getMessage());
-        verify(funcionarioRepository, never()).save(any()); // Garante que o save nunca foi chamado
+        verify(IFuncionarioRepository, never()).save(any()); // Garante que o save nunca foi chamado
     }
 }

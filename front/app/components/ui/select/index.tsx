@@ -53,7 +53,7 @@ export const Select = memo(
           <label
             htmlFor={props.id}
             className={cn(
-              'flex text-[#25262B] font-semibold text-xs items-center gap-1.5',
+              'flex text-[#25262B] font-medium text-xs items-center gap-1.5',
               labelClass,
             )}>
             {label} {labelComponent}

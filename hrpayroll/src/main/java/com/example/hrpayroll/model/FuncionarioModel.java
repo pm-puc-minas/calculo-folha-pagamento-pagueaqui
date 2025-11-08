@@ -20,20 +20,27 @@ public class FuncionarioModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String nome;
 
+    @NotBlank
     private String sobrenome;
 
+    @NotBlank(message = "O CPF é obrigatório")
     @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos")
     @Column(unique = true, name = "CPF")
     private String cpf;
 
+    @NotBlank(message = "O RG é obrigatório")
     @Column(name = "RG")
     private String rg;
 
+    @NotBlank(message = "O e-mail é obrigatório")
+    @Column(unique = true, nullable = false)
     @Email(message = "E-mail inválido")
     private String email;
 
+    @NotBlank
     private String endereco;
 
     @Past(message = "A data de nascimento deve ser anterior à data atual")
@@ -46,9 +53,11 @@ public class FuncionarioModel {
     @Column(name = "data_de_admissao")
     private Date dataDeAdmissao;
 
-    @Column(name = "cargo")
-    private String cargo;
+    @ManyToOne
+    @JoinColumn(name = "cargo_id")
+    private CargoModel cargo;
 
+    @NotBlank
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Senha fraca. A senha deve ter no mínimo 8 caracteres, incluindo uma letra maiúscula, uma minúscula, um número e um caractere especial.")
     private String senha;
 
