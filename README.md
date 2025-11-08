@@ -100,9 +100,8 @@ java -jar target/hrpayroll-0.0.1-SNAPSHOT.jar
 ```
 
 #### ⚙️ Opção 2: Usando o plugin do Spring Boot
-bash
-# Dentro da pasta /hrpayroll
 ```bash
+# Dentro da pasta /hrpayroll
 mvn spring-boot:run
 ```
 
@@ -110,6 +109,184 @@ A API estará disponível em:
 👉 *http://localhost:8080*
 
 ---
+
+## 📘 2. Documentação Interativa (Swagger)
+
+A API utiliza **SpringDoc (Swagger)** para gerar automaticamente uma documentação interativa.
+
+Após iniciar a aplicação, acesse:  
+🔗 **http://localhost:8080/swagger-ui.html**
+
+Nesta interface, você pode:
+- Visualizar todos os endpoints
+- Conferir os modelos de requisição e resposta
+- Testar endpoints diretamente pelo navegador
+
+---
+
+## 🔑 3. Principais Endpoints e Exemplos
+
+> **Nota sobre Autenticação:**  
+> Endpoints que **não** estão listados como “Público” exigem um **Token JWT** no cabeçalho da requisição.  
+> Esse token é obtido via `POST /auth/login`.
+
+**Cabeçalho de Autorização:**
+```
+Authorization: Bearer <seu-token-jwt>
+```
+
+---
+
+### 🔐 3.1. Autenticação (`/auth`)
+
+Endpoints públicos para registro, login e recuperação de conta.
+
+#### **POST /auth/login**
+Realiza o login de um usuário (**HR**, **EMPLOYEE** ou **ADMIN**) e retorna um token JWT.
+
+**Requisição (Body):**
+```json
+{
+  "email": "admin@pagueaqui.com",
+  "password": "SenhaSegura123",
+  "accountType": "ADMIN"
+}
+```
+
+**Resposta Esperada (200 OK):**
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBwYWd1ZWFxdWkuY29tIiwiaWF0IjoxNzE1MTk3MzkxLCJleHAiOjE3MTUyODM3OTF9.uA...token...3s",
+  "user": {
+    "id": 1,
+    "name": "Admin User",
+    "email": "admin@pagueaqui.com",
+    "role": "ADMIN"
+  }
+}
+```
+
+---
+
+### 👷‍♀️ 3.2. Funcionários (`/funcionario`)
+
+Endpoints para gerenciamento de funcionários. *(Requer Autenticação)*
+
+#### **POST /funcionario/create**
+Cadastra um novo funcionário no sistema.
+
+**Requisição (Body):**
+```json
+{
+  "nome": "Ana",
+  "sobrenome": "Souza",
+  "cpf": "11122233344",
+  "rg": "12345678",
+  "email": "ana.souza@empresa.com",
+  "endereco": "Rua das Flores, 100",
+  "dataNascimento": "1995-05-20",
+  "dataDeAdmissao": "2023-01-10",
+  "pis": 12345678901.0,
+  "senha": "SenhaForte@123",
+  "cargo": {
+    "id": 1
+  },
+  "proventos": {
+    "salarioBruto": 3500.00,
+    "adicionalNoturno": false,
+    "insalubridade": false,
+    "periculosidade": false
+  }
+}
+```
+
+**Resposta Esperada:** `200 OK` *(Corpo vazio)*
+
+---
+
+#### **GET /funcionario/list**
+Lista todos os funcionários cadastrados.
+
+**Resposta (200 OK):**
+```json
+[
+  {
+    "id": 1,
+    "nome": "Ana",
+    "sobrenome": "Souza",
+    "cpf": "11122233344",
+    "email": "ana.souza@empresa.com",
+    "endereco": "Rua das Flores, 100",
+    "dataNascimento": "1995-05-20",
+    "pis": 12345678901.0,
+    "dataDeAdmissao": "2023-01-10",
+    "cargo": {
+      "id": 1,
+      "nome": "Analista Jr",
+      "descricao": "Analista de Sistemas Junior"
+    },
+    "proventos": {
+      "id": 1,
+      "salarioBruto": 3500.00,
+      "adicionalNoturno": false,
+      "insalubridade": false,
+      "periculosidade": false
+    }
+  }
+]
+```
+
+---
+
+### 💰 3.3. Folha de Pagamento (`/folhas`)
+
+Endpoints para geração e consulta de folhas de pagamento. *(Requer Autenticação)*
+
+#### **POST /folhas/gerar/{companyId}**
+Gera uma nova folha de pagamento para uma empresa.
+
+**Exemplo de chamada:**
+```
+POST http://localhost:8080/folhas/gerar/1?dataInicio=2024-11-01&dataFim=2024-11-30&salarioBase=150000.00
+```
+
+**Resposta (201 CREATED):**
+```json
+{
+  "id": 1,
+  "dataInicio": "2024-11-01",
+  "dataFim": "2024-11-30",
+  "salarioBaseTotal": 150000.00,
+  "totalDescontos": 25000.00,
+  "totalProventos": 150000.00,
+  "salarioLiquidoTotal": 125000.00,
+  "companyId": 1
+}
+```
+
+---
+
+#### **GET /folhas/empresa/{companyId}**
+Busca todas as folhas de pagamento geradas para uma empresa específica.
+
+**Resposta (200 OK):**
+```json
+[
+  {
+    "id": 1,
+    "dataInicio": "2024-11-01",
+    "dataFim": "2024-11-30",
+    "salarioBaseTotal": 150000.00,
+    "totalDescontos": 25000.00,
+    "totalProventos": 150000.00,
+    "salarioLiquidoTotal": 125000.00,
+    "companyId": 1
+  }
+]
+```
+
+---
+
 
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
