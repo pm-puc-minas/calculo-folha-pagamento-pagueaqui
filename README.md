@@ -289,6 +289,20 @@ Busca todas as folhas de pagamento geradas para uma empresa específica.
 
 ## 🧩 4. Estrutura dos Arquivos Principais
 
+| Arquivo | Função |
+
+|----------|--------|
+
+| *pom.xml* | Configura dependências do Maven (Spring Boot, PostgreSQL, JWT, Swagger) |
+
+| *application.properties* | Define propriedades da aplicação e do banco de dados |
+
+| *docker-compose.yml* | Provisiona o banco PostgreSQL com variáveis de ambiente |
+
+| *Controllers/* | Contém os endpoints principais da API (AuthController, FuncionarioController, FolhaController) |
+
+---
+
 
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
