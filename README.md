@@ -314,4 +314,7 @@ mvn test
 ````
 ---
 
+## 🧠 6. Observações
+
+
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
