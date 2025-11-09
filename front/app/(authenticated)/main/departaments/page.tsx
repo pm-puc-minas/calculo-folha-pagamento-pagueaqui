@@ -10,6 +10,9 @@ export default function Page() {
             <Pathname />
             <UserItem />
             <Aside />
+            <div className="py-8 bg-[#F9F8FB] px-6 space-y-6">
+
+            </div>
         </>
     );
 }
