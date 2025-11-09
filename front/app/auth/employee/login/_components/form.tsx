@@ -12,14 +12,20 @@ import { useAuth } from "@/app/context/authContext";
 import { AuthUserDto } from "@/app/schemas/model";
 import { useMutation } from "@tanstack/react-query";
 
+const loginTexts = {
+  invalidEmail: "Por favor, insira um e-mail válido",
+  minPassword: "A senha deve ter pelo menos 8 caracteres",
+  welcomeBack: "Bem vindo de volta!",
+}
+
 const loginSchema = y.object({
   email: y
     .string()
-    .email("Por favor, insira um e-mail válido")
+    .email(loginTexts.invalidEmail)
     .required("Por favor, insira um e-mail"),
   password: y
     .string()
-    .min(8, "A senha deve ter pelo menos 8 caracteres")
+    .min(8, loginTexts.minPassword)
     .required("Por favor, insira uma senha"),
 });
 
@@ -44,7 +50,7 @@ export function LoginForm() {
       setToken(response.accessToken);
       setUser(response.user as AuthUserDto);
       router.push("/main/dashboard");
-      toast.success("Bem vindo de volta!");
+      toast.success(loginTexts.welcomeBack);
     },
     onError: (error: any) => {
       toast.error(formatError(error));

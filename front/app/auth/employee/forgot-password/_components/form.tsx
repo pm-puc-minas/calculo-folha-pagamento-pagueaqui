@@ -9,10 +9,16 @@ import { toast } from "sonner";
 import { formatError, api } from "@/app/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 
+const emailTexts = {
+  invalidEmail: "Insira um e-mail válido.",
+  sentSuccess: "E-mail enviado com sucesso.",
+  sentError: "Não foi possível enviar o e-mail.",
+}
+
 const forgotPasswordSchema = y.object({
   email: y
     .string()
-    .email("Insira um e-mail válido.")
+    .email(emailTexts.invalidEmail)
     .required("E-mail obrigatório"),
 });
 
@@ -32,11 +38,11 @@ export function ForgotPasswordForm() {
   const { mutate, isPending } = useMutation({
     mutationFn: (email: string) => forgotPasswordRequest(email),
     onSuccess: (_, variables) => {
-      toast.success("E-mail enviado com sucesso");
+      toast.success(emailTexts.sentSuccess);
       router.push(`/auth/employee/verify?email=${variables}`);
     },
     onError: (error: any) => {
-      toast.error(formatError(error, "Não foi possível enviar o e-mail"));
+      toast.error(formatError(error, emailTexts.sentError));
     },
   });
   return (

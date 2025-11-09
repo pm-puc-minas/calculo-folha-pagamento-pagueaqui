@@ -10,14 +10,19 @@ import { toast } from "sonner";
 import { formatError, api } from "@/app/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 
+const passwordTexts = {
+  passwordMinLength: "A senha deve ter pelo menos 8 caracteres",
+  confirmPasswordMatch: "As senhas devem ser iguais",
+}
+
 const newPasswordSchema = y.object({
   password: y
     .string()
-    .min(8, "A senha deve ter pelo menos 8 caracteres")
+    .min(8, passwordTexts.passwordMinLength)
     .required("Por favor, insira uma senha"),
   confirmPassword: y
     .string()
-    .oneOf([y.ref("password")], "As senhas devem ser iguais")
+    .oneOf([y.ref("password")], passwordTexts.confirmPasswordMatch)
     .required("Por favor, insira uma senha"),
 });
 
