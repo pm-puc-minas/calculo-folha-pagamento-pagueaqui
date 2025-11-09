@@ -14,9 +14,14 @@ import { useCreateUser } from "@/app/lib/api/generated";
 import { toIsoNoonUTC } from "@/app/lib/formatters";
 import api from "@/app/lib/axios";
 
+const credentialsTexts = {
+  invalidEmail: "E-mail inválido",
+  minPassword: "A senha deve ter no mínimo 8 caracteres",
+};
+
 const credentialsSchema = z.object({
-  professionalEmail: z.string().email("E-mail inválido"),
-  password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres"),
+  professionalEmail: z.string().email(credentialsTexts.invalidEmail),
+  password: z.string().min(8, credentialsTexts.minPassword),
 });
 
 type CredentialsForm = z.infer<typeof credentialsSchema>;

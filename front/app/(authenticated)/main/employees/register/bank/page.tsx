@@ -12,11 +12,18 @@ import { useEffect, useRef, useState } from "react";
 import { useEmployeeRegistration } from "@/app/context/employeeRegistrationContext";
 import { getBankByCode } from "@/app/lib/external/brasilapi";
 
+const bankTexts = {
+  accountRequired: "Conta é obrigatória",
+  agencyRequired: "Agência é obrigatória",
+  verificationDigitRequired: "Dígito verificador é obrigatório",
+  bankRequired: "Banco é obrigatório",
+};
+
 const bankSchema = z.object({
-  account: z.string().min(1, "Conta é obrigatória"),
-  agency: z.string().min(1, "Agência é obrigatória"),
-  verificationDigit: z.string().min(1, "Dígito verificador é obrigatório"),
-  bank: z.string().min(1, "Banco é obrigatório"),
+  account: z.string().min(1, bankTexts.accountRequired),
+  agency: z.string().min(1, bankTexts.agencyRequired),
+  verificationDigit: z.string().min(1, bankTexts.verificationDigitRequired),
+  bank: z.string().min(1, bankTexts.bankRequired),
   bankCode: z.string().optional(),
 });
 
