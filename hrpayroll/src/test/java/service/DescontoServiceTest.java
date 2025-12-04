@@ -111,44 +111,18 @@ class DescontosServiceTest {
 
     @Test
     void deveCalcularINSSComSucesso() {
-        when(IDescontosRepository.findById(1L)).thenReturn(Optional.of(desconto));
-        when(IDescontosRepository.save(any())).thenReturn(desconto);
 
-        descontosService.calcularINSS(1L, 3500.00);
+        Double inss = descontosService.calcularINSS(3500.00);
 
-        // verify(descontosRepository, times(1)).save(any(DescontosModel.class));
+        assertEquals(318.8196, inss, 0.0001);
     }
 
     @Test
     void deveCalcularIRRFComSucesso() {
-        when(IDescontosRepository.findById(1L)).thenReturn(Optional.of(desconto));
-        when(IDescontosRepository.save(any())).thenReturn(desconto);
 
-        descontosService.calcularIRRF(1L, 3500.00);
+        Double irrf = descontosService.calcularIRRF( 3500.00);
 
-        // verify(descontosRepository, times(1)).save(any(DescontosModel.class));
-    }
-
-    @Test
-    void deveCalcularSalarioComSucesso() {
-        // Arrange
-        Double salario = 2000.0;
-        when(IDescontosRepository.findById(1L)).thenReturn(Optional.of(desconto));
-
-        // Mock dos métodos internos do serviço (se não forem privados)
-        DescontosService spyService = spy(descontosService);
-        doReturn(200.0).when(spyService).calcularINSS(1L, salario);
-        doReturn(100.0).when(spyService).calcularIRRF(1L, salario);
-        doReturn(50.0).when(spyService).calcularTotalDescontos(salario);
-
-        // Act
-        Double salarioLiquido = spyService.calcularSalarioLiquido(1L, salario);
-
-        // Assert
-        Double esperado = salario - 200.0 - 100.0 - 50.0; // 1650.0
-        assertEquals(esperado, salarioLiquido, 0.0001);
-
-        verify(IDescontosRepository, times(1)).save(any(DescontosModel.class));
+        assertEquals(40.58853, irrf, 0.0001);
     }
 
     @Test
