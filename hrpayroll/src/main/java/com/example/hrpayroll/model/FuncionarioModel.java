@@ -64,4 +64,8 @@ public class FuncionarioModel {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "proventos_id")
     private ProventosModel proventos;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private CompanyModel company;
 }
