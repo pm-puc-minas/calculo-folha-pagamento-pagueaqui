@@ -4,13 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.hrpayroll.dto.FuncionarioCreateDTO;
-import com.example.hrpayroll.model.BankInfoModel;
-import com.example.hrpayroll.model.CargoModel;
+import com.example.hrpayroll.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import com.example.hrpayroll.model.FuncionarioModel;
-import com.example.hrpayroll.model.ProventosModel;
 import com.example.hrpayroll.repository.IFuncionarioRepository;
 
 @Service
@@ -31,17 +29,22 @@ public class FuncionarioService {
         @Autowired
         private CargoService cargoService;
 
+        @Autowired
+        private ProventosService proventosService;
+
         public FuncionarioService(
                 IFuncionarioRepository IFuncionarioRepository,
                 DescontosService descontoService,
                 AdicionalService adicionalService,
                 BankInfoService bankInfoService,
-                CargoService cargoService) {
+                CargoService cargoService,
+                ProventosService proventosService) {
                 this.IFuncionarioRepository = IFuncionarioRepository;
                 this.descontoService = descontoService;
                 this.adicionalService = adicionalService;
                 this.bankInfoService = bankInfoService;
                 this.cargoService = cargoService;
+                this.proventosService = proventosService;
         }
 
         public FuncionarioModel create(FuncionarioCreateDTO funcionario) {
@@ -78,7 +81,17 @@ public class FuncionarioService {
 
                 entity.setSenha(funcionario.getSenha());
 
-                return IFuncionarioRepository.save(entity);
+                entity = IFuncionarioRepository.save(entity);
+
+                ProventosModel proventosModel = new ProventosModel();
+                proventosModel.setFuncionario(entity);
+
+                proventosModel = proventosService.create(proventosModel);
+                entity.setProventos(proventosModel);
+
+                entity = IFuncionarioRepository.save(entity);
+
+                return entity;
         }
 
         public List<FuncionarioModel> list() {
