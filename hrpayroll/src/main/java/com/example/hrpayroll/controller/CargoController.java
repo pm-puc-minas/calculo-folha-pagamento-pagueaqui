@@ -56,7 +56,6 @@ public class CargoController {
     @PatchMapping("/${id}/status")
     public ResponseEntity<CargoModel> atualizarStatus(@PathVariable Long id, @RequestParam boolean ativo) {
         CargoModel cargo = cargoService.atualizarStatus(id, ativo);
-
         return ResponseEntity.status(HttpStatus.OK).body(cargo);
     }
 
