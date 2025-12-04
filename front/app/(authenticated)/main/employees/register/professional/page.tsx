@@ -14,24 +14,13 @@ import { useEmployeeRegistration } from "@/app/context/employeeRegistrationConte
 import api, { formatError } from "@/app/lib/axios";
 
 const professionalSchema = z.object({
-  username: z.string().optional(),
-  position: z.string().optional(),
-  professionalEmail: z.string().email("E-mail inválido").optional().or(z.literal("")),
-  department: z.string().optional(),
-  weeklyHours: z.number().optional(),
-  workDays: z.string().optional(),
-  admissionDate: z.string().optional(),
-  pisPasep: z.string().optional(),
-  dependents: z.number().optional(),
+  cargoId: z.string().optional(),
+  emailProfissional: z.string().email("E-mail inválido").optional().or(z.literal("")),
+  dataDeAdmissao: z.string().optional(),
+  pis: z.string().optional(),
 });
 
 type ProfessionalForm = z.infer<typeof professionalSchema>;
-
-const workDaysOptions = [
-  { value: "segunda-sexta", label: "Segunda a Sexta" },
-  { value: "segunda-sabado", label: "Segunda a Sábado" },
-  { value: "escala", label: "Escala" },
-];
 
 export default function EmployeeRegisterStep2() {
   const router = useRouter();
@@ -121,7 +110,7 @@ export default function EmployeeRegisterStep2() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Select
               methods={methods}
-              name="position"
+              name="cargoId"
               placeholder="Cargo"
               label="Cargo"
             >
@@ -135,7 +124,7 @@ export default function EmployeeRegisterStep2() {
             {/* E-mail profissional */}
             <Input 
               methods={methods} 
-              name="professionalEmail" 
+              name="emailProfissional" 
               label="E-mail profissional" 
               placeholder="E-mail profissional" 
               type="email"
@@ -144,7 +133,7 @@ export default function EmployeeRegisterStep2() {
             {/* Data de admissão */}
             <Input
               methods={methods}
-              name="admissionDate"
+              name="dataDeAdmissao"
               label="Data de admissão"
               type="date"
             />
@@ -152,20 +141,10 @@ export default function EmployeeRegisterStep2() {
             {/* PIS/PASEP */}
             <Input 
               methods={methods} 
-              name="pisPasep" 
+              name="pis" 
               label="PIS/PASEP" 
               placeholder="PIS/PASEP"
               mask="999.99999.99-9"
-            />
-
-            {/* Dependentes */}
-            <Input 
-              methods={methods} 
-              name="dependents" 
-              label="Dependentes" 
-              placeholder="Dependentes"
-              isNumeric
-              allowNegative={false}
             />
           </div>
 

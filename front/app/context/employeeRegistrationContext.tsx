@@ -2,32 +2,30 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
 export type PersonalData = {
-  firstName?: string;
-  lastName?: string;
-  phone?: string;
+  nome?: string;
+  sobrenome?: string;
+  telefone?: string;
   email?: string;
   cpf?: string;
   rg?: string;
-  birthDate?: string;
-  maritalStatus?: string;
-  gender?: string;
-  nationality?: string;
-  street?: string;
-  district?: string;
-  number?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
+  dataDeNascimento?: string;
+  estadoCivil?: string;
+  genero?: string;
+  nacionalidade?: string;
+  rua?: string;
+  bairro?: string;
+  numero?: string;
+  cidade?: string;
+  estado?: string;
+  cep?: string;
 };
 
 export type ProfessionalData = {
   employeeId?: string;
-  position?: string;
-  professionalEmail?: string;
-  department?: string;
-  admissionDate?: string;
-  pisPasep?: string;
-  dependents?: number;
+  cargoId?: string;
+  emailProfissional?: string;
+  dataDeAdmissao?: string;
+  pis?: string;
 };
 
 export type DocumentsData = {
@@ -38,11 +36,11 @@ export type DocumentsData = {
 };
 
 export type BankData = {
-  account?: string;
-  agency?: string;
-  verificationDigit?: string;
-  bank?: string;
-  bankCode?: string;
+  conta?: string;
+  agencia?: string;
+  digitoVerificador?: string;
+  banco?: string;
+  codigoBanco?: string;
 };
 
 export type CredentialsData = {

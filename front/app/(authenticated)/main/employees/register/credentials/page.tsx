@@ -61,40 +61,55 @@ const methods = useForm<CredentialsForm>({
       updateCredentialsData(data);
 
       const enderecoParts = [
-        personalData.street,
-        personalData.number,
-        personalData.district,
-        personalData.city,
-        personalData.state,
-        personalData.zip,
+        personalData.rua,
+        personalData.numero,
+        personalData.bairro,
+        personalData.cidade,
+        personalData.estado,
+        personalData.cep,
       ].filter(Boolean);
 
       const funcionario = {
-        nome: personalData.firstName || undefined,
-        sobrenome: personalData.lastName || undefined,
+        nome: personalData.nome || undefined,
+        sobrenome: personalData.sobrenome || undefined,
         cpf: personalData.cpf ? personalData.cpf.replace(/\D/g, "") : undefined,
         rg: personalData.rg ? personalData.rg.replace(/\D/g, "") : undefined,
         email: personalData.email || undefined,
+        emailProfissional: professionalData.emailProfissional || undefined,
         endereco: enderecoParts.join(", ") || undefined,
-        dataNascimento: personalData.birthDate ? toIsoNoonUTC(personalData.birthDate) : undefined,
-        pis: professionalData.pisPasep
-          ? Number((professionalData.pisPasep as string).replace(/\D/g, ""))
+        dataDeNascimento: personalData.dataDeNascimento ? toIsoNoonUTC(personalData.dataDeNascimento) : undefined,
+        dataDeAdmissao: professionalData.dataDeAdmissao ? toIsoNoonUTC(professionalData.dataDeAdmissao) : undefined, 
+        pis: professionalData.pis
+          ? Number((professionalData.pis as string).replace(/\D/g, ""))
           : undefined,
-        dataDeAdmissao: professionalData.admissionDate
-          ? toIsoNoonUTC(professionalData.admissionDate)
-          : undefined,
-        cargo: professionalData.position ? { id: parseInt(professionalData.position) } : undefined,
+        cargoId: professionalData.cargoId ? parseInt(professionalData.cargoId) : undefined,
         senha: data.password,
+        bairro: personalData.bairro,
+        cep: personalData.cep,
+        rua: personalData.rua,
+        numero: personalData.numero,
+        estado: personalData.estado,
+        cidade: personalData.cidade,
+        estadoCivil: personalData.estadoCivil,
+        genero: personalData.genero,
+        banco: {
+          id: null,
+          conta: bankData.conta,
+          agencia: bankData.agencia,
+          codigoBanco: bankData.codigoBanco,
+          digitoVerificador: bankData.digitoVerificador,
+          banco: bankData.banco
+        }
       };
 
       await createUserMutation.mutateAsync({ data: funcionario });
 
       try {
-        const nomeCompleto = [personalData.firstName, personalData.lastName]
+        const nomeCompleto = [personalData.nome, personalData.sobrenome]
           .filter(Boolean)
           .join(" ");
         await api.post("/funcionario/invite", {
-          email: professionalData.professionalEmail,
+          email: professionalData.emailProfissional,
           nome: nomeCompleto || undefined,
           empresa: undefined,
           senha: data.password,

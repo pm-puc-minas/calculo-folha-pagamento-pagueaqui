@@ -20,11 +20,11 @@ const bankTexts = {
 };
 
 const bankSchema = z.object({
-  account: z.string().min(1, bankTexts.accountRequired),
-  agency: z.string().min(1, bankTexts.agencyRequired),
-  verificationDigit: z.string().min(1, bankTexts.verificationDigitRequired),
-  bank: z.string().min(1, bankTexts.bankRequired),
-  bankCode: z.string().optional(),
+  conta: z.string().min(1, bankTexts.accountRequired),
+  agencia: z.string().min(1, bankTexts.agencyRequired),
+  digitoVerificador: z.string().min(1, bankTexts.verificationDigitRequired),
+  banco: z.string().min(1, bankTexts.bankRequired),
+  codigoBanco: z.string().optional(),
 });
 
 type BankForm = z.infer<typeof bankSchema>;
@@ -40,7 +40,7 @@ export default function EmployeeRegisterStep4() {
     resolver: zodResolver(bankSchema),
     defaultValues: {
       ...bankData,
-      bankCode: bankData.bankCode || "",
+      codigoBanco: bankData.codigoBanco || "",
     },
   });
 
@@ -55,13 +55,13 @@ export default function EmployeeRegisterStep4() {
     router.push("/main/employees/register/documents");
   };
 
-  const bankCode = methods.watch("bankCode");
+  const bankCode = methods.watch("codigoBanco");
   useEffect(() => {
     const code = (bankCode || "").toString().trim();
     setBankLookupError(null);
 
     if (!code || !/^\d{3}$/.test(code)) {
-      methods.setValue("bank", "", { shouldValidate: true, shouldDirty: true });
+      methods.setValue("banco", "", { shouldValidate: true, shouldDirty: true });
       setBankLookupLoading(false);
       if (abortRef.current) abortRef.current.abort();
       return;
@@ -74,9 +74,9 @@ export default function EmployeeRegisterStep4() {
         abortRef.current = ctrl;
         setBankLookupLoading(true);
         const data = await getBankByCode(code, { signal: ctrl.signal });
-        methods.setValue("bank", data.name, { shouldValidate: true, shouldDirty: true });
+        methods.setValue("banco", data.name, { shouldValidate: true, shouldDirty: true });
       } catch (err: any) {
-        methods.setValue("bank", "", { shouldValidate: true, shouldDirty: true });
+        methods.setValue("banco", "", { shouldValidate: true, shouldDirty: true });
         setBankLookupError(err?.message || "Não foi possível buscar o banco");
       } finally {
         setBankLookupLoading(false);
@@ -137,38 +137,38 @@ export default function EmployeeRegisterStep4() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input 
               methods={methods} 
-              name="account" 
+              name="conta" 
               label="Conta" 
               placeholder="Conta" 
             />
             <Input 
               methods={methods} 
-              name="agency" 
+              name="agencia" 
               label="Agência" 
               placeholder="Agência" 
             />
             <Input 
               methods={methods} 
-              name="verificationDigit" 
+              name="digitoVerificador" 
               label="Dígito Verificador" 
               placeholder="Dígito Verificador" 
             />
             <Input
               methods={methods}
-              name="bankCode"
+              name="codigoBanco"
               label="Código do Banco"
               placeholder="Ex.: 001, 033, 341"
               inputMode="numeric"
               maxLength={3}
               mask="999"
               endContent={
-                (methods.watch("bankCode") || "").toString().length > 0 ? (
+                (methods.watch("codigoBanco") || "").toString().length > 0 ? (
                   <button
                     type="button"
                     className="text-gray-400 hover:text-gray-600 mr-2"
                     aria-label="Limpar código"
                     onClick={() => {
-                      methods.setValue("bankCode", "");
+                      methods.setValue("codigoBanco", "");
                       setBankLookupError(null);
                     }}
                   >
@@ -179,7 +179,7 @@ export default function EmployeeRegisterStep4() {
             />
             <Input
               methods={methods}
-              name="bank"
+              name="banco"
               label="Banco"
               placeholder="Preenchido automaticamente pelo código"
               readOnly
