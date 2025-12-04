@@ -77,7 +77,7 @@ export default function EmployeeRegisterStep5() {
         dataDeAdmissao: professionalData.admissionDate
           ? toIsoNoonUTC(professionalData.admissionDate)
           : undefined,
-        cargo: professionalData.position || undefined,
+        cargo: professionalData.position ? { id: parseInt(professionalData.position) } : undefined,
         senha: data.password,
       };
 

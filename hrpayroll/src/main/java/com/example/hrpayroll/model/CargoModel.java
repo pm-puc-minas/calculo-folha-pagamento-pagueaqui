@@ -30,4 +30,7 @@ public class CargoModel {
     @Column(name = "salario_base")
     private Double salarioBase;
 
+    @Column(name = "ativo")
+    private Boolean ativo;
+
 }

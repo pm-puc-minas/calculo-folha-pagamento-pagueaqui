@@ -40,4 +40,14 @@ public class CargoService {
     public void deleteById(Long id) {
         cargoRepository.deleteById(id);
     }
+
+    public CargoModel atualizarStatus(Long id, boolean ativo) {
+        CargoModel cargo = findById(id);
+
+        cargo.setAtivo(ativo);
+
+        cargo = cargoRepository.save(cargo);
+
+        return cargo;
+    }
 }

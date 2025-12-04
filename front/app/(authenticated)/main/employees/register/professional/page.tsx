@@ -41,13 +41,14 @@ export default function EmployeeRegisterStep2() {
     defaultValues: professionalData,
   });
 
-  // Cargo options loaded from backend (singular endpoint: /cargo)
+  // Cargo options loaded from backend
   const [cargoOptions, setCargoOptions] = useState<Array<{ value: string; label: string }>>([]);
 
   useEffect(() => {
+    // Load positions (cargos) - department comes from the selected cargo
     (async () => {
       try {
-        const res = await api.get("/cargo");
+        const res = await api.get("/cargo/list");
         const opts = (res.data || []).map((c: { id: number | string; name: string }) => ({
           value: String(c.id),
           label: c.name,
@@ -138,19 +139,6 @@ export default function EmployeeRegisterStep2() {
               placeholder="E-mail profissional" 
               type="email"
             />
-
-            {/* Departamento */}
-            <Select
-              methods={methods}
-              name="department"
-              placeholder="Departamento"
-              label="Departamento"
-            >
-              <SelectItem value="ti">Tecnologia da Informação</SelectItem>
-              <SelectItem value="rh">Recursos Humanos</SelectItem>
-              <SelectItem value="financeiro">Financeiro</SelectItem>
-              <SelectItem value="operacoes">Operações</SelectItem>
-            </Select>
 
             {/* Data de admissão */}
             <Input

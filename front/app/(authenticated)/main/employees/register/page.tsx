@@ -165,9 +165,12 @@ export default function EmployeeRegisterStep1() {
   };
 
   return (
-    <div className="p-6 md:p-8">
-      <div className="bg-white rounded-xl">
-        <div className="px-6 md:px-8 pt-4">
+    <div className="flex-1 flex flex-col h-full bg-[#F8F9FA] overflow-auto">
+      <div className="bg-white border-b border-[#DEE2E6]">
+        <div className="px-8 py-6">
+          <h1 className="text-xl font-semibold text-[#212529]">Colaboradores</h1>
+        </div>
+        <div className="px-8">
           <Tabs defaultValue="personal" className="w-full">
             <TabsList>
               <TabsTrigger value="personal" className="gap-2">
@@ -202,13 +205,14 @@ export default function EmployeeRegisterStep1() {
                 <Lock className="w-4 h-4" /> Credenciais
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="personal" className="mt-6" />
           </Tabs>
         </div>
+      </div>
 
+      <div className="flex-1 overflow-auto">
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className="px-6 md:px-8 pb-6 md:pb-8"
+          className="px-8 py-6"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input methods={methods} name="firstName" label="Nome" placeholder="Nome" />

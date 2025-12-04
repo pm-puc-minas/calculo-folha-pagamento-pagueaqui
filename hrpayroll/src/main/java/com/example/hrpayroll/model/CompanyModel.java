@@ -31,4 +31,5 @@ public class CompanyModel {
 
     @Column(name = "inscricao_estadual")
     private String inscricaoEstadual;
+
 }
