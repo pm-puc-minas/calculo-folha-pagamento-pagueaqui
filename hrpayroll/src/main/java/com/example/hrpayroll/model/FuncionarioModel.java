@@ -1,5 +1,6 @@
 package com.example.hrpayroll.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -67,6 +68,7 @@ public class FuncionarioModel {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "proventos_id")
+    @JsonManagedReference
     private ProventosModel proventos;
 
     @ManyToOne
