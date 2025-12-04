@@ -1,9 +1,3 @@
-/**
- * ViewPositionDialog Component
- * View position details in a modal
- * Following design specifications
- */
-
 "use client";
 
 import {
@@ -13,14 +7,17 @@ import {
   DialogTitle,
 } from "@/app/components/ui/dialog";
 import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
 import { User } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import type { Position } from "../types";
 
 interface ViewPositionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   position: Position | null;
-  onEdit: (position: Position) => void;
+  onEdit: (position: Position) => void; // enviar atualização ao pai
 }
 
 export function ViewPositionDialog({
@@ -29,6 +26,18 @@ export function ViewPositionDialog({
   position,
   onEdit,
 }: ViewPositionDialogProps) {
+  const [isEditing, setIsEditing] = useState(false);
+
+  // React Hook Form
+  const { register, handleSubmit, reset } = useForm<Position>({
+    defaultValues: position || {},
+  });
+
+  // Atualiza os valores sempre que abrir o modal
+  useEffect(() => {
+    if (position) reset(position);
+  }, [position, reset]);
+
   if (!position) return null;
 
   const formatCurrency = (value: number): string => {
@@ -38,9 +47,18 @@ export function ViewPositionDialog({
     });
   };
 
+  const handleSave = (data: Position) => {
+    onEdit(data); // envia para o pai
+    setIsEditing(false);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(v) => {
+      onOpenChange(v);
+      if (!v) setIsEditing(false); // limpa modo edição ao fechar
+    }}>
       <DialogContent className="sm:max-w-[600px] p-0 gap-0 bg-white">
+        
         {/* Header */}
         <DialogHeader className="px-6 py-4 border-b border-[#DEE2E6]">
           <div className="flex items-center justify-between">
@@ -49,52 +67,91 @@ export function ViewPositionDialog({
                 <User className="w-5 h-5 text-primary" />
               </div>
               <DialogTitle className="text-lg font-semibold text-[#212529]">
-                Informações do Cargo
+                {isEditing ? "Editar Cargo" : "Informações do Cargo"}
               </DialogTitle>
             </div>
-            {/* TODO: Edit button disabled - backend has no update endpoint */}
-            <Button
-              variant="default"
-              size="sm"
-              disabled
-              className="bg-primary hover:bg-primary/90 text-white opacity-50 cursor-not-allowed w-auto whitespace-nowrap"
-              title="Editar não disponível - aguardando endpoint no backend"
-            >
-              Editar Cargo
-            </Button>
+
+            {!isEditing && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => setIsEditing(true)}
+                className="bg-primary hover:bg-primary/90 text-white w-auto whitespace-nowrap"
+              >
+                Editar
+              </Button>
+            )}
           </div>
         </DialogHeader>
 
         {/* Content */}
-        <div className="px-6 py-6 space-y-6">
-          {/* Name */}
-          <div>
-            <p className="text-xs font-medium text-[#868E96] mb-1">Nome</p>
-            <p className="text-sm text-[#212529] font-medium">
-              {position.name || "N/A"}
-            </p>
+        <form onSubmit={handleSubmit(handleSave)}>
+          <div className="px-6 py-6 space-y-6">
+
+            {/* Nome */}
+            <div>
+              <p className="text-xs font-medium text-[#868E96] mb-1">Nome</p>
+
+              {isEditing ? (
+                <Input {...register("name")} />
+              ) : (
+                <p className="text-sm text-[#212529] font-medium">
+                  {position.name || "N/A"}
+                </p>
+              )}
+            </div>
+
+            {/* Departamento */}
+            <div>
+              <p className="text-xs font-medium text-[#868E96] mb-1">
+                Departamento
+              </p>
+
+              {isEditing ? (
+                <Input {...register("departamento.nome")} />
+              ) : (
+                <p className="text-sm text-[#212529]">
+                  {position.departamento?.nome || "N/A"}
+                </p>
+              )}
+            </div>
+
+            {/* Salário */}
+            <div>
+              <p className="text-xs font-medium text-[#868E96] mb-1">
+                Salário Base
+              </p>
+
+              {isEditing ? (
+                <Input type="number" step="0.01" {...register("salarioBase", { valueAsNumber: true })} />
+              ) : (
+                <p className="text-sm text-[#212529] font-medium">
+                  {position.salarioBase ? formatCurrency(position.salarioBase) : "N/A"}
+                </p>
+              )}
+            </div>
           </div>
 
-          {/* Department */}
-          <div>
-            <p className="text-xs font-medium text-[#868E96] mb-1">
-              Departamento
-            </p>
-            <p className="text-sm text-[#212529]">
-              {position.departamento?.nome || "N/A"}
-            </p>
-          </div>
+          {/* Ações */}
+          {isEditing && (
+            <div className="flex justify-end items-center gap-3 px-6 py-4 border-t">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setIsEditing(false);
+                  reset(position); 
+                }}
+              >
+                Cancelar
+              </Button>
 
-          {/* Salary */}
-          <div>
-            <p className="text-xs font-medium text-[#868E96] mb-1">
-              Salário Base
-            </p>
-            <p className="text-sm text-[#212529] font-medium">
-              {position.salarioBase ? formatCurrency(position.salarioBase) : "N/A"}
-            </p>
-          </div>
-        </div>
+              <Button type="submit" className="bg-primary text-white">
+                Salvar alterações
+              </Button>
+            </div>
+          )}
+        </form>
       </DialogContent>
     </Dialog>
   );

@@ -70,6 +70,7 @@ export function PositionsContent() {
 
   const handleOpenEdit = (position: Position) => {
     // TODO: Backend doesn't have update endpoint
+  
     toast.error("Edição não disponível - aguardando endpoint no backend");
   };
 

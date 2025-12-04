@@ -201,14 +201,11 @@ export function PositionsTable({
                       >
                         <Eye className="w-4 h-4" />
                       </Button>
-                      {/* TODO: Edit disabled - backend has no update endpoint */}
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-[#868E96] hover:text-primary hover:bg-primary/10 opacity-50 cursor-not-allowed"
-                        disabled
-                        aria-label="Editar não disponível"
-                        title="Editar não disponível - aguardando endpoint no backend"
+                        className="h-8 w-8 text-[#868E96] hover:text-primary hover:bg-primary/10"
+                        onClick={() => onEdit(position)}
                       >
                         <Pencil className="w-4 h-4" />
                       </Button>
