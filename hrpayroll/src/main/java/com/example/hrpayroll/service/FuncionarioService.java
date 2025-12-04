@@ -54,8 +54,7 @@ public class FuncionarioService {
         usuario.setNome(novosDados.getNome());
         usuario.setSobrenome(novosDados.getSobrenome());
         usuario.setEmail(novosDados.getEmail());
-        usuario.setEndereco(novosDados.getEndereco());
-        usuario.setDataNascimento(novosDados.getDataNascimento());
+        usuario.setDataDeNascimento(novosDados.getDataDeNascimento());
 
         return IFuncionarioRepository.save(usuario);
     }

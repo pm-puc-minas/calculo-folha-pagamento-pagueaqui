@@ -19,10 +19,15 @@ const credentialsTexts = {
   minPassword: "A senha deve ter no mínimo 8 caracteres",
 };
 
-const credentialsSchema = z.object({
-  professionalEmail: z.string().email(credentialsTexts.invalidEmail),
-  password: z.string().min(8, credentialsTexts.minPassword),
-});
+const credentialsSchema = z
+  .object({
+    password: z.string().min(8, credentialsTexts.minPassword),
+    password2: z.string().min(8, credentialsTexts.minPassword),
+  })
+  .refine((data) => data.password === data.password2, {
+    message: "As senhas não coincidem",
+    path: ["password2"], // o erro aparece no campo password2
+  });
 
 type CredentialsForm = z.infer<typeof credentialsSchema>;
 
@@ -41,13 +46,14 @@ export default function EmployeeRegisterStep5() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const createUserMutation = useCreateUser();
   
-  const methods = useForm<CredentialsForm>({
-    resolver: zodResolver(credentialsSchema),
-    defaultValues: {
-      professionalEmail: credentialsData.professionalEmail || professionalData.professionalEmail || "",
-      password: credentialsData.password || "",
-    },
-  });
+const methods = useForm<CredentialsForm>({
+  resolver: zodResolver(credentialsSchema),
+  mode: "onChange",
+  defaultValues: {
+    password: credentialsData.password || "",
+    password2: "",
+  },
+});
 
   const onSubmit = async (data: CredentialsForm) => {
     try {
@@ -68,7 +74,7 @@ export default function EmployeeRegisterStep5() {
         sobrenome: personalData.lastName || undefined,
         cpf: personalData.cpf ? personalData.cpf.replace(/\D/g, "") : undefined,
         rg: personalData.rg ? personalData.rg.replace(/\D/g, "") : undefined,
-        email: data.professionalEmail || personalData.email || undefined,
+        email: personalData.email || undefined,
         endereco: enderecoParts.join(", ") || undefined,
         dataNascimento: personalData.birthDate ? toIsoNoonUTC(personalData.birthDate) : undefined,
         pis: professionalData.pisPasep
@@ -88,7 +94,7 @@ export default function EmployeeRegisterStep5() {
           .filter(Boolean)
           .join(" ");
         await api.post("/funcionario/invite", {
-          email: data.professionalEmail,
+          email: professionalData.professionalEmail,
           nome: nomeCompleto || undefined,
           empresa: undefined,
           senha: data.password,
@@ -199,7 +205,7 @@ export default function EmployeeRegisterStep5() {
               >
                 Voltar
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting || !methods.formState.isValid}>
                 {isSubmitting ? "Salvando..." : "Salvar"}
               </Button>
             </div>
