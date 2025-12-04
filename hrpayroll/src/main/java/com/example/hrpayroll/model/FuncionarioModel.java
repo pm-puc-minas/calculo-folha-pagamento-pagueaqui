@@ -63,7 +63,6 @@ public class FuncionarioModel {
     private CargoModel cargo;
 
     @NotBlank
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Senha fraca. A senha deve ter no mínimo 8 caracteres, incluindo uma letra maiúscula, uma minúscula, um número e um caractere especial.")
     private String senha;
 
     @OneToOne(cascade = CascadeType.ALL)
