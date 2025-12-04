@@ -49,6 +49,9 @@ public class FuncionarioModel {
     @Column(name = "data_de_nascimento")
     private Date dataDeNascimento;
 
+    @Column(name = "telefone")
+    private String telefone;
+
     @Column(name = "PIS")
     private Double pis;
 
@@ -71,6 +74,15 @@ public class FuncionarioModel {
     @JoinColumn(name = "company_id")
     private CompanyModel company;
 
+    @Column(name = "genero")
+    private String genero;
+
+    @Column(name = "estado_civil")
+    private String estadoCivil;
+
+    @Column(name = "nacionalidade")
+    private String nacionalidade;
+
     @Column(name = "cep")
     private String cep;
 
@@ -85,9 +97,6 @@ public class FuncionarioModel {
 
     @Column(name = "cidade")
     private String cidade;
-
-    @Column(name = "estado_civil")
-    private String estadoCivil;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "banco_usuario_id")

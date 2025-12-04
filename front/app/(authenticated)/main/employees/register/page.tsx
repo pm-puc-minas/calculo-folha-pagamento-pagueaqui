@@ -14,25 +14,25 @@ import { useEmployeeRegistration } from "@/app/context/employeeRegistrationConte
 import api from "@/app/lib/axios";
 
 const personalSchema = z.object({
-  firstName: z.string().min(1, "Informe o nome"),
-  lastName: z.string().min(1, "Informe o sobrenome"),
-  phone: z.string().optional(),
+  nome: z.string().min(1, "Informe o nome"),
+  sobrenome: z.string().min(1, "Informe o sobrenome"),
+  telefone: z.string().optional(),
   email: z.string().email("E-mail inválido").optional(),
   cpf: z
     .string()
     .min(11, "CPF é obrigatório")
     .refine((val) => (val || "").replace(/\D/g, "").length === 11, "CPF deve ter 11 dígitos"),
   rg: z.string().optional(),
-  birthDate: z.string().optional(),
-  maritalStatus: z.string().optional(),
-  gender: z.string().optional(),
-  nationality: z.string().optional(),
-  street: z.string().optional(),
-  district: z.string().optional(),
-  number: z.string().optional(),
-  city: z.string().optional(),
-  state: z.string().optional(),
-  zip: z.string().optional(),
+  dataDeNascimento: z.string().optional(),
+  estadoCivil: z.string().optional(),
+  genero: z.string().optional(),
+  nacionalidade: z.string().optional(),
+  rua: z.string().optional(),
+  bairro: z.string().optional(),
+  numero: z.string().optional(),
+  cidade: z.string().optional(),
+  estado: z.string().optional(),
+  cep: z.string().optional(),
 });
 
 type PersonalForm = z.infer<typeof personalSchema>;
@@ -61,7 +61,7 @@ export default function EmployeeRegisterStep1() {
     resolver: zodResolver(personalSchema),
     defaultValues: personalData,
   });
-  const zipValue = methods.watch("zip");
+  const zipValue = methods.watch("cep");
   const cpfValue = methods.watch("cpf");
   const [cepLoading, setCepLoading] = useState(false);
   const [cepError, setCepError] = useState<string | null>(null);
@@ -94,11 +94,11 @@ export default function EmployeeRegisterStep1() {
           setCepError("CEP não encontrado");
           return;
         }
-  methods.setValue("street", data.logradouro || "");
-  methods.setValue("district", data.bairro || "");
-  methods.setValue("city", data.localidade || "");
-        methods.setValue("state", data.uf || "");
-        methods.setValue("zip", data.cep || zipValue);
+  methods.setValue("rua", data.logradouro || "");
+  methods.setValue("bairro", data.bairro || "");
+  methods.setValue("cidade", data.localidade || "");
+        methods.setValue("estado", data.uf || "");
+        methods.setValue("cep", data.cep || zipValue);
         setCepError(null);
       } catch (_) {
         setCepError("Falha ao consultar o CEP");
@@ -160,6 +160,7 @@ export default function EmployeeRegisterStep1() {
   }, [cpfValue, methods]);
 
   const onSubmit = (data: PersonalForm) => {
+    console.log("SUBMIT DISPARADO", data);
     updatePersonalData(data);
     router.push("/main/employees/register/professional");
   };
@@ -215,12 +216,12 @@ export default function EmployeeRegisterStep1() {
           className="px-8 py-6"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input methods={methods} name="firstName" label="Nome" placeholder="Nome" />
-            <Input methods={methods} name="lastName" label="Sobrenome" placeholder="Sobrenome" />
+            <Input methods={methods} name="nome" label="Nome" placeholder="Nome" />
+            <Input methods={methods} name="sobrenome" label="Sobrenome" placeholder="Sobrenome" />
 
             <Input
               methods={methods}
-              name="phone"
+              name="telefone"
               label="Telefone"
               placeholder="(00) 00000-0000"
               mask={["(99) 9999-9999", "(99) 99999-9999"]}
@@ -248,13 +249,13 @@ export default function EmployeeRegisterStep1() {
 
             <Input
               methods={methods}
-              name="birthDate"
+              name="dataDeNascimento"
               label="Data de Nascimento"
               type="date"
             />
             <Select
               methods={methods}
-              name="maritalStatus"
+              name="estadoCivil"
               placeholder="Estado Civil"
               label="Estado Civil"
             >
@@ -267,7 +268,7 @@ export default function EmployeeRegisterStep1() {
 
             <Select
               methods={methods}
-              name="gender"
+              name="genero"
               placeholder="Gênero"
               label="Gênero"
             >
@@ -282,7 +283,7 @@ export default function EmployeeRegisterStep1() {
             <div className="flex flex-col gap-1">
               <Input
                 methods={methods}
-                name="zip"
+                name="cep"
                 label="CEP"
                 placeholder="00000-000"
                 mask={"99999-999"}
@@ -302,18 +303,18 @@ export default function EmployeeRegisterStep1() {
             </div>
 
             {/* Rua */}
-            <Input methods={methods} name="street" label="Rua" placeholder="Rua" />
+            <Input methods={methods} name="rua" label="Rua" placeholder="Rua" />
 
             {/* Bairro */}
-            <Input methods={methods} name="district" label="Bairro" placeholder="Bairro" />
+            <Input methods={methods} name="bairro" label="Bairro" placeholder="Bairro" />
 
             {/* Número */}
-            <Input methods={methods} name="number" label="Número" placeholder="Número" />
+            <Input methods={methods} name="numero" label="Número" placeholder="Número" />
 
             {/* Cidade */}
-            <Input methods={methods} name="city" label="Cidade" placeholder="Cidade" />
+            <Input methods={methods} name="cidade" label="Cidade" placeholder="Cidade" />
 
-            <Select methods={methods} name="state" placeholder="Estado" label="Estado">
+            <Select methods={methods} name="estado" placeholder="Estado" label="Estado">
               {states.map((uf) => (
                 <SelectItem key={uf} value={uf}>
                   {uf}

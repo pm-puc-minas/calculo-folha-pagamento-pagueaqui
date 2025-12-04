@@ -61,6 +61,7 @@ export default function EmployeeRegisterStep2() {
   }, []);
 
   const onSubmit = (data: ProfessionalForm) => {
+    console.log("SUBMIT DISPARADO", data);
     updateProfessionalData(data);
     router.push("/main/employees/register/documents");
   };
