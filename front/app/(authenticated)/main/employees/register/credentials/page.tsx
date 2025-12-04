@@ -168,16 +168,16 @@ export default function EmployeeRegisterStep5() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input 
               methods={methods} 
-              name="professionalEmail" 
-              label="E-mail Profissional" 
-              placeholder="E-mail Profissional"
-              type="email"
-            />
-            <Input 
-              methods={methods} 
               name="password" 
               label="Senha" 
               placeholder="Senha"
+              type="password"
+            />
+            <Input 
+              methods={methods} 
+              name="password2" 
+              label="Senha novamente" 
+              placeholder="Senha novamente"
               type="password"
             />
           </div>

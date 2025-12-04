@@ -197,8 +197,8 @@ export function EmployeeFormDialog({
 
                 <TabsContent value="credentials" className="mt-0">
                   <div className="grid grid-cols-2 gap-4">
-                    <Input methods={methods} name="email" label="E-mail Profissional" type="email" required />
-                    <Input methods={methods} name="senha" label="Senha" type="password" required={!isEditing} />
+                    <Input methods={methods} name="email" label="Senha" type="password" required />
+                    <Input methods={methods} name="senha" label="Senha novamente" type="password2" required={!isEditing} />
                   </div>
                 </TabsContent>
               </form>
