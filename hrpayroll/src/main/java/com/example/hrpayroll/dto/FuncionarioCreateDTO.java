@@ -9,18 +9,23 @@ public class FuncionarioCreateDTO {
     private String sobrenome;
     private String cpf;
     private String rg;
+    private String nacionalidade;
+    private String telefone;
     private String email;
     private String emailProfissional;
     private Date dataDeNascimento;
+    private Date dataDeAdmissao;
     private Double pis;
-    private Integer cargoId;
+    private Long cargoId;
     private String senha;
     private String cep;
     private String rua;
     private String numero;
+    private String bairro;
     private String estado;
     private String cidade;
     private String estadoCivil;
+    private String genero;
     private BankInfoCreateDTO banco;
 
     public FuncionarioCreateDTO() {}
@@ -65,6 +70,22 @@ public class FuncionarioCreateDTO {
         this.rg = rg;
     }
 
+    public String getNacionalidade() {
+        return nacionalidade;
+    }
+
+    public void setNacionalidade(String nacionalidade) {
+        this.nacionalidade = nacionalidade;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -89,6 +110,14 @@ public class FuncionarioCreateDTO {
         this.dataDeNascimento = dataDeNascimento;
     }
 
+    public Date getDataDeAdmissao() {
+        return dataDeAdmissao;
+    }
+
+    public void setDataDeAdmissao(Date dataDeAdmissao) {
+        this.dataDeAdmissao = dataDeAdmissao;
+    }
+
     public Double getPis() {
         return pis;
     }
@@ -97,11 +126,11 @@ public class FuncionarioCreateDTO {
         this.pis = pis;
     }
 
-    public Integer getCargoId() {
+    public Long getCargoId() {
         return cargoId;
     }
 
-    public void setCargoId(Integer cargoId) {
+    public void setCargoId(Long cargoId) {
         this.cargoId = cargoId;
     }
 
@@ -137,6 +166,14 @@ public class FuncionarioCreateDTO {
         this.numero = numero;
     }
 
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
     public String getEstado() {
         return estado;
     }
@@ -161,6 +198,14 @@ public class FuncionarioCreateDTO {
         this.estadoCivil = estadoCivil;
     }
 
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
     public BankInfoCreateDTO getBanco() {
         return banco;
     }
@@ -168,4 +213,5 @@ public class FuncionarioCreateDTO {
     public void setBanco(BankInfoCreateDTO banco) {
         this.banco = banco;
     }
+
 }

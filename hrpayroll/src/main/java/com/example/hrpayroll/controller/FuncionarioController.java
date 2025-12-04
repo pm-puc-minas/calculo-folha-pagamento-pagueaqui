@@ -2,6 +2,7 @@ package com.example.hrpayroll.controller;
 
 import java.util.List;
 
+import com.example.hrpayroll.dto.FuncionarioCreateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class FuncionarioController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity createUser(@Valid @RequestBody FuncionarioModel funcionarioModel) {
-        funcionarioService.create(funcionarioModel);
+    public ResponseEntity createUser(@Valid @RequestBody FuncionarioCreateDTO funcionario) {
+        funcionarioService.create(funcionario);
 
         return ResponseEntity.ok().build();
     }

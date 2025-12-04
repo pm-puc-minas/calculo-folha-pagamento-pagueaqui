@@ -98,6 +98,9 @@ public class FuncionarioModel {
     @Column(name = "cidade")
     private String cidade;
 
+    @Column(name = "bairro")
+    private String bairro;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "banco_usuario_id")
     private BankInfoModel bancoInfoModel;
