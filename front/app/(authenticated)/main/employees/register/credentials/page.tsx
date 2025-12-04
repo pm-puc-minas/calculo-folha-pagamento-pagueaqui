@@ -74,6 +74,8 @@ const methods = useForm<CredentialsForm>({
         sobrenome: personalData.sobrenome || undefined,
         cpf: personalData.cpf ? personalData.cpf.replace(/\D/g, "") : undefined,
         rg: personalData.rg ? personalData.rg.replace(/\D/g, "") : undefined,
+        nacionalidade: personalData.nacionalidade || undefined,
+        telefone: personalData.telefone || undefined,
         email: personalData.email || undefined,
         emailProfissional: professionalData.emailProfissional || undefined,
         endereco: enderecoParts.join(", ") || undefined,
