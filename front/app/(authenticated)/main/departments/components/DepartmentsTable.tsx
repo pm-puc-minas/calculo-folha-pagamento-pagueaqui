@@ -71,16 +71,6 @@ export function DepartmentsTable({
               height={177}
               className="mb-6 opacity-80"
             />
-            <p className="text-[#495057] font-medium mb-1">
-              {searchTerm
-                ? "Nenhum departamento encontrado"
-                : "Não há registros..."}
-            </p>
-            <p className="text-sm text-[#ADB5BD]">
-              {searchTerm
-                ? "Tente ajustar os filtros de busca"
-                : "Aqui serão listados os departamentos da empresa"}
-            </p>
           </div>
         ) : (
           <div className="p-6 bg-white">

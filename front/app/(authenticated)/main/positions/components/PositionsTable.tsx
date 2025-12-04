@@ -38,13 +38,6 @@ export function PositionsTable({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Debug: Log positions to see the structure
-  useEffect(() => {
-    if (positions.length > 0) {
-      console.log("First position data:", positions[0]);
-    }
-  }, [positions]);
-
   const filteredPositions = useMemo(() => {
     if (!searchTerm.trim()) return positions;
 
