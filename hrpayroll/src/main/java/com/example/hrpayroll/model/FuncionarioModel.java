@@ -40,12 +40,14 @@ public class FuncionarioModel {
     @Email(message = "E-mail inválido")
     private String email;
 
-    @NotBlank
-    private String endereco;
+    @NotBlank(message = "O e-mail é obrigatório")
+    @Column(name = "email_profissional",unique = true, nullable = false)
+    @Email(message = "E-mail inválido")
+    private String emailProfissional;
 
     @Past(message = "A data de nascimento deve ser anterior à data atual")
     @Column(name = "data_de_nascimento")
-    private Date dataNascimento;
+    private Date dataDeNascimento;
 
     @Column(name = "PIS")
     private Double pis;
@@ -68,4 +70,27 @@ public class FuncionarioModel {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private CompanyModel company;
+
+    @Column(name = "cep")
+    private String cep;
+
+    @Column(name = "rua")
+    private String rua;
+
+    @Column(name = "numero")
+    private String numero;
+
+    @Column(name = "estado")
+    private String estado;
+
+    @Column(name = "cidade")
+    private String cidade;
+
+    @Column(name = "estado_civil")
+    private String estadoCivil;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "banco_usuario_id")
+    private BankInfoModel bancoInfoModel;
+
 }
