@@ -38,7 +38,7 @@ Pensando nisso, o **PagueAqui** foi criado para **automatizar esse processo** e 
 ---
 
 ## 🛠️ Tecnologias Utilizadas  
-- **Frontend:** React ⚛️  
+- **Frontend:** React com TypeScript⚛️  
 - **Backend:** Java com Spring Boot ☕  
 - **Banco de Dados:** PostgreSQL 🗃️  
 - **Gerenciamento de Dependências:** Maven  
