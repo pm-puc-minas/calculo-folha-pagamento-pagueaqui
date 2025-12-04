@@ -5,4 +5,8 @@ import org.springframework.stereotype.Repository;
 import com.example.hrpayroll.model.ProventosModel;
 
 @Repository
-public interface IProventosRepository extends JpaRepository<ProventosModel, Long> {}
+public interface IProventosRepository extends JpaRepository<ProventosModel, Long> {
+
+    ProventosModel findByFuncionarioId(Long funcionarioId);
+
+}
