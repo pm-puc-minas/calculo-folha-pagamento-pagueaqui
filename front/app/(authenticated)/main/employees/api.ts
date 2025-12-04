@@ -37,8 +37,7 @@ export function useEmployees() {
             return data;
           }],
         });
-        
-        console.log("Employees carregados:", data?.length || 0);
+      
         return Array.isArray(data) ? data : [];
       } catch (error) {
         console.error("Erro ao buscar funcionários:", error);
