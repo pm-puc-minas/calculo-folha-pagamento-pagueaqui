@@ -7,7 +7,9 @@ export function departamentoModulo (){
         <>
             <Header></Header>
             <Aside></Aside>
-
+            <div className="flex items-center gap-8 px-3 border-b border-border">
+                <h1>Colaborador</h1>
+            </div>
         </>
-    )
+    );
 }
