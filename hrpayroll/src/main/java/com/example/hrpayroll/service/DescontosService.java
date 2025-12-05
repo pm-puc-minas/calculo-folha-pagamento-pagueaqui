@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.example.hrpayroll.model.DescontosModel;
 import com.example.hrpayroll.repository.IDescontosRepository;
+import com.example.hrpayroll.repository.ICalculoRepository;
 
-//Aqui eu esperava ver uso de composição ou interfaces, não uma classe extensa com os descontos
 @Service
 public class DescontosService {
 
     @Autowired
     private IDescontosRepository descontosRepository;
+    private ICalculoRepository calculoRepository;
 
     public List<DescontosModel> listarTodos() {
         return descontosRepository.findAll();
