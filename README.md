@@ -323,7 +323,7 @@ mvn test
 
 ---
 
-# 📘 Cálculo da Folha de Pagamento — Aplicação do Padrão Decorator
+## 📘 Cálculo da Folha de Pagamento — Aplicação do Padrão Decorator
 
 ## 📌 Padrão Utilizado  
 **Decorator**
