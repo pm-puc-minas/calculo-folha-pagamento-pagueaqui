@@ -347,5 +347,18 @@ Foi criada a interface `ICalculoSalarioComponente`, permitindo que **cada descon
 O Decorator foi aplicado exclusivamente ao INSS como prova de conceito, sem impactar o funcionamento restante do backend ou frontend.
 
 ---
+## 📌 Classes Criadas / Modificadas  
+
+### ✅ Criada
+- `ICalculoSalarioComponente.java`  
+  Interface que define o contrato para componentes de cálculo salarial.
+
+### ✏️ Modificada
+- `FuncionarioService.java`  
+  - Adicionada classe interna `CalculoBase`
+  - Adicionado decorator aplicado ao cálculo do INSS  
+  - Demais regras mantidas **inalteradas**
+
+---
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
