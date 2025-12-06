@@ -365,5 +365,45 @@ O Decorator foi aplicado exclusivamente ao INSS como prova de conceito, sem impa
 
 <img width="766" height="537" alt="image" src="https://github.com/user-attachments/assets/465cf9d0-3237-4113-9aba-ec8f85727a38" />
 
+---
+
+## 📌 Trechos de Código Demonstrando a Aplicação do Padrão
+
+### **Interface criada — `ICalculoSalarioComponente.java`**
+
+```
+package com.example.hrpayroll.calculo;
+
+public interface ICalculoSalarioComponente {
+    Double calcular(Double salarioAtual, Double salarioBase);
+}
+```
+### Componente base do Decorator
+```
+private class CalculoBase implements ICalculoSalarioComponente {
+    @Override
+    public Double calcular(Double salarioAtual, Double salarioBase) {
+        return salarioAtual; // não altera nada
+    }
+```
+
+### Aplicação do Decorator no cálculo do INSS
+```
+ICalculoSalarioComponente calculoINSS =
+        new ICalculoSalarioComponente() {
+
+            private ICalculoSalarioComponente componente = new CalculoBase();
+
+            @Override
+            public Double calcular(Double salarioAtual, Double salarioBase) {
+                Double desconto = descontoService.calcularINSS(salarioBase);
+                return componente.calcular(salarioAtual, salarioBase) - desconto;
+            }
+        };
+
+// aplica o decorator ao cálculo
+salarioLiquido = calculoINSS.calcular(salarioLiquido, salarioBruto);
+```
+---
 
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
