@@ -361,4 +361,9 @@ O Decorator foi aplicado exclusivamente ao INSS como prova de conceito, sem impa
 
 ---
 
+## 📌 Diagrama UML Simplificado do Decorator no Contexto
+
+<img width="766" height="537" alt="image" src="https://github.com/user-attachments/assets/465cf9d0-3237-4113-9aba-ec8f85727a38" />
+
+
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
