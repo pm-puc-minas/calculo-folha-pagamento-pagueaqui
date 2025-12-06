@@ -330,6 +330,21 @@ mvn test
 
 ---
 
+## 📌 Justificativa da Escolha  
+
+O método `salarioLiquidoById` da classe `FuncionarioService` concentrava diversas regras de negócio responsáveis pelo cálculo do salário líquido (INSS, IRRF, adicionais, descontos, etc.).  
+
+Essa concentração de responsabilidades dificultava:
+
+- a manutenção das regras de cálculo,  
+- a escalabilidade do código,  
+- a testabilidade das regras de negócio.
+
+Para iniciar a modularização sem alterar a arquitetura geral da aplicação, aplicamos o **padrão Decorator** de forma minimalista apenas sobre o cálculo do **INSS**.  
+
+Foi criada a interface `ICalculoSalarioComponente`, permitindo que **cada desconto ou adicional possa futuramente ser encapsulado como um componente decorável**.
+
+O Decorator foi aplicado exclusivamente ao INSS como prova de conceito, sem impactar o funcionamento restante do backend ou frontend.
 
 ---
 
