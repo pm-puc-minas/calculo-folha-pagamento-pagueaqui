@@ -1,8 +1,11 @@
 package service;
 
+import com.example.hrpayroll.model.CargoModel;
 import com.example.hrpayroll.model.FuncionarioModel;
+import com.example.hrpayroll.model.ProventosModel;
 import com.example.hrpayroll.repository.IFuncionarioRepository;
-import com.example.hrpayroll.service.FuncionarioService;
+import com.example.hrpayroll.service.*;
+import com.example.hrpayroll.service.BankInfoService; // Importação necessária
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,13 +25,26 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class) 
+@ExtendWith(MockitoExtension.class)
 class FuncionarioServiceTest {
 
     @Mock
     private IFuncionarioRepository IFuncionarioRepository;
 
-    // Cria uma instância real do UserService, injetando os mocks que ele precisa.
+    // Dependências necessárias para o FuncionarioService
+    @Mock
+    private DescontosService descontoService;
+    @Mock
+    private AdicionalService adicionalService;
+    @Mock
+    private CargoService cargoService;
+    @Mock
+    private ProventosService proventosService;
+
+    @Mock
+    private BankInfoService bankInfoService;
+
+    // Cria uma instância real do UserService, injetando os mocks.
     @InjectMocks
     private FuncionarioService funcionarioService;
 
@@ -43,20 +59,6 @@ class FuncionarioServiceTest {
         user.setEmail("maria.silva@example.com");
         user.setDataDeNascimento(new Date());
     }
-
-//    @Test
-//    @DisplayName("Deve criar um usuário com sucesso")
-//    void create_ShouldReturnSavedUser() {
-//        when(IFuncionarioRepository.save(any(FuncionarioModel.class))).thenReturn(user);
-//
-//        FuncionarioModel newUser = new FuncionarioModel(); // Um novo usuário sem ID
-//        newUser.setNome("Maria");
-//        FuncionarioModel savedUser = funcionarioService.create(newUser);
-//
-//        assertThat(savedUser).isNotNull();
-//        assertThat(savedUser.getId()).isEqualTo(1L);
-//        verify(IFuncionarioRepository, times(1)).save(any(FuncionarioModel.class)); // Verifica se o save foi chamado exatamente 1 vez.
-//    }
 
     @Test
     @DisplayName("Deve listar todos os usuários")
@@ -120,5 +122,55 @@ class FuncionarioServiceTest {
 
         assertEquals("Usuário não encontrado.", exception.getMessage());
         verify(IFuncionarioRepository, never()).save(any()); // Garante que o save nunca foi chamado
+    }
+
+    @Test
+    @DisplayName("Cálculo do Salário Líquido (INSS com Decorator) deve retornar o valor correto")
+    void calcularSalarioLiquidoComDecoratorINSS_deveManterResultadoCorreto() {
+        final Long ID_FUNCIONARIO = 1L;
+        final Double SALARIO_BASE = 5000.00;
+
+        // Valores Mockados
+        final Double VALOR_INSS = 600.00;
+        final Double VALOR_IRRF = 350.00;
+        final Double DESCONTO_PLANO_SAUDE = 150.00;
+        final Double DESCONTO_VALE_TRANSPORTE = 300.00;
+
+        // Mocks das Entidades
+        FuncionarioModel funcionarioMock = mock(FuncionarioModel.class);
+        CargoModel cargoMock = mock(CargoModel.class);
+        ProventosModel proventosMock = mock(ProventosModel.class);
+
+        // Configuração do Funcionário e Cargo
+        when(IFuncionarioRepository.findById(ID_FUNCIONARIO)).thenReturn(Optional.of(funcionarioMock));
+        when(funcionarioMock.getCargo()).thenReturn(cargoMock);
+        when(funcionarioMock.getProventos()).thenReturn(proventosMock);
+        when(cargoMock.getSalarioBase()).thenReturn(SALARIO_BASE);
+
+        // Configuração dos Proventos ativados
+        when(proventosMock.getValeTransporte()).thenReturn(true);
+        when(proventosMock.getPlanoDeSaude()).thenReturn(true);
+        // Configurações desativadas/zero para simplificar a conta
+        when(proventosMock.getAdicionalNoturno()).thenReturn(false);
+        when(proventosMock.getAdicionalInsalubridade()).thenReturn(false);
+        when(proventosMock.getAdicionalPericulosidade()).thenReturn(false);
+        when(proventosMock.getValeAlimentacaoRefeicao()).thenReturn(false);
+        when(proventosMock.getHorasExtras()).thenReturn(0L);
+
+        // O Decorator (INSS) e o restante do código consomem esses valores mockados.
+        when(descontoService.calcularINSS(SALARIO_BASE)).thenReturn(VALOR_INSS);
+        when(descontoService.calcularIRRF(SALARIO_BASE)).thenReturn(VALOR_IRRF);
+        when(descontoService.calcularDescontoPlanoDeSaude(SALARIO_BASE)).thenReturn(DESCONTO_PLANO_SAUDE);
+        when(descontoService.calcularDescontoValeTransporte(SALARIO_BASE)).thenReturn(DESCONTO_VALE_TRANSPORTE);
+
+        Double salarioLiquido = funcionarioService.salarioLiquidoById(ID_FUNCIONARIO);
+
+
+        // 5000.00 (Base) - 600.00 (INSS - via Decorator) - 350.00 (IRRF) - 300.00 (VT) - 150.00 (Plano de Saúde)
+        Double resultadoEsperado = 5000.00 - 600.00 - 350.00 - 300.00 - 150.00; // = 3600.00
+
+        assertEquals(resultadoEsperado, salarioLiquido, 0.001, "O salário líquido calculado deve ser 3600.00.");
+
+        verify(descontoService, times(1)).calcularINSS(SALARIO_BASE);
     }
 }

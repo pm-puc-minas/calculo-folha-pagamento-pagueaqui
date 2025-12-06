@@ -3,6 +3,7 @@ package com.example.hrpayroll.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.hrpayroll.calculo.ICalculoSalarioComponente;
 import com.example.hrpayroll.dto.FuncionarioCreateDTO;
 import com.example.hrpayroll.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,6 +126,14 @@ public class FuncionarioService {
         return IFuncionarioRepository.save(usuario);
     }
 
+    // Componente base do Decorator
+    private class CalculoBase implements ICalculoSalarioComponente {
+        @Override
+        public Double calcular(Double salarioAtual, Double salarioBase) {
+            return salarioAtual;
+        }
+    }
+
     public Double salarioLiquidoById(Long id) {
         FuncionarioModel funcionario = this.findOneById(id);
         if (funcionario == null) {
@@ -136,13 +145,27 @@ public class FuncionarioService {
         }
 
         ProventosModel proventos = funcionario.getProventos();
-
         Double salarioBruto = funcionario.getCargo().getSalarioBase();
 
+        // SALÁRIO INICIAL
         Double salarioLiquido = salarioBruto;
 
-        salarioLiquido -= descontoService.calcularINSS(salarioBruto);
-        
+        //Decorator aplicado SOMENTE AO INSS ===
+        ICalculoSalarioComponente calculoINSS = new ICalculoSalarioComponente() {
+
+            private ICalculoSalarioComponente componente = new CalculoBase();
+
+            @Override
+            public Double calcular(Double salarioAtual, Double salarioBase) {
+                Double desconto = descontoService.calcularINSS(salarioBase);
+                return componente.calcular(salarioAtual, salarioBase) - desconto;
+            }
+        };
+
+        // aplica o decorator
+        salarioLiquido = calculoINSS.calcular(salarioLiquido, salarioBruto);
+
+        // IRRF normal
         salarioLiquido -= descontoService.calcularIRRF(salarioBruto);
 
         if (proventos.getAdicionalNoturno() == true) {
@@ -174,8 +197,8 @@ public class FuncionarioService {
         }
 
         return salarioLiquido;
-
     }
+
 
     public void delete(Long id) {
         FuncionarioModel funcionario = this.findOneById(id);

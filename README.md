@@ -323,4 +323,87 @@ mvn test
 
 ---
 
+## 📘 Cálculo da Folha de Pagamento — Aplicação do Padrão Decorator
+
+## 📌 Padrão Utilizado  
+**Decorator**
+
+---
+
+## 📌 Justificativa da Escolha  
+
+O método `salarioLiquidoById` da classe `FuncionarioService` concentrava diversas regras de negócio responsáveis pelo cálculo do salário líquido (INSS, IRRF, adicionais, descontos, etc.).  
+
+Essa concentração de responsabilidades dificultava:
+
+- a manutenção das regras de cálculo,  
+- a escalabilidade do código,  
+- a testabilidade das regras de negócio.
+
+Para iniciar a modularização sem alterar a arquitetura geral da aplicação, aplicamos o **padrão Decorator** de forma minimalista apenas sobre o cálculo do **INSS**.  
+
+Foi criada a interface `ICalculoSalarioComponente`, permitindo que **cada desconto ou adicional possa futuramente ser encapsulado como um componente decorável**.
+
+O Decorator foi aplicado exclusivamente ao INSS como prova de conceito, sem impactar o funcionamento restante do backend ou frontend.
+
+---
+## 📌 Classes Criadas / Modificadas  
+
+### ✅ Criada
+- `ICalculoSalarioComponente.java`  
+  Interface que define o contrato para componentes de cálculo salarial.
+
+### ✏️ Modificada
+- `FuncionarioService.java`  
+  - Adicionada classe interna `CalculoBase`
+  - Adicionado decorator aplicado ao cálculo do INSS  
+  - Demais regras mantidas **inalteradas**
+
+---
+
+## 📌 Diagrama UML Simplificado do Decorator no Contexto
+
+<img width="766" height="537" alt="image" src="https://github.com/user-attachments/assets/465cf9d0-3237-4113-9aba-ec8f85727a38" />
+
+---
+
+## 📌 Trechos de Código Demonstrando a Aplicação do Padrão
+
+### **Interface criada — `ICalculoSalarioComponente.java`**
+
+```
+package com.example.hrpayroll.calculo;
+
+public interface ICalculoSalarioComponente {
+    Double calcular(Double salarioAtual, Double salarioBase);
+}
+```
+### Componente base do Decorator
+```
+private class CalculoBase implements ICalculoSalarioComponente {
+    @Override
+    public Double calcular(Double salarioAtual, Double salarioBase) {
+        return salarioAtual; // não altera nada
+    }
+```
+
+### Aplicação do Decorator no cálculo do INSS
+```
+ICalculoSalarioComponente calculoINSS =
+        new ICalculoSalarioComponente() {
+
+            private ICalculoSalarioComponente componente = new CalculoBase();
+
+            @Override
+            public Double calcular(Double salarioAtual, Double salarioBase) {
+                Double desconto = descontoService.calcularINSS(salarioBase);
+                return componente.calcular(salarioAtual, salarioBase) - desconto;
+            }
+        };
+
+// aplica o decorator ao cálculo
+salarioLiquido = calculoINSS.calcular(salarioLiquido, salarioBruto);
+```
+---
+
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
