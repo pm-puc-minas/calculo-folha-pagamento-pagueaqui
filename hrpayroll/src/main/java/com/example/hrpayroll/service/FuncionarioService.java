@@ -125,6 +125,14 @@ public class FuncionarioService {
         return IFuncionarioRepository.save(usuario);
     }
 
+    // Componente base do Decorator
+    private class CalculoBase implements ICalculoSalarioComponente {
+        @Override
+        public Double calcular(Double salarioAtual, Double salarioBase) {
+            return salarioAtual; 
+        }
+    }
+
     public Double salarioLiquidoById(Long id) {
         FuncionarioModel funcionario = this.findOneById(id);
         if (funcionario == null) {
