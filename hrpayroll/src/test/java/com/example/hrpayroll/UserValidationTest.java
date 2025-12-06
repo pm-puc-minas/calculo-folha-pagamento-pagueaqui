@@ -32,8 +32,14 @@ class UserValidationTest {
         user.setCpf("12345678901");
         user.setRg("MG12345678");
         user.setEmail("maria.silva@example.com");
-        user.setEndereco("Rua XXXX, 123");
-        user.setDataNascimento(new Date());
+        user.setEmailProfissional("maria.prof@example.com");
+        user.setDataDeNascimento(new Date());
+        user.setCep("30130090");
+        user.setRua("Rua XXXX");
+        user.setNumero("123");
+        user.setEstado("MG");
+        user.setCidade("Belo Horizonte");
+        user.setBairro("Centro");
         user.setSenha("Senha@Forte123");
         return user;
     }
