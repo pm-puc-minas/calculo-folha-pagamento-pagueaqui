@@ -323,4 +323,14 @@ mvn test
 
 ---
 
+# 📘 Cálculo da Folha de Pagamento — Aplicação do Padrão Decorator
+
+## 📌 Padrão Utilizado  
+**Decorator**
+
+---
+
+
+---
+
 ✨ Projeto desenvolvido com foco em **automação, confiabilidade e escalabilidade**.  
