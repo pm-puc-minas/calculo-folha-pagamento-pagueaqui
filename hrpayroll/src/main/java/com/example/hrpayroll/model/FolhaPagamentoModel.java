@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -34,4 +36,6 @@ public class FolhaPagamentoModel {
     private BigDecimal salarioBase;
     private String observacoes;
 
+    @OneToMany(mappedBy = "folhaPagamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FolhaItemModel> itens = new ArrayList<>();
 }

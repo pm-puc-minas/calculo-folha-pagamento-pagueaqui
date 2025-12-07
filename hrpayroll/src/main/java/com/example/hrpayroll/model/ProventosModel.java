@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -41,4 +43,6 @@ public class ProventosModel {
     @Column(name = "plano_de_saude", columnDefinition = "boolean default false")
     private Boolean planoDeSaude = false;
 
+    public void setSalarioBruto(BigDecimal bigDecimal) {
+    }
 }
