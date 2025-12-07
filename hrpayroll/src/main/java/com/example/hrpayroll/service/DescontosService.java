@@ -8,14 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.example.hrpayroll.model.DescontosModel;
 import com.example.hrpayroll.repository.IDescontosRepository;
-import com.example.hrpayroll.repository.ICalculoRepository;
 
 @Service
 public class DescontosService {
 
     @Autowired
     private IDescontosRepository descontosRepository;
-    private ICalculoRepository calculoRepository;
 
     public List<DescontosModel> listarTodos() {
         return descontosRepository.findAll();
@@ -53,6 +51,7 @@ public class DescontosService {
     }
 
     public double calcularINSS(double salario) {
+
         double inss = 0.0;
 
         if (salario > 7786.02) salario = 7786.02;
