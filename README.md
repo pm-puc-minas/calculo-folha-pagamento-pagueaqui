@@ -108,6 +108,19 @@ mvn spring-boot:run
 A API estará disponível em:  
 👉 *http://localhost:8080*
 
+## 🚀 1.4. Execultando o frontend
+
+1.  Execute o seguinte comando para baixar as dependências do npm
+    ```bash
+    npm install
+    ```
+2. Após isso, rode a aplicação:
+   ```bash
+   npm run dev
+   ```
+O front estará disponível em:
+👉 *http://localhost:3000*
+
 ---
 
 ## 📘 2. Documentação Interativa (Swagger)
