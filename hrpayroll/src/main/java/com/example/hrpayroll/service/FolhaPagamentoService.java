@@ -4,6 +4,7 @@ import com.example.hrpayroll.model.CompanyModel;
 import com.example.hrpayroll.model.FolhaPagamentoModel;
 import com.example.hrpayroll.repository.IFolhaPagamentoRepository;
 import org.springframework.stereotype.Service;
+import com.example.hrpayroll.service.RelatorioService;
 
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
